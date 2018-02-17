@@ -5,7 +5,7 @@ import java.util.Set;
  * structures.Bond , Chemical structures.Bond -
  *      @author Emily Anible
  *      structures.Bond Object.
- *          A bond forms between two atoms (head, tail) and has a couple of properties.
+ *          A bond forms between two atoms and has a couple of properties.
  *
  *      //TODO: What happens when we create a structures.Bond?
  *      //TODO: What happens when we break  a structures.Bond?
@@ -18,7 +18,7 @@ public class Bond {
     private final int order;
 
     /**
-     *  Bond has an unordered set of atoms it's attached to
+     *  Bond has an unordered set of atoms its attached to
      *  //TODO: Logic or data structure to limit this to an unordered pair.
      */
     private Set<AtomObject> bondedAtoms;
