@@ -2,12 +2,14 @@
 /**
  * Element -
  *      @author Emily Anible
- *      Abstract Element Object. Each instance of the object contains information about the element,
+ *      Element Object. Each instance of the object contains information about the element,
  *      and can be copied to create duplicate "atoms".
  *      The information about real elements is stored and translated elsewhere,
  *      this object only holds the information about each one used.
+ *
+ *      //TODO: Maybe call this something different. Is a property of Atoms now, so maybe TypeElement?
  */
-public abstract class Element {
+public class Element {
 
 
     /**
@@ -43,35 +45,32 @@ public abstract class Element {
         this.cpkColor = cpkColor;
     }
 
-    public int getCpkColor() {
-        return cpkColor;
-    }
-
-    public double getDensity() {
-        return density;
-    }
-
-
-    public int getAtomicRadius() {
-        return atomicRadius;
-    }
-
-
-    public double getAtomicMass() {
-        return atomicMass;
-    }
-
-
-    public String getName() {
-        return name;
+    public int getAtomicNumber() {
+        return atomicNumber;
     }
 
     public String getSymbol() {
         return symbol;
     }
 
-    public int getAtomicNumber() {
-        return atomicNumber;
+    public String getName() {
+        return name;
+    }
+
+    public double getAtomicMass() {
+        return atomicMass;
+    }
+
+    public int getAtomicRadius() {
+        return atomicRadius;
+    }
+
+    public double getDensity() {
+        return density;
+    }
+
+    public int getCpkColor() {
+        return cpkColor;
     }
 
 }
