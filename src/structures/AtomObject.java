@@ -1,9 +1,11 @@
+package structures;
+
 import java.util.ArrayList;
 
 /**
- * ElementType -
+ * structures.ElementType -
  *      @author Emily Anible
- *      AtomObject. Each instance of this object is a "physical" atom, with attributes
+ *      structures.AtomObject. Each instance of this object is a "physical" atom, with attributes
  *          - Element - What element is this atom?
  *          - Bonds    - What bonds object are bonded here?
  *                    - (maybe atom.getBonded() to get a list of the atoms it's bonded to)

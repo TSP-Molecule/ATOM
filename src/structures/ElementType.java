@@ -1,8 +1,9 @@
+package structures;
 
 /**
- * ElementType -
+ * structures.ElementType -
  *      @author Emily Anible
- *      ElementType Object. Each instance of the object contains information about the element,
+ *      structures.ElementType Object. Each instance of the object contains information about the element,
  *      and can be copied to create duplicate "atoms".
  *      The information about real elements is stored and translated elsewhere,
  *      this object only holds the information about each one used.
@@ -13,7 +14,7 @@ public class ElementType {
 
 
     /**
-     *  ElementType Attributes
+     *  structures.ElementType Attributes
      *      Each element has various attributes about it.
      *      The object will store a copy of this information accessible
      *      through the getters.

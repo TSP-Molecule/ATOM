@@ -1,12 +1,13 @@
+package structures;
 
 /**
- * Bond , Chemical Bond -
+ * structures.Bond , Chemical structures.Bond -
  *      @author Emily Anible
- *      Bond Object.
+ *      structures.Bond Object.
  *          A bond forms between two atoms (head, tail) and has a couple of properties.
  *
- *      //TODO: What happens when we create a Bond?
- *      //TODO: What happens when we break  a Bond?
+ *      //TODO: What happens when we create a structures.Bond?
+ *      //TODO: What happens when we break  a structures.Bond?
  */
 public class Bond {
 
