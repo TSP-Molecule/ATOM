@@ -1,4 +1,5 @@
 package structures;
+import java.util.Set;
 
 /**
  * structures.Bond , Chemical structures.Bond -
@@ -16,41 +17,22 @@ public class Bond {
      */
     private final int order;
 
-
     /**
-     * Atom at the "head" of the bond.
+     *  Bond has an unordered set of atoms it's attached to
+     *  //TODO: Logic or data structure to limit this to an unordered pair.
      */
-    private AtomObject headAtom;
+    private Set<AtomObject> bondedAtoms;
 
-
-    /**
-     * Atom at the "tail" of the bond.
-     */
-    private AtomObject tailAtom;
-
-    public Bond(int order, AtomObject headAtom, AtomObject tailAtom) {
+    public Bond(int order, AtomObject tailAtom, Set<AtomObject> bondedAtoms) {
         this.order = order;
-        this.headAtom = headAtom;
-        this.tailAtom = tailAtom;
-    }
-
-    public AtomObject getTailAtom() {
-        return tailAtom;
-    }
-
-    public void setTailAtom(AtomObject tailAtom) {
-        this.tailAtom = tailAtom;
-    }
-
-    public AtomObject getHeadAtom() {
-        return headAtom;
-    }
-
-    public void setHeadAtom(AtomObject headAtom) {
-        this.headAtom = headAtom;
+        this.bondedAtoms = bondedAtoms;
     }
 
     public int getOrder() {
         return order;
+    }
+
+    public Set<AtomObject> getBondedAtoms() {
+        return bondedAtoms;
     }
 }
