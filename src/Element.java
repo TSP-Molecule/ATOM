@@ -2,12 +2,12 @@
 /**
  * Element -
  *      @author Emily Anible
- *      Element Object. Each instance of the object contains information about the element,
+ *      Abstract Element Object. Each instance of the object contains information about the element,
  *      and can be copied to create duplicate "atoms".
  *      The information about real elements is stored and translated elsewhere,
  *      this object only holds the information about each one used.
  */
-public class Element {
+public abstract class Element {
 
 
     /**
