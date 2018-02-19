@@ -33,7 +33,7 @@ public class Atominomicon {
     /**
      * Reads source file and creates a HashMap for each element with all valid isotopes,
      * storing each HashMap in the ArrayList.
-     *
+     * <p>
      * The zero element in a HashMap is the default atom, non-isotopic //TODO: Figure out isotopes
      *
      * @param filename elements.dat file to read
@@ -48,9 +48,9 @@ public class Atominomicon {
         String line = br.readLine();         // Read in heading line before processing data.
 
         while ((line = br.readLine()) != null) {
-            line = line.replace(" ",""); //Remove Whitespace
+            line = line.replace(" ", ""); //Remove Whitespace
             String[] s = line.split(",");           //Split line by commas
-            for ( int i = 0; i < s.length; i++) if (s[i].equals("")) s[i] = "000000";
+            for (int i = 0; i < s.length; i++) if (s[i].equals("")) s[i] = "000000";
 
 
             Element element = new Element(
@@ -68,7 +68,7 @@ public class Atominomicon {
                     Integer.parseInt(s[11])             // State
             );
 
-            HashMap<Integer, Atom> atomMap= new HashMap<>();
+            HashMap<Integer, Atom> atomMap = new HashMap<>();
             Atom atom = new Atom(element);
             atomMap.put(0, atom);           //Place base element in map at zero position
 

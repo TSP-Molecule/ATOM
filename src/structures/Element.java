@@ -20,44 +20,44 @@ public class Element {
      * <p>
      * This information should NEVER change during runtime!
      */
-    private final int       atomicNumber;
-    private final String    symbol;
-    private final String    name;
-    private final double    atomicMass;
-    private final int       cpkColor;
-    private final String    eConfig;        //Electron Configuration
-    private final double    eNegativity;
-    private final int       atomicRadius;
-    private final String    bondingType;
-    private final double    density;
-    private final String    group;
-    private final int       state;          //0 1 2, solid liquid gas.
+    private final int atomicNumber;
+    private final String symbol;
+    private final String name;
+    private final double atomicMass;
+    private final int cpkColor;
+    private final String eConfig;        //Electron Configuration
+    private final double eNegativity;
+    private final int atomicRadius;
+    private final String bondingType;
+    private final double density;
+    private final String group;
+    private final int state;          //0 1 2, solid liquid gas.
 
-    public Element(int      atomicNumber,
-                   String   symbol,
-                   String   name,
-                   double   atomicMass,
-                   int      cpkColor,
-                   String   eConfig,
-                   double   eNegativity,
-                   int      atomicRadius,
-                   String   bondingType,
-                   double   density,
-                   String   group,
-                   int      state ) {
+    public Element(int atomicNumber,
+                   String symbol,
+                   String name,
+                   double atomicMass,
+                   int cpkColor,
+                   String eConfig,
+                   double eNegativity,
+                   int atomicRadius,
+                   String bondingType,
+                   double density,
+                   String group,
+                   int state) {
 
-        this.atomicNumber   = atomicNumber;
-        this.symbol         = symbol;
-        this.name           = name;
-        this.atomicMass     = atomicMass;
-        this.cpkColor       = cpkColor;
-        this.eConfig        = eConfig;
-        this.eNegativity    = eNegativity;
-        this.atomicRadius   = atomicRadius;
-        this.bondingType    = bondingType;
-        this.density        = density;
-        this.group          = group;
-        this.state          = state;
+        this.atomicNumber = atomicNumber;
+        this.symbol = symbol;
+        this.name = name;
+        this.atomicMass = atomicMass;
+        this.cpkColor = cpkColor;
+        this.eConfig = eConfig;
+        this.eNegativity = eNegativity;
+        this.atomicRadius = atomicRadius;
+        this.bondingType = bondingType;
+        this.density = density;
+        this.group = group;
+        this.state = state;
     }
 
     public int getAtomicNumber() {

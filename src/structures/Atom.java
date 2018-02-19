@@ -3,12 +3,13 @@ package structures;
 import java.util.ArrayList;
 
 /**
- *  Atom -
- *      @author Emily Anible
- *      Atom. Each instance of this object is a "physical" atom, with attributes
- *          - Element - What element is this atom?
- *          - Bonds    - What bonds object are bonded here?
- *                    - (maybe atom.getBonded() to get a list of the atoms it's bonded to)
+ * Atom -
+ *
+ * @author Emily Anible
+ * Atom. Each instance of this object is a "physical" atom, with attributes
+ * - Element - What element is this atom?
+ * - Bonds    - What bonds object are bonded here?
+ * - (maybe atom.getBonded() to get a list of the atoms it's bonded to)
  */
 public class Atom {
 
@@ -27,8 +28,8 @@ public class Atom {
     /**
      * Create an Atom with both an element and attached bonds.
      *
-     * @param element   The Atom's element.
-     * @param bonds     ArrayList of attached bonds.
+     * @param element The Atom's element.
+     * @param bonds   ArrayList of attached bonds.
      */
     public Atom(Element element, ArrayList<Bond> bonds) {
         this.element = element;
@@ -38,7 +39,8 @@ public class Atom {
 
     /**
      * Create an Atom with only an element, no attached bonds.
-     * @param element   The Atom's element.
+     *
+     * @param element The Atom's element.
      */
     public Atom(Element element) {
         this.element = element;
