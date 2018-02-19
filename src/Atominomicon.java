@@ -77,7 +77,129 @@ public class Atominomicon {
         return nomicon;
     }
 
-    public ArrayList<HashMap<Integer, Atom>> getAtominomicon() {
-        return atominomicon;
+    /**
+     * Reads Element from Atominomicon
+     *
+     * @param atomicNumber  atomic number of element
+     * @param isotope       isotope value
+     * @return  element corresponding to atomic number and isotope
+     */
+    public Element readElem(int atomicNumber, int isotope) {
+        return atominomicon.get(atomicNumber).get(isotope).getElement();
+    }
+
+    /**
+     * Reads Element from Atominomicon
+     *
+     * @param atomicNumber  atomic number of element
+     * @return  element corresponding to atomic number
+     */
+    public Element readElem(int atomicNumber) {
+        return atominomicon.get(atomicNumber).get(0).getElement();
+    }
+
+    /**
+     * Reads Atom from Atominomicon
+     *
+     * @param atomicNumber  atomic number of atom
+     * @param isotope       isotope value
+     * @return  atom corresponding to atomic number and isotope
+     */
+    public Atom readAtom(int atomicNumber, int isotope) {
+        return atominomicon.get(atomicNumber).get(isotope);
+    }
+
+    /**
+     * @param atomicNumber  atomic number of atom
+     * @return  atom corresponding to atomic number and isotope
+     *
+     */
+    public Atom readAtom(int atomicNumber) {
+        return atominomicon.get(atomicNumber).get(0);
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Symbol associated with the atom at atomicNumber
+     */
+    public String getSymbol(int atomicNumber) {
+        return this.readElem(atomicNumber).getSymbol();
+    }
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Name associated with the atom at atomicNumber
+     */
+    public String getName(int atomicNumber) {
+        return this.readElem(atomicNumber).getName();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Atomic Mass associated with the atom at atomicNumber
+     */
+    public double getAtomicMass(int atomicNumber) {
+        return this.readElem(atomicNumber).getAtomicMass();
+    }
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Atomic Radius associated with the atom at atomicNumber
+     */
+    public int getAtomicRadius(int atomicNumber) {
+        return this.readElem(atomicNumber).getAtomicRadius();
+    }
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Density associated with the atom at atomicNumber
+     */
+    public double getDensity(int atomicNumber) {
+        return this.readElem(atomicNumber).getDensity();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Color associated with the atom at atomicNumber
+     */
+    public int getColor(int atomicNumber) {
+        return this.readElem(atomicNumber).getColor();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Electron Configuration associated with the atom at atomicNumber
+     */
+    public String geteConfig(int atomicNumber) {
+        return this.readElem(atomicNumber).geteConfig();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Bonding Type associated with the atom at atomicNumber
+     */
+    public String getBondingType(int atomicNumber) {
+        return this.readElem(atomicNumber).getBondingType();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Group associated with the atom at atomicNumber
+     */
+    public String getGroup(int atomicNumber) {
+        return this.readElem(atomicNumber).getGroup();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return State associated with the atom at atomicNumber
+     */
+    public int getState(int atomicNumber) {
+        return this.readElem(atomicNumber).getState();
+    }
+
+    /**
+     * @param atomicNumber atomic number of atom
+     * @return Electronegativity associated with the atom at atomicNumber
+     */
+    public double geteNegativity(int atomicNumber) {
+        return this.readElem(atomicNumber).geteNegativity();
     }
 }

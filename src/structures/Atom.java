@@ -46,6 +46,14 @@ public class Atom {
         this.element = element;
     }
 
+    public Element getElement() {
+        return element;
+    }
+
+    public ArrayList<Bond> getBonds() {
+        return bonds;
+    }
+
     @Override
     public String toString() {
         return "Atom{" +

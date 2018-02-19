@@ -1,8 +1,7 @@
 import org.junit.Test;
+import structures.Elem;
 
 import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class AtominomiconTest {
 
@@ -21,8 +20,22 @@ public class AtominomiconTest {
         }
 
         // Print out result
-        for (int i = 1; i <= 118; i++) {
-            System.out.println(atominomicon.getAtominomicon().get(i).toString());
-        }
+//        for (int i = 1; i <= 118; i++) {
+//            System.out.println(atominomicon.getAtominomicon().get(i).toString());
+//        }
+
+        // Try printing out color of a Zinc atom:
+        int zincColor0 = atominomicon.readElem(30).getColor();
+        int zincColor1 = atominomicon.readElem(30, 0).getColor();
+
+        int zincColor2 = atominomicon.readAtom(30).getElement().getColor();
+        int zincColor3 = atominomicon.readAtom(30, 0).getElement().getColor();
+
+        int zincCol  = atominomicon.getColor(30);
+
+        int test = atominomicon.getColor( Elem.Nickel.get() );
+
+        System.out.println(Integer.toHexString(test));
+
     }
 }

@@ -24,7 +24,7 @@ public class Element {
     private final String symbol;
     private final String name;
     private final double atomicMass;
-    private final int cpkColor;
+    private final int color;
     private final String eConfig;        //Electron Configuration
     private final double eNegativity;
     private final int atomicRadius;
@@ -37,7 +37,7 @@ public class Element {
                    String symbol,
                    String name,
                    double atomicMass,
-                   int cpkColor,
+                   int color,
                    String eConfig,
                    double eNegativity,
                    int atomicRadius,
@@ -50,7 +50,7 @@ public class Element {
         this.symbol = symbol;
         this.name = name;
         this.atomicMass = atomicMass;
-        this.cpkColor = cpkColor;
+        this.color = color;
         this.eConfig = eConfig;
         this.eNegativity = eNegativity;
         this.atomicRadius = atomicRadius;
@@ -84,8 +84,8 @@ public class Element {
         return density;
     }
 
-    public int getCpkColor() {
-        return cpkColor;
+    public int getColor() {
+        return color;
     }
 
     public String geteConfig() {
@@ -115,7 +115,7 @@ public class Element {
                 ", symbol='" + symbol + '\'' +
                 ", name='" + name + '\'' +
                 ", atomicMass=" + atomicMass +
-                ", cpkColor=" + cpkColor +
+                ", cpkColor=" + color +
                 ", eConfig='" + eConfig + '\'' +
                 ", eNegativity=" + eNegativity +
                 ", atomicRadius=" + atomicRadius +
