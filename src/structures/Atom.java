@@ -22,7 +22,7 @@ public class Atom {
     /**
      * What bonds are connected to this atom?
      */
-    private ArrayList<Bond> bonds;
+    private ArrayList<Bond> bonds = null;
 
     /**
      * Create an Atom with both an element and attached bonds.
@@ -42,5 +42,13 @@ public class Atom {
      */
     public Atom(Element element) {
         this.element = element;
+    }
+
+    @Override
+    public String toString() {
+        return "Atom{" +
+                "element=" + element +
+                ", bonds=" + bonds +
+                '}';
     }
 }
