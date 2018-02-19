@@ -2,13 +2,12 @@ package structures;
 import java.util.Set;
 
 /**
- * structures.Bond , Chemical structures.Bond -
+ * Bond , Chemical structures.Bond -
  *      @author Emily Anible
- *      structures.Bond Object.
  *          A bond forms between two atoms and has a couple of properties.
  *
- *      //TODO: What happens when we create a structures.Bond?
- *      //TODO: What happens when we break  a structures.Bond?
+ *      //TODO: What happens when we create a Bond?
+ *      //TODO: What happens when we break  a Bond?
  */
 public class Bond {
 
@@ -21,9 +20,9 @@ public class Bond {
      *  Bond has an unordered set of atoms its attached to
      *  //TODO: Logic or data structure to limit this to an unordered pair.
      */
-    private Set<AtomObject> bondedAtoms;
+    private Set<Atom> bondedAtoms;
 
-    public Bond(int order, AtomObject tailAtom, Set<AtomObject> bondedAtoms) {
+    public Bond(int order, Atom tailAtom, Set<Atom> bondedAtoms) {
         this.order = order;
         this.bondedAtoms = bondedAtoms;
     }
@@ -32,7 +31,7 @@ public class Bond {
         return order;
     }
 
-    public Set<AtomObject> getBondedAtoms() {
+    public Set<Atom> getBondedAtoms() {
         return bondedAtoms;
     }
 }

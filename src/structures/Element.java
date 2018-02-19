@@ -1,20 +1,18 @@
 package structures;
 
 /**
- * structures.ElementType -
+ * Element -
  *      @author Emily Anible
- *      structures.ElementType Object. Each instance of the object contains information about the element,
+ *      Element Object. Each instance of the object contains information about the element,
  *      and can be copied to create duplicate "atoms".
  *      The information about real elements is stored and translated elsewhere,
  *      this object only holds the information about each one used.
- *
- *      //TODO: Maybe call this something different. Is a property of Atoms now, so maybe TypeElement?
  */
-public class ElementType {
+public class Element {
 
 
     /**
-     *  structures.ElementType Attributes
+     *  Element Attributes
      *      Each element has various attributes about it.
      *      The object will store a copy of this information accessible
      *      through the getters.
@@ -28,14 +26,15 @@ public class ElementType {
     private final int       atomicRadius;
     private final double    density;
     private final int       cpkColor;
+    //TODO: electronegativity
 
-    public ElementType(int      atomicNumber,
-                       String   symbol,
-                       String   name,
-                       double   atomicMass,
-                       int      atomicRadius,
-                       double   density,
-                       int      cpkColor) {
+    public Element(int      atomicNumber,
+                   String   symbol,
+                   String   name,
+                   double   atomicMass,
+                   int      atomicRadius,
+                   double   density,
+                   int      cpkColor) {
 
         this.atomicNumber   = atomicNumber;
         this.symbol         = symbol;
