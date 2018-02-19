@@ -26,15 +26,18 @@ public class Element {
     private final int       atomicRadius;
     private final double    density;
     private final int       cpkColor;
-    //TODO: electronegativity
+    private final String    eConfig; //Electron Configuration
+    private final String    bondingType;
+    private final String    group;
+    private final int       state; //0 1 2, solid liquid gas.
 
-    public Element(int      atomicNumber,
-                   String   symbol,
-                   String   name,
-                   double   atomicMass,
-                   int      atomicRadius,
-                   double   density,
-                   int      cpkColor) {
+    public Element(int atomicNumber,
+                   String symbol,
+                   String name,
+                   double atomicMass,
+                   int atomicRadius,
+                   double density,
+                   int cpkColor, String eConfig, String bondingType, String group, int state) {
 
         this.atomicNumber   = atomicNumber;
         this.symbol         = symbol;
@@ -43,6 +46,10 @@ public class Element {
         this.atomicRadius   = atomicRadius;
         this.density        = density;
         this.cpkColor       = cpkColor;
+        this.eConfig        = eConfig;
+        this.bondingType = bondingType;
+        this.group = group;
+        this.state = state;
     }
 
     public int getAtomicNumber() {
@@ -73,4 +80,19 @@ public class Element {
         return cpkColor;
     }
 
+    public String geteConfig() {
+        return eConfig;
+    }
+
+    public String getBondingType() {
+        return bondingType;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public int getState() {
+        return state;
+    }
 }
