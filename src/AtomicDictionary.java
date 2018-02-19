@@ -10,5 +10,6 @@
  *              value - Atom object corresponding to that isotope
  */
 public class AtomicDictionary {
-
+    int x;
+       // System.out.println();
 }
