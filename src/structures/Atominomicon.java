@@ -1,3 +1,5 @@
+package structures;
+
 import structures.Atom;
 import structures.Element;
 

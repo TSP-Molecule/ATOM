@@ -1,4 +1,5 @@
 import org.junit.Test;
+import structures.Atominomicon;
 import structures.Elem;
 
 import java.io.IOException;
@@ -33,7 +34,9 @@ public class AtominomiconTest {
 
         int zincCol  = atominomicon.getColor(30);
 
-        int test = atominomicon.getColor( Elem.Nickel.get() );
+        int test = atominomicon.getColor( Elem.Nickel.getNum() );
+
+        System.out.println("Nickel is " + Elem.Nickel.getSymbol());
 
         System.out.println(Integer.toHexString(test));
 
