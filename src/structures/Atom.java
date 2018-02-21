@@ -17,7 +17,7 @@ public class Atom {
     /**
      * What element is this atom?
      */
-    private final Element element;
+    private final Elem element;
 
 
     /**
@@ -31,7 +31,7 @@ public class Atom {
      * @param element The Atom's element.
      * @param bonds   ArrayList of attached bonds.
      */
-    public Atom(Element element, ArrayList<Bond> bonds) {
+    public Atom(Elem element, ArrayList<Bond> bonds) {
         this.element = element;
         this.bonds = bonds;
     }
@@ -42,11 +42,11 @@ public class Atom {
      *
      * @param element The Atom's element.
      */
-    public Atom(Element element) {
+    public Atom(Elem element) {
         this.element = element;
     }
 
-    public Element getElement() {
+    public Elem getElement() {
         return element;
     }
 
