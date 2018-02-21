@@ -1,3 +1,5 @@
+import structures.Atominomicon;
+
 import java.io.IOException;
 
 public class Main {
