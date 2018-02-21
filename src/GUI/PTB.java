@@ -9,7 +9,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import structures.Atominomicon;
-import structures.Element;
+//import structures.Element;
 import structures.Elem;
 
 import javafx.scene.control.Button;
@@ -24,7 +24,7 @@ public class PTB extends Button {
     private int col;
     private int num;
     private String label;
-    private Element element;
+   // private Element element;
     private Color plain;
     private Color highlighted =  Color.rgb(250, 250, 195);
     private Color selected;
@@ -57,7 +57,7 @@ public class PTB extends Button {
         switch(s) {
             case "nonmetal":  plain = plainCols[0]; selected = selectCols[0]; break;
             case "noble gas": plain = plainCols[1]; selected = selectCols[1]; break;
-            case "alkali metal": plain = plainCols[2]; selected = selectCols[2];break;
+            case "alkalimetal": plain = Color.rgb(255, 0, 0); /*plainCols[2];*/ selected = selectCols[2];break;
             case "alkaline earth metal": plain = plainCols[3]; selected = selectCols[3]; break;
             case "metalloid": plain = plainCols[4]; selected = selectCols[4];break;
             case "halogen": plain = plainCols[5]; selected = selectCols[5];break;
@@ -86,12 +86,12 @@ public class PTB extends Button {
         }
         //atomic num, atomSymbol, atomicWeight, name
         if (num > 0) {
-            label = String.format("%d\n%s\n%f%s", num, atom.getSymbol(num), atom.getAtomicMass(num), atom.getName(num));
+            label = String.format("%d\n%s\n%f%s", num, Elem.get(num).getSymbol(), Elem.get(num).getAtomicMass(), Elem.get(num).getName());
             setText(label);
         }
 
         if (num > 0) {
-            assignColors(atom.getGroup(num));
+            assignColors(Elem.get(num).getGroup());
         } else {
             assignColors("");
         }
