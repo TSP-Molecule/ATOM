@@ -14,6 +14,8 @@ public class AtominomiconTest {
     public void Atominomicon() throws IOException {
         Atominomicon atominomicon = new Atominomicon();
 
-        System.out.println( "Atomic Mass: "  + Elem.get(30).getAtomicMass());
+        System.out.println( "Atomic Mass: "  + Elem.Nickel.getAtomicMass());
+
+        Elem.get( i ).getAtomicMass();
     }
 }
