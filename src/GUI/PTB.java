@@ -87,6 +87,7 @@ public class PTB extends Button {
         //atomic num, atomSymbol, atomicWeight, name
         if (num > 0) {
             label = String.format("%d\n%s\n%f%s", num, atom.getSymbol(num), atom.getAtomicMass(num), atom.getName(num));
+            setText(label);
         }
 
         if (num > 0) {
