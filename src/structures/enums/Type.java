@@ -7,6 +7,7 @@ package structures.enums;
  *      Stores the type of an element. Set in Elem.java.
  */
 public enum Type {
+    NONE,
     NONMETAL,
     NOBLE_GAS,
     ALKALI_METAL,

@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import structures.Atominomicon;
 //import structures.Element;
 import structures.enums.Elem;
-
+import structures.enums.Type;
 import javafx.scene.control.Button;
 
 import java.io.IOException;
@@ -51,18 +51,33 @@ public class PTB extends Button {
     private Background bl;
     private BackgroundFill b;
 
-    private void assignColors(String s) {
-        switch(s) {
-            case "nonmetal":  plain = plainCols[0]; selected = selectCols[0]; break;
-            case "noblegas": plain = plainCols[1]; selected = selectCols[1]; break;
-            case "alkalimetal": plain =/* Color.rgb(255, 0, 0); */plainCols[2]; selected = selectCols[2];break;
-            case "alkalineearthmetal": plain = plainCols[3]; selected = selectCols[3]; break;
-            case "metalloid": plain = plainCols[4]; selected = selectCols[4];break;
-            case "halogen": plain = plainCols[5]; selected = selectCols[5];break;
-            case "transitionmetal": plain = plainCols[6]; selected = selectCols[6];break;
-            case "lanthanoid": plain = plainCols[7]; selected = selectCols[7];break;
-            case "actinoid": plain = plainCols[8]; selected = selectCols[8];break;
-            case "post-transitionmetal": plain = plainCols[9]; selected = selectCols[9];break;
+//    NONMETAL,
+//    NOBLE_GAS,
+//    ALKALI_METAL,
+//    ALKALINE_EARTH_METAL,
+//    METALLOID,
+//    HALOGEN,
+//    METAL,
+//    TRANSITION_METAL,
+//    POST_TRANSITION_METAL,
+//    ACTINOID,
+//    LANTHANOID;
+
+
+    private void assignColors(Type type) {
+
+        switch(type) {
+            case NONMETAL:  plain = plainCols[0]; selected = selectCols[0]; break;
+            case NOBLE_GAS: plain = plainCols[1]; selected = selectCols[1]; break;
+            case ALKALI_METAL: plain =/* Color.rgb(255, 0, 0); */plainCols[2]; selected = selectCols[2];break;
+            case ALKALINE_EARTH_METAL: plain = plainCols[3]; selected = selectCols[3]; break;
+            case METALLOID: plain = plainCols[4]; selected = selectCols[4];break;
+            case HALOGEN: plain = plainCols[5]; selected = selectCols[5];break;
+            case METAL: plain = plainCols[6]; selected = selectCols[6];break;
+            case TRANSITION_METAL: plain = plainCols[7]; selected = selectCols[7];break;
+            case POST_TRANSITION_METAL: plain = plainCols[8]; selected = selectCols[8];break;
+            case ACTINOID: plain = plainCols[9]; selected = selectCols[9];break;
+            case LANTHANOID: plain = plainCols[10]; selected = selectCols[10];break;
             default: plain = Color.rgb(195, 195, 195);
                      selected = Color.rgb(195, 195, 195);
                      highlighted = Color.rgb(195, 195, 195);
@@ -91,7 +106,7 @@ public class PTB extends Button {
         if (num > 0) {
             assignColors(Elem.get(num).getType());
         } else {
-            assignColors("");
+            assignColors(null);
         }
         this.setBackground(new Background(new BackgroundFill(plain,cnorm, inorm )));
      //   Button button = new Button();
