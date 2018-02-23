@@ -17,6 +17,6 @@ public enum Type {
     METAL,
     TRANSITION_METAL,
     POST_TRANSITION_METAL,
-    ACTINOID,
-    LANTHANOID;
+    ACTINIDE,
+    LANTHANIDE;
 }
