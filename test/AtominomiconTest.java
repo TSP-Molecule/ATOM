@@ -16,6 +16,6 @@ public class AtominomiconTest {
 
         System.out.println( "Atomic Mass: "  + Elem.Nickel.getAtomicMass());
 
-        Elem.get( i ).getAtomicMass();
+      //  Elem.get( i ).getAtomicMass();
     }
 }
