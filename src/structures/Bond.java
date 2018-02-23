@@ -1,4 +1,6 @@
 package structures;
+import structures.enums.BondOrder;
+
 import java.util.Set;
 
 /**
@@ -12,9 +14,9 @@ import java.util.Set;
 public class Bond {
 
     /**
-     * Order -- 1, 2, 3 for Single, Double, or Triple bond, respectively.
+     *  BondOrder - 1 for single bonds, 2 for double, 3 for triple.
      */
-    private final int order;
+    private final BondOrder order;
 
     /**
      *  Bond has an unordered set of atoms its attached to
@@ -22,12 +24,12 @@ public class Bond {
      */
     private Set<Atom> bondedAtoms;
 
-    public Bond(int order, Atom tailAtom, Set<Atom> bondedAtoms) {
+    public Bond(BondOrder order, Atom tailAtom, Set<Atom> bondedAtoms) {
         this.order = order;
         this.bondedAtoms = bondedAtoms;
     }
 
-    public int getOrder() {
+    public BondOrder getOrder() {
         return order;
     }
 

@@ -106,7 +106,7 @@ public class PTB extends Button {
         if (num > 0) {
             assignColors(Elem.get(num).getType());
         } else {
-            assignColors(null);
+            assignColors(Type.NONE);
         }
         this.setBackground(new Background(new BackgroundFill(plain,cnorm, inorm )));
      //   Button button = new Button();
