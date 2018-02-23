@@ -76,8 +76,8 @@ public class PTB extends Button {
             case METAL: plain = plainCols[6]; selected = selectCols[6];break;
             case TRANSITION_METAL: plain = plainCols[7]; selected = selectCols[7];break;
             case POST_TRANSITION_METAL: plain = plainCols[8]; selected = selectCols[8];break;
-            case ACTINOID: plain = plainCols[9]; selected = selectCols[9];break;
-            case LANTHANOID: plain = plainCols[10]; selected = selectCols[10];break;
+            case ACTINIDE: plain = plainCols[9]; selected = selectCols[9];break;
+            case LANTHANIDE: plain = plainCols[10]; selected = selectCols[10];break;
             default: plain = Color.rgb(195, 195, 195);
                      selected = Color.rgb(195, 195, 195);
                      highlighted = Color.rgb(195, 195, 195);
