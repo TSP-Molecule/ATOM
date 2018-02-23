@@ -54,15 +54,15 @@ public class PTB extends Button {
     private void assignColors(String s) {
         switch(s) {
             case "nonmetal":  plain = plainCols[0]; selected = selectCols[0]; break;
-            case "noble gas": plain = plainCols[1]; selected = selectCols[1]; break;
-            case "alkalimetal": plain = Color.rgb(255, 0, 0); /*plainCols[2];*/ selected = selectCols[2];break;
-            case "alkaline earth metal": plain = plainCols[3]; selected = selectCols[3]; break;
+            case "noblegas": plain = plainCols[1]; selected = selectCols[1]; break;
+            case "alkalimetal": plain =/* Color.rgb(255, 0, 0); */plainCols[2]; selected = selectCols[2];break;
+            case "alkalineearthmetal": plain = plainCols[3]; selected = selectCols[3]; break;
             case "metalloid": plain = plainCols[4]; selected = selectCols[4];break;
             case "halogen": plain = plainCols[5]; selected = selectCols[5];break;
-            case "transition metal": plain = plainCols[6]; selected = selectCols[6];break;
+            case "transitionmetal": plain = plainCols[6]; selected = selectCols[6];break;
             case "lanthanoid": plain = plainCols[7]; selected = selectCols[7];break;
             case "actinoid": plain = plainCols[8]; selected = selectCols[8];break;
-            case "post-transition metal": plain = plainCols[9]; selected = selectCols[9];break;
+            case "post-transitionmetal": plain = plainCols[9]; selected = selectCols[9];break;
             default: plain = Color.rgb(195, 195, 195);
                      selected = Color.rgb(195, 195, 195);
                      highlighted = Color.rgb(195, 195, 195);
@@ -127,7 +127,10 @@ public class PTB extends Button {
         });
       //  this.setWidth(100);
       ////  this.setHeight(100);
-        setPrefSize(100, 100);
+        setPrefSize(50, 80);
+        if (n ==-1) {
+            setVisible(false);
+        }
         pane.add(this, col, row);
         //element;
     }
