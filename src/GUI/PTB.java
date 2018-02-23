@@ -10,13 +10,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import structures.Atominomicon;
 //import structures.Element;
-import structures.Elem;
+import structures.enums.Elem;
 
 import javafx.scene.control.Button;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PTB extends Button {
 
@@ -91,7 +89,7 @@ public class PTB extends Button {
         }
 
         if (num > 0) {
-            assignColors(Elem.get(num).getGroup());
+            assignColors(Elem.get(num).getType());
         } else {
             assignColors("");
         }

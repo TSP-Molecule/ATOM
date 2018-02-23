@@ -1,4 +1,4 @@
-atomicNumber,symbol,name         ,atomicMass ,cpkColor,eConfig               ,eNegativity,atomicRadius,bondingType     ,density  ,group                ,state
+atomicNumber,symbol,name         ,atomicMass ,cpkColor,eConfig               ,eNegativity,atomicRadius,bondingType     ,density  ,type                ,state
 1           ,H     ,Hydrogen     ,1.00794    ,FFFFFF  ,1s1                   ,2.2        ,37          ,diatomic        ,0.0000899,nonmetal             ,2
 2           ,He    ,Helium       ,4.002602   ,D9FFFF  ,1s2                   ,           ,32          ,atomic          ,0.0001785,noble gas            ,2
 3           ,Li    ,Lithium      ,6.941      ,CC80FF  ,[He] 2s1              ,0.98       ,134         ,metallic        ,0.535    ,alkali metal         ,0

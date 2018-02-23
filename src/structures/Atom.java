@@ -1,5 +1,7 @@
 package structures;
 
+import structures.enums.Elem;
+
 import java.util.ArrayList;
 
 /**
