@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 public class WebServiceTest {
 
     public static void main (String args[]) throws IOException {
-        String chem = "\'nitric acid\'";
-        Process p = Runtime.getRuntime().exec("python ChemSpider.py " + chem);
+        String chem = "nitric acid";
+        Process p = Runtime.getRuntime().exec(new String[]{"python","ChemSpider.py",chem});
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String s = null;
         while ((s = pin.readLine()) != null) {
