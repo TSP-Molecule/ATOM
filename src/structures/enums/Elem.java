@@ -143,7 +143,6 @@ public enum Elem {
     private final double density;
     private final Type type;
     private final int state;          //0 1 2, solid liquid gas.
-    private ElectronConfig eConfig;
     
     Elem(int atomicNumber, String symbol, double atomicMass, int color, String eConfigString, double eNegativity, int atomicRadius, String bondingType, double density, Type type, int state) {
         this.atomicNumber = atomicNumber;
@@ -157,9 +156,7 @@ public enum Elem {
         this.density = density;
         this.type = type;
         this.state = state;
-
-        /* Initialize the Electron Configuration for this element */
-        eConfig = new ElectronConfig(eConfigString);
+        
     }
 
     public static Elem get(int atomicNumber) {
