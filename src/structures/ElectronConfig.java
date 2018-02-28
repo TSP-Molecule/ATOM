@@ -30,7 +30,7 @@ public class ElectronConfig {
             nobleHead = Elem.getBySymbol(noble);
             eConfig = initConfig(eConfigString.substring(5));
         } else {
-            nobleHead = null;
+            nobleHead = Elem.NULL;
             eConfig = initConfig(eConfigString);
         }
     }
@@ -49,7 +49,7 @@ public class ElectronConfig {
         return nobleHead;
     }
 
-    public ArrayList<String> geteConfig() {
+    public ArrayList<String> getConfig() {
         return eConfig;
     }
 }
