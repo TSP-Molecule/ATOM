@@ -1,4 +1,4 @@
 package structures.enums;
 
-public enum Series {
+public enum Period {
 }

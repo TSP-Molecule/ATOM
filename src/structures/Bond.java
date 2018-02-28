@@ -24,7 +24,7 @@ public class Bond {
      */
     private Set<Atom> bondedAtoms;
 
-    public Bond(BondOrder order, Atom tailAtom, Set<Atom> bondedAtoms) {
+    public Bond(BondOrder order, Set<Atom> bondedAtoms) {
         this.order = order;
         this.bondedAtoms = bondedAtoms;
     }

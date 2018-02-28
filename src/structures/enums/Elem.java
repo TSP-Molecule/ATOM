@@ -163,6 +163,13 @@ public enum Elem {
         return null;
     }
 
+    public static Elem getBySymbol( String symbol) {
+        for ( Elem e: Elem.values()) {
+            if (e.getSymbol().equalsIgnoreCase(symbol)) return e;
+        }
+        return null;
+    }
+
     public String getName() {
         return name();
     }
