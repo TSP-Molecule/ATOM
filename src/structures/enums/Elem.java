@@ -1,6 +1,8 @@
 package structures.enums;
 
 
+import structures.ElectronConfig;
+
 /**
  *  Elem Enum
  *      @author Emily Anible
@@ -134,26 +136,30 @@ public enum Elem {
     private String symbol;
     private final double atomicMass;
     private final int color;
-    private final String eConfig;        //Electron Configuration
+    private final String eConfigString;        //Electron Configuration
     private final double eNegativity;
     private final int atomicRadius;
     private final String bondingType;
     private final double density;
     private final Type type;
     private final int state;          //0 1 2, solid liquid gas.
-
-    Elem(int atomicNumber, String symbol, double atomicMass, int color, String eConfig, double eNegativity, int atomicRadius, String bondingType, double density, Type type, int state) {
+    private ElectronConfig eConfig;
+    
+    Elem(int atomicNumber, String symbol, double atomicMass, int color, String eConfigString, double eNegativity, int atomicRadius, String bondingType, double density, Type type, int state) {
         this.atomicNumber = atomicNumber;
         this.symbol = symbol;
         this.atomicMass = atomicMass;
         this.color = color;
-        this.eConfig = eConfig;
+        this.eConfigString = eConfigString;
         this.eNegativity = eNegativity;
         this.atomicRadius = atomicRadius;
         this.bondingType = bondingType;
         this.density = density;
         this.type = type;
         this.state = state;
+
+        /* Initialize the Electron Configuration for this element */
+        eConfig = new ElectronConfig(eConfigString);
     }
 
     public static Elem get(int atomicNumber) {
@@ -191,8 +197,8 @@ public enum Elem {
         return color;
     }
 
-    public String geteConfig() {
-        return eConfig;
+    public String geteConfigString() {
+        return eConfigString;
     }
 
     public double geteNegativity() {
@@ -226,7 +232,7 @@ public enum Elem {
                 ", symbol='" + symbol + '\'' +
                 ", atomicMass=" + atomicMass +
                 ", color=" + color +
-                ", eConfig='" + eConfig + '\'' +
+                ", eConfigString='" + eConfigString + '\'' +
                 ", eNegativity=" + eNegativity +
                 ", atomicRadius=" + atomicRadius +
                 ", bondingType='" + bondingType + '\'' +
