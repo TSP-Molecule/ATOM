@@ -113,7 +113,7 @@ public enum Elem {
     Fermium       (100,"Fm",257        ,0xB31FBA,"[Rn]-5f12-7s2"         ,1.3   ,-99999,""                ,-99999   ,Type.ACTINIDE,-1)    ,
     Mendelevium   (101,"Md",258        ,0xB30DA6,"[Rn]-5f13-7s2"         ,1.3   ,-99999,""                ,-99999   ,Type.ACTINIDE,-1)    ,
     Nobelium      (102,"No",259        ,0xBD0D87,"[Rn]-5f14-7s2"         ,1.3   ,-99999,""                ,-99999   ,Type.ACTINIDE,-1)    ,
-    Lawrencium    (103,"Lr",262        ,0xC70066,"[Rn]-5f14-7s2-7p1"     ,1.3   ,-99999,""                ,-99999   ,Type.TRANSITION_METAL     ,-1)    ,
+    Lawrencium    (103,"Lr",262        ,0xC70066,"[Rn]-5f14-7s2-7p1"     ,1.3   ,-99999,""                ,-99999   ,Type.ACTINIDE    ,-1)    ,
     Rutherfordium (104,"Rf",267        ,0xCC0059,"[Rn]-5f14-6d2-7s2"     ,-99999,-99999,""                ,-99999   ,Type.TRANSITION_METAL     ,-1)    ,
     Dubnium       (105,"Db",268        ,0xD1004F,"[Rn]-5f14-6d3-7s2"     ,-99999,-99999,""                ,-99999   ,Type.TRANSITION_METAL     ,-1)    ,
     Seaborgium    (106,"Sg",271        ,0xD90045,"[Rn]-5f14-6d4-7s2"     ,-99999,-99999,""                ,-99999   ,Type.TRANSITION_METAL     ,-1)    ,
