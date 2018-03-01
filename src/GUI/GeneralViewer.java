@@ -4,9 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -25,38 +23,68 @@ public class GeneralViewer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        MenuBar bar = makeMenuBar(primaryStage);
-        BorderPane mainPane = new BorderPane();
-        mainPane.setTop(bar);
-        GridPane middle = new GridPane();
-        middle.add(displayPane(primaryStage), 0, 0);
-        middle.add(viewPane(primaryStage), 1, 0);
-        middle.setBackground( new Background(new BackgroundFill(Color.rgb(255, 0, 0), new CornerRadii(2), new Insets(2))));
-        mainPane.setCenter(middle);
-        Scene scene = new Scene(mainPane, 1200, 800);
-        primaryStage.setScene(scene);
+        primaryStage = window();
         primaryStage.show();
+    }
+
+    /**
+     * Displays the full window with a split view
+     * @return the stage containing the window
+     */
+    public Stage window() {
+        Stage stage = new Stage();
+        Group group = new Group();
+        GridPane pane = new GridPane();
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 0, 0), new CornerRadii(2), new Insets(2))));
+        pane.setPrefSize(1200, 600);
+
+        TextArea left = new TextArea("Molecule here");
+        left.setMinSize(600, 700);
+        left.setBackground(new Background(new BackgroundFill(Color.rgb(255, 200, 220), new CornerRadii(2), new Insets(0))));
+        pane.add(left, 0, 0);
+
+        TextArea right = new TextArea("Molecule Info will go here");
+        right.setMinSize(600, 700);
+        right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
+        pane.add(right, 1, 0);
 
 
-
+        group.getChildren().add(pane);
+        BorderPane mainPane = new BorderPane();
+        mainPane.setPrefSize(stage.getWidth(), stage.getHeight());
+        mainPane.setTop(makeMenuBar(stage));
+        mainPane.setCenter(group);
+        Scene scene = new Scene(mainPane, 1200, 800);
+        stage.setScene(scene);
+        return stage;
 
     }
 
+
     private GridPane displayPane(Stage stage) {
         GridPane p = new GridPane();
-        p.setPrefSize(stage.getWidth()/2, stage.getHeight()*2/3);
+       // p.setPrefSize(stage.getWidth()/2, stage.getHeight()*2/3);
+        p.setMinSize(stage.getWidth()/2, stage.getHeight() *2/3);
         p.setBackground(new Background(new BackgroundFill(Color.rgb(255, 0, 0), new CornerRadii(2), new Insets(2))));
         return p;
     }
 
     private FlowPane viewPane(Stage stage) {
         FlowPane pane = new FlowPane();
-        Text info = new Text(pane.getWidth()/2, pane.getHeight()/4, "This will display a molecule");
+        Text info = new Text(pane.getWidth()/2, pane.getHeight(), "This will display a molecule");
         pane.getChildren().add(info);
         pane.setPrefSize(stage.getWidth()/2, stage.getHeight());
         pane.setBackground( new Background(new BackgroundFill(Color.rgb(255, 250, 0), new CornerRadii(2), new Insets(2))));
 
         return pane;
+    }
+
+    private SubScene sub (Parent scene, double w, double h) {
+        SubScene scene1 = new SubScene(scene, w, h);
+        scene1.setWidth(500);
+        scene1.setHeight(600);
+        scene1.setFill(Color.rgb(180, 255, 180));
+        return scene1;
     }
 
 
@@ -133,10 +161,20 @@ public class GeneralViewer extends Application {
         MenuItem view2D = new MenuItem("2D View");
         MenuItem search = new MenuItem("Search");
         MenuItem viewInfoWindow = new MenuItem("View molecule info in new window");
+        MenuItem viewPeriodicTable = new MenuItem("View periodic table");
+        viewPeriodicTable.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //PeriodicTableView view = new PeriodicTableView();
+                TrialPeriodic2 view = new TrialPeriodic2();
+                view.show();
+            }
+        });
         navigation.getItems().add(view2D);
         navigation.getItems().add(view3D);
         navigation.getItems().add(search);
         navigation.getItems().add(viewInfoWindow);
+        navigation.getItems().add(viewPeriodicTable);
         bar.getMenus().add(navigation);
 
         Menu help = new Menu("Help");
@@ -201,9 +239,4 @@ public class GeneralViewer extends Application {
         return null;
     }
 
-
-//    Menu file = new Menu("File");
-//    MenuItem open = new MenuItem("Open");
-//    MenuItem saveImage = new MenuItem("Save");
-//    MenuItem exit = new MenuItem("Exit");
 }

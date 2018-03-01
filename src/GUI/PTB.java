@@ -8,13 +8,18 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import structures.Atominomicon;
-//import structures.Element;
 import structures.enums.Elem;
 import structures.enums.Type;
 import javafx.scene.control.Button;
-
 import java.io.IOException;
+
+/**
+ * Creates a Button to display an element in the Periodic Table.
+ * @author Sarah Larkin
+ * Date Last Modified: February 28, 2018
+ */
 
 public class PTB extends Button {
 
@@ -22,7 +27,6 @@ public class PTB extends Button {
     private int col;
     private int num;
     private String label;
-   // private Element element;
     private Color plain;
     private Color highlighted =  Color.rgb(250, 250, 195);
     private Color selected;
@@ -51,21 +55,12 @@ public class PTB extends Button {
     private Background bl;
     private BackgroundFill b;
 
-//    NONMETAL,
-//    NOBLE_GAS,
-//    ALKALI_METAL,
-//    ALKALINE_EARTH_METAL,
-//    METALLOID,
-//    HALOGEN,
-//    METAL,
-//    TRANSITION_METAL,
-//    POST_TRANSITION_METAL,
-//    ACTINOID,
-//    LANTHANOID;
 
-
+    /**
+     * Assigns a color to the element button based on the element type.
+     * @param type the type of the element
+     */
     private void assignColors(Type type) {
-
         switch(type) {
             case NONMETAL:  plain = plainCols[0]; selected = selectCols[0]; break;
             case NOBLE_GAS: plain = plainCols[1]; selected = selectCols[1]; break;
@@ -86,7 +81,7 @@ public class PTB extends Button {
 
     }
 
-    public PTB (int n, int r, int c, GridPane pane) {
+    public PTB (int n, int r, int c, GridPane pane, Stage stage) {
         num = n;
         row = r;
         col = c;
@@ -97,19 +92,17 @@ public class PTB extends Button {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //atomic num, atomSymbol, atomicWeight, name
+        // Display atomic num, atomSymbol, atomicWeight
         if (num > 0) {
-            label = String.format("%d\n%s\n%f%s", num, Elem.get(num).getSymbol(), Elem.get(num).getAtomicMass(), Elem.get(num).getName());
+            label = String.format("%d\n%s\n%.2f", num, Elem.get(num).getSymbol(), Elem.get(num).getAtomicMass());
             setText(label);
         }
-
         if (num > 0) {
             assignColors(Elem.get(num).getType());
         } else {
             assignColors(Type.NONE);
         }
         this.setBackground(new Background(new BackgroundFill(plain,cnorm, inorm )));
-     //   Button button = new Button();
         this.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -117,14 +110,19 @@ public class PTB extends Button {
                     chosen = true;
                     setBackground(new Background(new BackgroundFill(selected,chigh, ihigh )));
                     //TODO: display window
-                    //display new window
+                } else {
+                    chosen = false;
+                    hover = true;
+                    setBackground(new Background(new BackgroundFill(highlighted,chigh, ihigh )));
+
                 }
+
             }
         });
         this.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(!hover) {
+                if(!hover && !chosen) {
                     hover = true;
                     setBackground(new Background(new BackgroundFill(highlighted,chigh, ihigh )));
                 }
@@ -136,18 +134,18 @@ public class PTB extends Button {
             public void handle(MouseEvent event) {
                 if(hover) {
                     hover = false;
-                    setBackground(new Background(new BackgroundFill(plain, cnorm, inorm )));
+                    if (!chosen ) {
+                        setBackground(new Background(new BackgroundFill(plain, cnorm, inorm)));
+                    }
                 }
             }
         });
-      //  this.setWidth(100);
-      ////  this.setHeight(100);
         setPrefSize(50, 80);
+
         if (n ==-1) {
             setVisible(false);
         }
         pane.add(this, col, row);
-        //element;
     }
 
 
