@@ -61,7 +61,7 @@ public class GeneralViewer extends Application {
         mainPane.setCenter(group);
         Scene scene = new Scene(mainPane, 1200, 800);
         stage.setScene(scene);
-        stage.setTitle("ATOM");
+        stage.setTitle("ATOM - A Tiny Object Modeler");
         return stage;
 
     }
