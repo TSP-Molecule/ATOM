@@ -1,5 +1,8 @@
-package GUI;
+package Deprecated_Outdated;
 
+
+
+import GUI.PeriodicTableView;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,7 +25,7 @@ import java.util.ArrayList;
  * CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 1, 2018
  */
-public class GeneralViewer extends Application {
+public class OldGeneralView extends Application {
 
     Atominomicon atominimicon;
 
@@ -67,9 +70,9 @@ public class GeneralViewer extends Application {
     }
 
     /**
-     * Makes a central pane that can be used for organizing panels.
-     * @param stage the window of display
-     * @return the grid pane
+     *
+     * @param stage
+     * @return
      */
     private GridPane displayPane(Stage stage) {
         GridPane p = new GridPane();
@@ -78,27 +81,16 @@ public class GeneralViewer extends Application {
         return p;
     }
 
-    /**
-     * Makes a flow pane that can contain the molecule model
-     * @param stage the window of display
-     * @return the flow pane
-     */
     private FlowPane viewPane(Stage stage) {
         FlowPane pane = new FlowPane();
         Text info = new Text(pane.getWidth()/2, pane.getHeight(), "This will display a molecule");
         pane.getChildren().add(info);
         pane.setPrefSize(stage.getWidth()/2, stage.getHeight());
         pane.setBackground( new Background(new BackgroundFill(Color.rgb(255, 250, 0), new CornerRadii(2), new Insets(2))));
+
         return pane;
     }
 
-    /**
-     * Makes a subscene which is an alternate option for displaying a 3D model
-     * @param scene the parent scene, or window
-     * @param w the width of the subscene
-     * @param h the height of the subscene
-     * @return the subscene completed
-     */
     private SubScene sub (Parent scene, double w, double h) {
         SubScene scene1 = new SubScene(scene, w, h);
         scene1.setWidth(500);
@@ -155,12 +147,13 @@ public class GeneralViewer extends Application {
                     if (node instanceof Label) {
                         Label l = (Label) node;
                         String s = l.getText();
-                        // TODO: Display molecule
+                        // Display molecule
+                        //  Window w;
                     }
                 }
             });
         }
-       return pane;
+        return pane;
     }
 
 
@@ -184,6 +177,7 @@ public class GeneralViewer extends Application {
         viewPeriodicTable.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                //PeriodicTableView view = new PeriodicTableView();
                 PeriodicTableView view = new PeriodicTableView();
                 view.show();
             }
@@ -201,6 +195,7 @@ public class GeneralViewer extends Application {
         MenuItem sources = new MenuItem("Sources");
         help.getItems().addAll(userManual, about, sources);
         bar.getMenus().add(help);
+        // bar.getMenus().add
 
         return bar;
     }
@@ -239,4 +234,22 @@ public class GeneralViewer extends Application {
         return file;
     }
 
+    private Menu makeMenu(String s, MenuItem ... args ) {
+        return null;
+    }
+
+    private MenuItem makeMenuItem(String s) {
+        MenuItem item = new MenuItem(s);
+        item.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                switch (s) {
+                    case "save":
+                }
+            }
+        });
+        return null;
+    }
+
 }
+

@@ -1,106 +1,219 @@
 package GUI;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import structures.enums.Elem;
+import structures.enums.Type;
+
 import java.util.ArrayList;
 
 /**
- * Displays the periodic table of the elements.
- * @author Sarah Larkin
- *
+ * Displays the periodic table of the elements with the ability to click on any
+ * element to select it, as well as scroll-over highlighting.
+ * @author  Sarah Larkin
+ * CS3141, Spring 2018, Team ATOM
+ * Date Last Modified: March 1, 2018
  */
 public class PeriodicTableView extends Stage {
 
+    private ArrayList<Button> buttonList = new ArrayList<Button>();
+
     public PeriodicTableView() {
         Group group = new Group();
-        group.getChildren().add(makeTable());
-        Line line = new Line(110, 450, 145, 685);
-        Line line2 = new Line(110, 530, 145, 760);
-        group.getChildren().addAll(line, line2);
-        Scene scene = new Scene(group, 900, 800);
-        setTitle("Periodic Table of the Elements");
-        setScene(scene);
+        GridPane pane = new GridPane();
+        makeTable(pane);
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                for(Button b: buttonList) {
+                    ((PeriodicTableButton)b).normalize();
+                    ((PeriodicTableButton)b).setHov(false);
+                    ((PeriodicTableButton)b).setSelected(false);
+                }
+            }
+        });
+        group.getChildren().add(pane);
+        Text lanthanides = new Text(145, 620, "Lanthanides");
+        group.getChildren().add(lanthanides);
+        Line line1 = new Line(122,440, 142, 680 );
+        Line line1h = new Line(142, 680, 178, 680);
+        Text actinides = new Text(70, 760, "Actinides");
+        Line line2 = new Line(122, 520, 142, 760);
+        Line line2h = new Line(142, 760, 178, 760);
+        group.getChildren().addAll(line1, line1h, actinides, line2, line2h);
+        Scene s = new Scene(group, 1080, 800);
+        setScene(s);
+        setTitle("The Periodic Table of the Elements");
         show();
     }
 
-    private ArrayList<Button> buttons = new ArrayList<>();
+    private boolean hover = false;
+    private boolean selected = false;
+
+    Button [][] table = new Button [10][18];
 
     /**
-     * Gets the list of buttons in the table
-     * @return the button list
+     * Fills in the full table of elements in a grid pane.
+     * @param pane
      */
-    public ArrayList<Button> getButtons() {
-        return buttons;
+    private void makeTable(GridPane pane) {
+        initializeGrid();
+        addElementsToGrid();
+        displayGrid(pane);
     }
 
     /**
-     * Puts all the buttons in the table - hardcoded for now but will be rewritten in the near future.
-     * @return the pane with all the buttons in it.
+     * Initializes all the buttons in the grid as placeholders.
      */
-    private GridPane makeTable() {
-        GridPane pane = new GridPane();
-        ArrayList<Button> buttons = new ArrayList<>();
-        buttons.add(new PTB(1, 0, 0, pane, this));
-        buttons.add(new PTB(3,1, 0, pane, this));
-        for(int i = 1; i < 17; i++) {
-            buttons.add(new PTB(-1, 0, i, pane, this));
+    private void initializeGrid() {
+        for (int i = 0, j = 0; (i * j) < 154; i++) {
+            if ((i > 0) && (i % 18 == 0)){
+                i = 0;
+                j++;
+            }
+            Button b = new PeriodicTableButton("null", Type.NONE);
+            b.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    for (Button button : buttonList) {
+                        ((PeriodicTableButton) button).setSelected(false);
+                        ((PeriodicTableButton) button).setHov(false);
+                        ((PeriodicTableButton) button).normalize();
+                    }
+                }
+            });
+            table[j][i] = b;
         }
-        buttons.add(new PTB(2, 0, 17, pane, this));
-        buttons.add(new PTB(3,1, 0, pane, this));
-        buttons.add(new PTB(4,1, 1, pane, this));
+    }
 
-        for(int i = 2; i < 12; i++) {
-            buttons.add(new PTB(-1, 1, i, pane, this));
-        }
-        for (int i = 12, j = 5; i < 18; i++, j++) {
-            buttons.add(new PTB(j, 1, i, pane, this));
-        }
+    /**
+     * Adds all the elements to the grid by series and period.
+     */
+    private void addElementsToGrid() {
+        int act = 3;
+        int lan = 3;
+        for(int i = 1; i < 119; i++) {
+            String s = String.format("%d\n%s\n%-5.2f", Elem.get(i).getNum(), Elem.get(i).getSymbol(), Elem.get(i).getAtomicMass());
+            PeriodicTableButton b = new PeriodicTableButton(s, Elem.get(i).getType());
 
-        buttons.add(new PTB(11, 2, 0, pane, this));
-        buttons.add(new PTB(12,2, 1, pane, this));
-        for(int i = 2; i < 12; i++) {
-            buttons.add(new PTB(-1, 2, i, pane, this));
-        }
-        for (int i = 12, j = 13; i < 18; i++, j++) {
-            buttons.add(new PTB(j, 2, i, pane, this));
-        }
-        for(int i = 0, j = 19, r = 3; i < 18; i++, j++ ) {
-            buttons.add(new PTB(j,r,i,pane, this ));
-            if (i == 17 && j == 36) {
-                i = -1;
-                r = 4;
+            buttonList.add(b);
+            highlightElem(b);
+            selectElem(b);
+
+            int  row = Elem.get(i).getPeriod().getInt() - 1;
+            int col = Elem.get(i).getGroup().getInt() - 1;
+
+            if ( col < 18) {
+                table[row][col] = b;
+            } else if (col == 18) {
+                table[9][act] = b;
+                act++;
+            } else if (col == 19) {
+                table[8][lan] = b;
+                lan++;
             }
         }
-        buttons.add(new PTB(55, 5, 0, pane, this));
-        buttons.add(new PTB(56, 5, 1, pane, this));
-        for(int i = 3, j = 72; i < 18; i++, j++) {
-            buttons.add(new PTB(j, 5, i, pane, this));
-        }
-
-        buttons.add(new PTB(87, 6, 0, pane, this));
-        buttons.add(new PTB(88, 6, 1, pane, this));
-        for(int i = 3, j = 104; i < 18; i++, j++) {
-            buttons.add(new PTB(j, 6, i, pane, this));
-        }
-        for(int i = 0; i < 18; i++) {
-            buttons.add(new PTB(-1, 7, i, pane, this));
-        }
-        for(int i = 0; i < 3; i++) {
-            buttons.add(new PTB(-1, 8, i, pane, this));
-        }
-        for(int i = 3, j = 57; i < 18; i++, j++) {
-            buttons.add(new PTB(j, 8, i, pane, this));
-        }
-        for(int i = 0; i < 3; i++) {
-            buttons.add(new PTB(-1, 9, i, pane, this));
-        }
-        for(int i = 3, j = 89; i < 18; i++, j++) {
-            buttons.add(new PTB(j, 9, i, pane, this));
-        }
-
-        return pane;
     }
+
+    /**
+     * Adds all the elements to a visible grid pane, setting their button sizes.
+     * @param pane the pane to receive the elements.
+     */
+    private void displayGrid(GridPane pane) {
+        for (int i = 0, j = 0; (i * j) <= 17*9; i++) {
+
+            if (i > 0 && i % 18 == 0) {
+                i = 0;
+                j++;
+            }
+            Button b = table[j][i];
+            b.setPrefSize(60, 80);
+            pane.add(b, i, j);
+        }
+    }
+
+
+    /**
+     * Adds event listening utility for highlighting and un-highlighting each
+     * element by attaching an event listener
+     * @param b the button to be highlighted
+     */
+    private void highlightElem(PeriodicTableButton b) {
+        b.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(!anySelected()) {
+                    for (Button blue: buttonList) {
+                        ((PeriodicTableButton)blue).setHov(false);
+                        ((PeriodicTableButton)blue).normalize();
+                    }
+                    b.setHov(true);
+                    b.highlight();
+                }
+            }
+        });
+        b.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                if(!anySelected()) {
+                    for (Button b: buttonList) {
+                        ((PeriodicTableButton)b).setHov(false);
+                        ((PeriodicTableButton) b).normalize();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Provides utility of selecting only one button at a time by attaching an
+     * event listener.
+     * @param b button to be selected
+     */
+    private void selectElem(PeriodicTableButton b) {
+        b.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                if (!b.getSelected()) {
+                    for(Button button: buttonList) {
+                        ((PeriodicTableButton)button).setHov(false);
+                        ((PeriodicTableButton)button).setSelected(false);
+                        ((PeriodicTableButton)button).normalize();
+                    }
+                    b.setSelected(true);
+                    b.choose();
+                } else {
+                    b.setSelected(false);
+                    b.normalize();
+                }
+            }
+        });
+    }
+
+    /**
+     * Checks if any buttons are currently selected
+     * @return whether any buttons are selected.
+     */
+    private boolean anySelected() {
+        for(Button b: buttonList) {
+            if (((PeriodicTableButton)b).getSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
 }

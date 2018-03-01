@@ -11,10 +11,10 @@ package structures.enums;
 public enum Elem {
     //  Name           num sym  mass        color    econfig                  eneg   radius bonding            density   group           type                  state
     NULL          (0  ,""  ,-99999     ,0x999999,""                      ,-99999,-99999,""                ,-99999   ,null           ,null          ,   null                  	,-1)	,
-    Hydrogen      (1  ,"H" ,1.00794    ,0xFFFFFF,"1s1"                   ,2.2   ,37    ,"diatomic"        ,0.0000899,Group.Group2   ,Period.Period1 ,Type.NONMETAL            	,2)     ,
-    Helium        (2  ,"He",4.002602   ,0xD9FFFF,"1s2"                   ,1     ,32    ,"atomic"          ,0.0001785,Group.Group1   ,Period.Period1 ,Type.NOBLE_GAS            	,2)     ,
-    Lithium       (3  ,"Li",6.941      ,0xCC80FF,"[He]-2s1"              ,0.98  ,134   ,"metallic"        ,0.535    ,Group.Group2   ,Period.Period2 ,Type.ALKALI_METAL         	,0)     ,
-    Beryllium     (4  ,"Be",9.012182   ,0xC2FF00,"[He]-2s2"              ,1.57  ,90    ,"metallic"        ,1.848    ,Group.Group3   ,Period.Period2 ,Type.ALKALINE_EARTH_METAL  ,0)     ,
+    Hydrogen      (1  ,"H" ,1.00794    ,0xFFFFFF,"1s1"                   ,2.2   ,37    ,"diatomic"        ,0.0000899,Group.Group1   ,Period.Period1 ,Type.NONMETAL            	,2)     ,
+    Helium        (2  ,"He",4.002602   ,0xD9FFFF,"1s2"                   ,1     ,32    ,"atomic"          ,0.0001785,Group.Group18   ,Period.Period1 ,Type.NOBLE_GAS            	,2)     ,
+    Lithium       (3  ,"Li",6.941      ,0xCC80FF,"[He]-2s1"              ,0.98  ,134   ,"metallic"        ,0.535    ,Group.Group1   ,Period.Period2 ,Type.ALKALI_METAL         	,0)     ,
+    Beryllium     (4  ,"Be",9.012182   ,0xC2FF00,"[He]-2s2"              ,1.57  ,90    ,"metallic"        ,1.848    ,Group.Group2   ,Period.Period2 ,Type.ALKALINE_EARTH_METAL  ,0)     ,
     Boron         (5  ,"B" ,10.811     ,0xFFB5B5,"[He]-2s2-2p1"          ,2.04  ,82    ,"covalent-network",2.46     ,Group.Group13  ,Period.Period2 ,Type.METALLOID           	,0)     ,
     Carbon        (6  ,"C" ,12.0107    ,0x909090,"[He]-2s2-2p2"          ,2.55  ,77    ,"covalent-network",2.26     ,Group.Group14  ,Period.Period2 ,Type.NONMETAL            	,0)     ,
     Nitrogen      (7  ,"N" ,14.0067    ,0x3050F8,"[He]-2s2-2p3"          ,3.04  ,75    ,"diatomic"        ,0.001251 ,Group.Group15  ,Period.Period2 ,Type.NONMETAL            	,2)     ,
