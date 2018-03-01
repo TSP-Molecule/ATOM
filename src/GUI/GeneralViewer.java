@@ -165,7 +165,8 @@ public class GeneralViewer extends Application {
         viewPeriodicTable.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                PeriodicTableView view = new PeriodicTableView();
+                //PeriodicTableView view = new PeriodicTableView();
+                TrialPeriodic2 view = new TrialPeriodic2();
                 view.show();
             }
         });
@@ -238,9 +239,4 @@ public class GeneralViewer extends Application {
         return null;
     }
 
-
-//    Menu file = new Menu("File");
-//    MenuItem open = new MenuItem("Open");
-//    MenuItem saveImage = new MenuItem("Save");
-//    MenuItem exit = new MenuItem("Exit");
 }
