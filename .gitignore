@@ -3,4 +3,4 @@ out/
 *.iml
 *.class
 
-src/META-INF/
+*.MF
