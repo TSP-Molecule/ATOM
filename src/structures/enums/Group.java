@@ -1,7 +1,5 @@
 package structures.enums;
 
-import javafx.scene.GroupBuilder;
-
 public enum Group {
     Group1      (1  ,"IA", 1),
     Group2      (2  ,"IIA", 2),
