@@ -3,3 +3,5 @@
 *.class
 
 *.py~
+
+out/production/ATOM/resources/

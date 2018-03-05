@@ -11,15 +11,14 @@ public class WebService {
      */
     public static String getFormula(String chem) throws IOException {
 
-        Process p = new ProcessBuilder("python", "ChemSpider.py", "-f", "water").start();
+        Process p = new ProcessBuilder("python", "./src/ChemSpider.py", "-f", "water").start();
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String formula = pin.readLine();
-        while(formula != null)
-        {
-            pin.readLine();
-            System.out.println(formula);
+        String form = null;
+        if ((form = pin.readLine()) != null) {
+            return form;
+        } else {
+            return null;
         }
-        return formula;
     }
 
     /**
@@ -31,7 +30,7 @@ public class WebService {
      */
     public static String getName(String form) throws IOException {
         String formEdit = form.replace("_", "").replace("{","").replace("}","");
-        Process p = Runtime.getRuntime().exec(new String[]{"python","ChemSpider.py", "-n", formEdit});
+        Process p = Runtime.getRuntime().exec(new String[]{"python","./src/ChemSpider.py", "-n", formEdit});
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String name = null;
         if ((name = pin.readLine()) != null) {

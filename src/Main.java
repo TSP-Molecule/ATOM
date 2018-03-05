@@ -10,6 +10,7 @@ public class Main {
             atomicDictionary = new AtomicDictionary();
 
             System.out.println("Does this work?");
-            System.out.println(WebService.getFormula("water"));
+            System.out.println(WebService.getFormula("ethyl methyl ether"));
+            System.out.println(WebService.getName("HCl"));
         }
 }
