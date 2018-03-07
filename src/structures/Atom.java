@@ -16,17 +16,11 @@ import java.util.ArrayList;
 public class Atom {
 
 
-    /**
-     * What element is this atom?
-     */
     private final Elem element;
-
-
-    /**
-     * What bonds are connected to this atom?
-     */
-    private ArrayList<Bond> bonds = null;
-
+    private ArrayList<Bond> bonds = null;   //Attached bonds
+    private int filledShells;     //Number of full electron shells
+    private int valenceShell;     //Number of electrons in valence shell
+    private int maxBonds;
     /**
      * Create an Atom with both an element and attached bonds.
      *
@@ -36,6 +30,7 @@ public class Atom {
     public Atom(Elem element, ArrayList<Bond> bonds) {
         this.element = element;
         this.bonds = bonds;
+        this.maxBonds = 8 - element.getGroup().getInt();
     }
 
 
