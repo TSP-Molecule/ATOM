@@ -1,6 +1,7 @@
 package structures;
 import structures.enums.BondOrder;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -18,22 +19,39 @@ public class Bond {
      */
     private final BondOrder order;
 
-    /**
-     *  Bond has an unordered set of atoms its attached to
-     *  //TODO: Logic or data structure to limit this to an unordered pair.
-     */
-    private Set<Atom> bondedAtoms;
+    private final Atom atomOne;
+    private final Atom atomTwo;
 
-    public Bond(BondOrder order, Set<Atom> bondedAtoms) {
+    public Bond(BondOrder order, Atom atomOne, Atom atomTwo) {
         this.order = order;
-        this.bondedAtoms = bondedAtoms;
+        this.atomOne = atomOne;
+        this.atomTwo = atomTwo;
     }
 
     public BondOrder getOrder() {
         return order;
     }
 
-    public Set<Atom> getBondedAtoms() {
+    public ArrayList<Atom> getBondedAtoms() {
+        ArrayList<Atom> bondedAtoms = new ArrayList<>(2);
+        bondedAtoms.set(0, atomOne);
+        bondedAtoms.set(1, atomTwo);
+
         return bondedAtoms;
+    }
+
+    public Atom getAtomOne() {
+        return atomOne;
+    }
+
+    public Atom getAtomTwo() {
+        return atomTwo;
+    }
+
+    @Override
+    public String toString() {
+        return "\n    Bond{ \n      atoms: "
+                + atomOne.getElement().getName() + ", " + atomTwo.getElement().getName()
+                +  ", \n      order: " + order + "}\n";
     }
 }
