@@ -23,9 +23,14 @@ public class Bond {
     private final Atom atomTwo;
 
     public Bond(BondOrder order, Atom atomOne, Atom atomTwo) {
+        //TODO: Proper checking that the bond can be formed.
         this.order = order;
         this.atomOne = atomOne;
         this.atomTwo = atomTwo;
+
+        //Add newly created bond to bond lists of both atoms.
+        atomOne.getAttachedBonds().add(this); //TODO: Method to handle bond addition in Atoms.
+        atomTwo.getAttachedBonds().add(this);
     }
 
     public BondOrder getOrder() {
