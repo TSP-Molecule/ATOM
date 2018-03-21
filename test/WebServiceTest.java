@@ -1,10 +1,11 @@
 import org.junit.Test;
-import static junit.framework.TestCase.fail;
 
-class WebServiceTest {
+import static org.junit.Assert.fail;
+
+public class WebServiceTest {
 
     @Test
-    void getFormula() {
+    public void getFormula() {
         try {
             String water = WebService.getFormula("water");
             if (!water.equals("H_{2}O")) {
@@ -27,13 +28,13 @@ class WebServiceTest {
                 fail("ethyl methyl ether should be C_{3}H_{8}O");
             }
         } catch (Exception e) {
-            fail("Python script missing");
             e.printStackTrace();
+            fail("Python script missing OR python dependencies not installed\n\tCheck that Python & chemspipy are installed");
         }
     }
 
     @Test
-    void getName() {
+    public void getName() {
         try {
             String water = WebService.getName("H_{2}O");
             if (!water.equals("Water")) {
@@ -56,8 +57,9 @@ class WebServiceTest {
                 fail("C_{3}H_{8}O should be Isopropanol");
             }
         } catch (Exception e) {
-            fail("Python script missing");
+            System.out.println(System.getProperty("user.dir"));
             e.printStackTrace();
+            fail("Python script missing OR python dependencies not installed\n\tCheck that Python & chemspipy are installed");
         }
     }
 }

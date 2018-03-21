@@ -2,10 +2,14 @@
 
 #Syntax to run command: python ChemSpider.py -(f/n) term
 #     -f name -> get the formula for the common name formula
-#     -n formula -> get the comman name for the formula
+#     -n formula -> get the common name for the formula
 
 import sys
 #allows us to use command line arguments
+
+if len(sys.argv) < 3:
+     print("Incorrect input.\n\t==> python ChemSpider.py [-f/-n] <argument>")
+     sys.exit()
 
 from chemspipy import ChemSpider
 cs = ChemSpider('3e05e0a6-9f49-4dff-ba0e-a9d6ca3d04ea')
