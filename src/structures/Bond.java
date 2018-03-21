@@ -1,4 +1,5 @@
 package structures;
+
 import structures.enums.BondOrder;
 
 import java.util.ArrayList;
@@ -6,16 +7,17 @@ import java.util.Set;
 
 /**
  * Bond , Chemical structures.Bond -
- *      @author Emily Anible
- *          A bond forms between two atoms and has a couple of properties.
  *
- *      //TODO: What happens when we create a Bond?
- *      //TODO: What happens when we break  a Bond?
+ * @author Emily Anible
+ * A bond forms between two atoms and has a couple of properties.
+ * <p>
+ * //TODO: What happens when we create a Bond?
+ * //TODO: What happens when we break  a Bond?
  */
 public class Bond {
 
     /**
-     *  BondOrder - 1 for single bonds, 2 for double, 3 for triple.
+     * BondOrder - 1 for single bonds, 2 for double, 3 for triple.
      */
     private final BondOrder order;
 
@@ -57,6 +59,6 @@ public class Bond {
     public String toString() {
         return "\n    Bond{ \n      atoms: "
                 + atomOne.getElement().getName() + ", " + atomTwo.getElement().getName()
-                +  ", \n      order: " + order + "}\n";
+                + ", \n      order: " + order + "}\n";
     }
 }
