@@ -2,7 +2,7 @@
 
 #Syntax to run command: python ChemSpider.py -(f/n) term
 #     -f name -> get the formula for the common name formula
-#     -n formula -> get the comman name for the formula
+#     -n formula -> get the common name for the formula
 
 import sys
 #allows us to use command line arguments
