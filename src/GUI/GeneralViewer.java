@@ -173,8 +173,6 @@ public class GeneralViewer extends Application {
         MenuBar bar = new MenuBar();
         bar.getMenus().add(makeFileMenu(p));
 
-
-
         Menu navigation = new Menu("Navigation");
         MenuItem view3D = new MenuItem("3D View");
         MenuItem view2D = new MenuItem("2D View");
@@ -203,6 +201,22 @@ public class GeneralViewer extends Application {
         bar.getMenus().add(help);
 
         return bar;
+    }
+
+
+    public void makeSearchBar(MenuBar bar) {
+        // may need a panel to hold both menubar and search bar
+        TextField search = new TextField();
+        Button go = new Button("GO");
+        go.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String newSearch = search.getText();
+                // perform a search
+                search.setText("");
+            }
+        });
+       // bar.getMenus().add
     }
 
     /**

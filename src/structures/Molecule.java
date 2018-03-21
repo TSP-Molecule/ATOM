@@ -31,7 +31,6 @@ public class Molecule {
             if ((center.getElement() == Elem.Hydrogen)
                     || (a.getElement().geteNegativity() < center.getElement().geteNegativity()
                     && a.getElement() != Elem.Hydrogen)) {
-
                 center = a;
             }
         }

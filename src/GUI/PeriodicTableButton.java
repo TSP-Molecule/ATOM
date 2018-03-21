@@ -6,6 +6,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import structures.enums.Elem;
 import structures.enums.Type;
 
 /**
@@ -18,22 +19,23 @@ public class PeriodicTableButton extends Button {
 
     private boolean hover = false;
     private boolean selected = false;
+    private Elem element = null;
 
     private static double q = 0.75;// opacity of color
 
     private static Color plainCols [] = {
             Color.rgb(188, 255, 128, 1), Color.rgb(240, 128, 128, 1), Color.rgb(255, 209, 128, 1), Color.rgb(166, 160, 67, 1),
-            Color.rgb(94, 224, 255, 1), Color.rgb(134, 252, 110, 1), Color.rgb(132, 118, 255, 1), Color.rgb(255, 55, 128, 1),
-            Color.rgb(255, 114, 247, 1), Color.rgb(166, 67, 160, 1), Color.rgb(195, 195, 195, 1), Color.rgb(120, 120, 120, 1),
+            Color.rgb(94, 224, 255, 1), Color.rgb(134, 252, 110, 1), Color.rgb(215, 184, 255, 1), Color.rgb(255, 95, 168, 1),// 55 128
+            Color.rgb(255, 114, 247, 1), Color.rgb(230, 180, 180, 1), Color.rgb(195, 195, 195, 1), Color.rgb(120, 120, 120, 1),
             Color.rgb(255, 185, 105, 1)
     };
 
-    private static Color selectCols [] = {
-            Color.rgb(188, 255, 128, q), Color.rgb(240, 128, 128, q), Color.rgb(255, 209, 128, q), Color.rgb(166, 160, 67, q),
-            Color.rgb(94, 224, 255, q), Color.rgb(134, 252, 110, q), Color.rgb(132, 118, 255, q), Color.rgb(255, 55, 128, q),
-            Color.rgb(255, 114, 247, q), Color.rgb(166, 67, 160, q), Color.rgb(195, 195, 195, q), Color.rgb(120, 120, 120, q),
-            Color.rgb(255, 185, 105, q)
-    };
+//    private static Color selectCols [] = {
+//            Color.rgb(188, 255, 128, q), Color.rgb(240, 128, 128, q), Color.rgb(255, 209, 128, q), Color.rgb(166, 160, 67, q),
+//            Color.rgb(94, 224, 255, q), Color.rgb(134, 252, 110, q), Color.rgb(132, 118, 255, q), Color.rgb(255, 55, 128, q),
+//            Color.rgb(255, 114, 247, q), Color.rgb(166, 67, 160, q), Color.rgb(195, 195, 195, q), Color.rgb(120, 120, 120, q),
+//            Color.rgb(255, 185, 105, q)
+//    };
 
     private CornerRadii cnorm = new CornerRadii(3);// normal corner radius
     private CornerRadii chigh = new CornerRadii(5);// highlighted state corner radius
@@ -103,9 +105,9 @@ public class PeriodicTableButton extends Button {
     }
 
 
-    public PeriodicTableButton(String s, Type t) {
+    public PeriodicTableButton(String s, Type t, Elem elem) {
         setText(s);
-
+        element = elem;
         if (s.equalsIgnoreCase("null")) {
             setVisible(false);
         } else {
@@ -115,5 +117,11 @@ public class PeriodicTableButton extends Button {
         hover = false;
         selected = false;
     }
+
+    public Elem getElement() {
+        return element;
+    }
+
+
 
 }
