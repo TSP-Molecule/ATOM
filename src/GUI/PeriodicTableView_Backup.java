@@ -7,16 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import structures.enums.Elem;
 import structures.enums.Type;
 
-import javax.lang.model.element.Element;
 import java.util.ArrayList;
 
 /**
@@ -26,12 +22,11 @@ import java.util.ArrayList;
  * CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 1, 2018
  */
-public class PeriodicTableView extends Stage {
+public class PeriodicTableView_Backup extends Stage {
 
     private ArrayList<Button> buttonList = new ArrayList<Button>();
-    private Text currElem;
 
-    public PeriodicTableView() {
+    public PeriodicTableView_Backup() {
         Group group = new Group();
         GridPane pane = new GridPane();
         makeTable(pane);
@@ -54,16 +49,6 @@ public class PeriodicTableView extends Stage {
         Line line2 = new Line(122, 520, 142, 760);
         Line line2h = new Line(142, 760, 178, 760);
         group.getChildren().addAll(line1, line1h, actinides, line2, line2h);
-        Rectangle display = new Rectangle(250, 20, 200, 200);
-        display.setFill(Color.rgb(225, 255, 195));
-        Elem hydrogen = Elem.get(1);
-        String origElem = hydrogen.getNum() +  "\n" + hydrogen.getSymbol() + "\n" + hydrogen.getName() + "\n" + hydrogen.getAtomicMass();
-        currElem = new Text(260, 75, origElem);
-        // number, symbol, name mass electron config top right
-        currElem.setFill(Color.rgb(0, 0, 0));
-        currElem.setFont(new Font(28));
-        group.getChildren().add(display);
-        group.getChildren().add(currElem);
         Scene s = new Scene(group, 1080, 800);
         setScene(s);
         setTitle("The Periodic Table of the Elements");
@@ -117,7 +102,7 @@ public class PeriodicTableView extends Stage {
         int lan = 3;
         for(int i = 1; i < 119; i++) {
             String s = String.format("%d\n%s\n%-5.2f", Elem.get(i).getNum(), Elem.get(i).getSymbol(), Elem.get(i).getAtomicMass());
-            PeriodicTableButton b = new PeriodicTableButton(s, Elem.get(i).getType(), Elem.get(i));
+            PeriodicTableButton b = new PeriodicTableButton(s, Elem.get(i).getType(), null);
 
             buttonList.add(b);
             highlightElem(b);
@@ -172,9 +157,6 @@ public class PeriodicTableView extends Stage {
                     }
                     b.setHov(true);
                     b.highlight();
-                    Elem elem = b.getElement();
-                    String elemInfo = String.format("%d\n%s\n%s\n%f\n", elem.getNum(), elem.getSymbol(), elem.getName(), elem.getAtomicMass());
-                    currElem.setText(elemInfo);
                 }
             }
         });
