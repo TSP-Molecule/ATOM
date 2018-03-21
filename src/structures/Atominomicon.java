@@ -32,7 +32,7 @@ public class Atominomicon {
         HashMap<Integer, Atom> atomMap = new HashMap<>();
 
         for (int i = 0; i < 119; i++) {
-            Atom atom = new Atom ( Elem.get(i) );
+            Atom atom = new Atom ( Elem.get(i), null);
             atomMap.put(0, atom);
             atominomicon.add(i, atomMap);
             System.out.println(atominomicon.get(i));

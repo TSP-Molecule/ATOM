@@ -26,10 +26,12 @@ public enum Group {
 
     private final int num;
     private final String group;
+    private final int valenceElectrons;
 
-    Group(int num, String group, int i) {
+    Group(int num, String group, int valenceElectrons) {
         this.num = num;
         this.group = group;
+        this.valenceElectrons = valenceElectrons;
     }
 
     /**
@@ -60,5 +62,9 @@ public enum Group {
 
     public String getGroup() {
         return group;
+    }
+
+    public int getValenceE() {
+        return valenceElectrons;
     }
 }

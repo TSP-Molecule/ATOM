@@ -5,6 +5,9 @@ Project SDK: Java 1.8
 
 Element data from [andrejewski's periodic table](https://github.com/andrejewski/periodic-table) 
 
+# Releases
+* Deliverables 1: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-1.0/ATOM.jar) | [Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-1.0/)
+
 # Requirements
 To run ATOM, you will need both Python 3.x.x and Java 1.8.x JRE installed on your machine.
 
@@ -25,3 +28,4 @@ To use, simply click any GUI items available. The periodic table popup is availa
   Example formula: C6H12O6, H2O, HCl</br>
   
 The flag must come before other arguments.
+
