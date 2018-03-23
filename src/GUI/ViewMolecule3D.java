@@ -4,8 +4,10 @@ import com.sun.javafx.sg.prism.NGNode;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
@@ -13,6 +15,8 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.paint.Color;
+import structures.enums.Elem;
+
 
 public class ViewMolecule3D extends Application {
 
@@ -23,6 +27,10 @@ public class ViewMolecule3D extends Application {
     double centerX = camX + 400 * Math.sin(theta);
     double centerY = camZ + 400 * Math.cos(theta);
     double centerZ = 0;// Math.tan(Math.PI/6);
+    double oldX = 400;
+    double oldY = 0;
+    double oldZ = 0;
+    boolean subf = true;
 
     @Override
     public void start(Stage primaryStage) {
@@ -49,27 +57,120 @@ public class ViewMolecule3D extends Application {
 //        subScene.setCamera(cam);
 //        Group fin = new Group();
 //        fin.getChildren().add(subScene);
-
-        Scene scene = new Scene(group, 400, 400, true);
         Camera cam = new PerspectiveCamera(true);
         cam.setNearClip(0.1);
         cam.setFarClip(10000);
-        scene.setCamera(cam);
+        SubScene sub = new SubScene(group, 400, 400);
+        sub.setCamera(cam);
+        cam.getTransforms().add(new Translate(0, 0, -100));
+        GridPane pane = new GridPane();
+        pane.add(sub, 0, 0);
+        Button bob = new Button("BLUE\nBELLS\nBLOOM");
+     //   pane.add(bob, 1, 0);
+        TextField job = new TextField("blah");
+       // job.setEditable(false);
+        job.setPrefSize(200, 400);
+        pane.add(job, 1, 0);
+        Scene scene = new Scene(pane, 600, 400, true);
+
+        //scene.setCamera(cam);
       //  scene.getCamera().getTransforms().add(new Rotate(0, 0, 0, 0));
-        scene.getCamera().getTransforms().add(new Translate(0, 0, 0));
+        //.getCamera().getTransforms().add(new Translate(0, 0, 0));
         //camX = -200;
         //scene.getCamera().setLayoutX(0);
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-            double dist = 50;
-            double theta = 10;
+        job.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.RIGHT) {
-                    cam.getTransforms().add(new Rotate(theta, 0, 0, 0, Rotate.Y_AXIS));
+                    if (subf) {
+                        sub.requestFocus();
+                        group.getTransforms().add(new Rotate(theta, 0, 0, 0, Rotate.Y_AXIS));
+                    }
+                }
+            }
+        });
+
+        sub.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                sub.requestFocus();
+                subf = true;
+            }
+        });
+      job.setOnMouseEntered(new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+             // job.requestFocus();
+              subf = false;
+          }
+      });
+      sub.setOnMousePressed(new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+              oldX = event.getX();
+              System.out.println(oldX);
+          }
+      });
+        sub.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                double x = event.getX();
+                double y = event.getY();
+                if (x < oldX && Math.abs(x - oldX) > 20) {
+                   // System.out.println("BAAA");
+                    //cam.getTransforms().add(new Rotate(5, 0, 0, 0, Rotate.Y_AXIS));
+                    group.getTransforms().add(new Rotate(5, 0, 0, 0, Rotate.Y_AXIS));
+                    oldX = x;
+                } else if (x > oldX && Math.abs(x - oldX) > 20) {
+                    group.getTransforms().add(new Rotate(-5, 0, 0, 0, Rotate.Y_AXIS));
+                    oldX = x;
+                }
+                if (y > oldY && Math.abs(y - oldY) > 20) {
+                    group.getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.X_AXIS));
+                    oldY = y;
+                } else if (y < oldY && Math.abs(y - oldY) > 20) {
+                    group.getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.X_AXIS));
+                    oldY = y;
+                }
+            }
+        });
+        sub.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println(event.getX());
+            }
+        });
+
+        sub.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            double dist = 50;
+            double theta = 10;
+
+            @Override
+            public void handle(KeyEvent event) {
+
+//                sub.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//                    @Override
+//                    public void handle(KeyEvent event) {
+//                        if (event.getCode().isLetterKey()) {
+//                            System.out.println("MyKey");
+//                        }
+//                    }
+//                });
+                sub.requestFocus();
+                if (event.getCode() == KeyCode.RIGHT) {
+
+                    sub.requestFocus();
+                    cam.getTransforms().add(new Rotate(theta, 0, 0, -100, Rotate.Y_AXIS));
+                    cam.getTransforms().add(new Translate(100 * Math.cos(theta), 0, -100 * Math.sin(theta)));
                     System.out.println(cam.getTranslateX());
+                    if (job.isFocused()) {
+                        sub.requestFocus();
+                    }
+                    subf = true;
                 } else if (event.getCode() == KeyCode.LEFT){
                     cam.getTransforms().add(new Rotate(-theta, 0, 0, 0, Rotate.Y_AXIS));
+                    cam.getTransforms().add(new Translate(100 * Math.cos(-theta), 0, -100 * Math.sin(-theta)));
                 } else if (event.getCode() == KeyCode.UP) {
                     cam.getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.X_AXIS));
                 } else if (event.getCode() == KeyCode.DOWN) {
@@ -87,6 +188,7 @@ public class ViewMolecule3D extends Application {
                 }  else if (event.getCode() == KeyCode.F) {
                     cam.getTransforms().add(new Translate(0, dist, 0));
                 }
+                sub.requestFocus();
             }
 
 
@@ -138,8 +240,164 @@ public class ViewMolecule3D extends Application {
 
     }
 
+
+    public Group ammoniaMolecule() {
+        Group group = new Group();
+
+        double x = 0;
+        double y = 0;
+        double z = 0;
+        double bondLength = 200;
+
+        final double ANGLE = 120;
+        double thetaX = 0;
+        double thetaY = ANGLE;
+        double thetaZ = 0;
+
+        double bondX = bondLength * Math.cos(thetaX);
+        double bondY = Math.sin(thetaY);
+        double bondZ = bondLength * Math.sin(thetaZ);
+
+
+        Sphere carbon = new Sphere(100);
+        carbon.setMaterial(new PhongMaterial(Elem.getBySymbol("C").getColor()));
+        carbon.getTransforms().add(new Translate(x, y, z));
+        group.getChildren().add(carbon);
+
+        double theta = 45;
+
+        Cylinder bond1 = new Cylinder(10, 100);
+        bond1.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+        bond1.getTransforms().add(new Translate(bondLength * Math.cos(theta)/2, -bondLength * Math.cos(theta)/2, 0));
+        bond1.getTransforms().add(new Rotate(theta,bondLength * Math.cos(theta)/2, -bondLength * Math.cos(theta)/2, 0, Rotate.Z_AXIS));
+        group.getChildren().add(bond1);
+
+        thetaX += ANGLE;
+        thetaZ += ANGLE;
+
+        Sphere h1 = new Sphere(100);
+        h1.setMaterial(new PhongMaterial(Elem.getBySymbol("H").getColor()));
+        h1.getTransforms().add(new Translate(bondLength * Math.cos(theta), -bondLength * Math.cos(theta), 0));
+        group.getChildren().add(h1);
+
+        Cylinder bond2 = new Cylinder(10, 100);
+        bond2.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+        bond2.getTransforms().add(new Translate(bondX, bondY, bondZ));
+        bond2.getTransforms().add(new Rotate(thetaY, bondX, bondY, bondZ, Rotate.Z_AXIS));
+        group.getChildren().add(bond2);
+
+        thetaX += ANGLE;
+        thetaZ += ANGLE;
+
+        Sphere h2 = new Sphere(100);
+        h2.setMaterial(new PhongMaterial(Elem.getBySymbol("H").getColor()));
+        h2.getTransforms().add(new Translate(x + bondX * 2, y + bondY * 2, z + bondZ * 2));
+        group.getChildren().add(h2);
+
+        Cylinder bond3 = new Cylinder(10, 100);
+        bond3.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+        bond3.getTransforms().add(new Translate(bondX, bondY, bondZ));
+        bond3.getTransforms().add(new Rotate(thetaY, bondX, bondY, bondZ, Rotate.Z_AXIS));
+        group.getChildren().add(bond3);
+
+        thetaX += ANGLE;
+        thetaZ += ANGLE;
+
+        Sphere h3 = new Sphere(100);
+        h3.setMaterial(new PhongMaterial(Elem.getBySymbol("H").getColor()));
+        h3.getTransforms().add(new Translate(x + bondX * 2, y + bondY * 2, z + bondZ * 2));
+        group.getChildren().add(h3);
+
+        group.getTransforms().add(new Translate(0, 0, 1500));
+        return group;
+    }
+
+    public Group waterMolecule() {
+        Group group = new Group();
+
+       /* Sphere oxygen = new Sphere(50);
+        oxygen.setMaterial(new PhongMaterial(Elem.getBySymbol("O").getColor()));
+        group.getChildren().add(oxygen);
+
+        Cylinder bond1 = new Cylinder(50, 100);
+        bond1.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+        bond1.getTransforms().add(new Translate(100 * Math.cos(-60), 100 * Math.sin(-60), 0));
+        bond1.getTransforms().add(new Rotate(-60, 100 * Math.cos(-60), 100 * Math.sin(-60), 0, Rotate.Z_AXIS));
+        group.getChildren().add(bond1);
+
+        Sphere h1 = new Sphere(50);
+        h1.setMaterial(new PhongMaterial(Elem.getBySymbol("H").getColor()));
+        h1.getTransforms().add(new Translate(200 * Math.cos(-60), 200 * Math.sin(-60), 0));
+        group.getChildren().add(h1);
+
+        Cylinder bond2 = new Cylinder(50, 100);
+        bond2.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+        bond2.getTransforms().add(new Translate(-100 * Math.cos(-60), 100 * Math.sin(-60), 0));
+        bond2.getTransforms().add(new Rotate(-60, -100 * Math.cos(-60), 100 * Math.sin(-60), 0, Rotate.Z_AXIS));
+        group.getChildren().add(bond2);
+
+        Sphere h2 = new Sphere(50);
+        h2.setMaterial(new PhongMaterial(Elem.getBySymbol("H").getColor()));
+        h2.getTransforms().add(new Translate(-200 * Math.cos(-60), -200 * Math.sin(-60), 0));
+        group.getChildren().add(h2);*/
+
+        Sphere hydrogen = new Sphere(50);
+        PhongMaterial whiteMat = new PhongMaterial();
+        whiteMat.setDiffuseColor(Color.ANTIQUEWHITE);
+        whiteMat.setSpecularColor(Color.ANTIQUEWHITE);
+        hydrogen.setMaterial(whiteMat);
+        int bond = 200;
+
+        Sphere oxygen = new Sphere(50);
+        PhongMaterial redMat = new PhongMaterial();
+        redMat.setSpecularColor(Color.RED);
+        redMat.setDiffuseColor(Color.RED);
+        oxygen.setMaterial(redMat);
+
+        Sphere hydrogen1 = new Sphere(50);
+        hydrogen1.setMaterial(whiteMat);
+
+        Cylinder b1 = new Cylinder(10,bond);
+        PhongMaterial blackM = new PhongMaterial();
+        blackM.setDiffuseColor(Color.BLACK);
+        blackM.setSpecularColor(Color.BLACK);
+        b1.setMaterial(blackM);
+
+        Cylinder b2 = new Cylinder(10, bond);
+        b2.setMaterial(blackM);
+
+        oxygen.setTranslateX(0);
+        oxygen.setTranslateY(0);
+        oxygen.setTranslateZ(0);
+
+        hydrogen.setTranslateX(bond * Math.cos(-1 * Math.PI/3));
+        hydrogen.setTranslateY(bond * Math.sin(-1 * Math.PI/3));
+        hydrogen.setTranslateZ(0);
+
+        hydrogen1.setTranslateX(bond * Math.cos(Math.PI/3));
+        hydrogen1.setTranslateY(bond * Math.sin(Math.PI/3));
+        hydrogen1.setTranslateZ(0);
+
+        b1.setTranslateX(bond * Math.cos(-1 * Math.PI/3)/2 - 0);
+        b1.setTranslateY(bond * Math.sin(-1 * Math.PI/3)/2 + 0);
+        b1.setTranslateZ(0);
+        b1.setRotationAxis(Rotate.Z_AXIS);
+        b1.setRotate(30);
+
+        b2.setTranslateX(bond * Math.cos(Math.PI/3)/2);
+        b2.setTranslateY(bond * Math.sin(Math.PI/3)/2);
+        b2.setTranslateZ(0);
+        b2.setRotationAxis(Rotate.Z_AXIS);
+        b2.setRotate(150);
+
+        group.getChildren().addAll(b1, b2, hydrogen, oxygen, hydrogen1);
+
+        return group;
+
+    }
+
     public Group grouper() {
-        Group group = makeScene();
+        Group group = waterMolecule();
 //        Camera cam = new PerspectiveCamera(true);
 //        cam.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override

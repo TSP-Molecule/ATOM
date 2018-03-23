@@ -50,6 +50,8 @@ public class Molecule {
         return atoms;
     }
 
+
+
     @Override
     public String toString() {
         return "Molecule{" +
@@ -58,4 +60,6 @@ public class Molecule {
                 ",\n\nCENTER= " + center +
                 "\n}";
     }
+
+
 }

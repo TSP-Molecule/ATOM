@@ -40,7 +40,7 @@ public class ModelTestMolecule extends Application {
     @Override
     public void start(Stage primaryStage) {
         Group group = new Group();//grouper();
-        displayElement(Elem.Oxygen, group);
+        //displayElement(Elem.Oxygen, group);
 //        Camera cam = new PerspectiveCamera(true);
 //        cam.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
@@ -216,8 +216,15 @@ public class ModelTestMolecule extends Application {
         HashMap<Atom, Boolean> completed = new HashMap<>();
         Stack<Atom> toDisplay = new Stack<>();
         toDisplay.add(center);
+        double x = 0;
+        double y = 0;
+        double z = 0;
+        double bondOffsetX = 50;
+        double bondOffsetZ = 0;
+
         while(!toDisplay.isEmpty()) {
             Atom atom = toDisplay.pop();
+            displayElement(atom.getElement(), x, y, z, mole);
             ArrayList<Bond> bonds = atom.getAttachedBonds();
             for(Bond b: bonds) {
                Atom one =  b.getAtomOne();
@@ -227,20 +234,21 @@ public class ModelTestMolecule extends Application {
                } else {
                    toDisplay.push(one);
                }
+
             }
-atom.getElement();
-           // displayElement();
+
         }
         return null;
 
     }
 
-    public void displayElement(Elem elem, Group group) {
+    public void displayElement(Elem elem, double x, double y, double z, Group group) {
         Sphere sphere = new Sphere(100);
-        sphere.setMaterial(new PhongMaterial(Color.web("" + elem.getColor())));
+        sphere.setMaterial(new PhongMaterial(elem.getColor()));
+        sphere.getTransforms().add(new Translate(x, y, z));
         group.getChildren().add(sphere);
-        System.out.println(elem.getColor());
-        System.out.println(Color.web("" + elem.getColor()));
+//        System.out.println(elem.getColor());
+//        System.out.println(Color.web("" + elem.getColor()));
         //sphere.setMaterial(new PhongMaterial(elem.getColor()));
     }
 

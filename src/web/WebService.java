@@ -1,3 +1,5 @@
+package web;
+
 import java.io.*;
 
 public class WebService {
