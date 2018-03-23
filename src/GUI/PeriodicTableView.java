@@ -5,6 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -24,12 +26,21 @@ import java.util.ArrayList;
  * element to select it, as well as scroll-over highlighting.
  * @author  Sarah Larkin
  * CS3141, Spring 2018, Team ATOM
- * Date Last Modified: March 1, 2018
+ * Date Last Modified: March 22, 2018
  */
 public class PeriodicTableView extends Stage {
 
     private ArrayList<Button> buttonList = new ArrayList<Button>();
     private Text currElem;
+    private Color plainCols [] = {
+            Color.rgb(188, 255, 128, 1), Color.rgb(240, 128, 128, 1),
+            Color.rgb(255, 209, 128, 1), Color.rgb(166, 160, 67, 1),
+            Color.rgb(94, 224, 255, 1), Color.rgb(134, 252, 110, 1),
+            Color.rgb(215, 184, 255, 1),Color.rgb(255, 95, 168, 1),// 55 128
+            /*Color.rgb(255, 114, 247, 1),*/ Color.rgb(230, 180, 180, 1),
+            Color.rgb(195, 195, 195, 1), /*Color.rgb(120, 120, 120, 1),*/
+            Color.rgb(255, 185, 105, 1)
+    };
 
     public PeriodicTableView() {
         Group group = new Group();
@@ -62,6 +73,53 @@ public class PeriodicTableView extends Stage {
         // number, symbol, name mass electron config top right
         currElem.setFill(Color.rgb(0, 0, 0));
         currElem.setFont(new Font(28));
+
+        for (int i = 0; i < 11; i++) {
+            Rectangle rectangle = new Rectangle(500, 20 + i * 17, 180, 17);
+            rectangle.setFill(plainCols[i]);
+            group.getChildren().add(rectangle);
+            String s = "";
+            switch (i + 1) {
+                case 1:
+                    s = "NONMETAL";
+                    break;
+                case 2:
+                    s = "NOBLE_GAS";
+                    break;
+                case 3:
+                    s = "ALKALI_METAL";
+                    break;
+                case 4:
+                    s = "ALKALINE_EARTH_METAL";
+                    break;
+                case 5:
+                    s = "METALLOID";
+                    break;
+                case 6:
+                    s = "HALOGEN";
+                    break;
+                case 7:
+                    s = "METAL";
+                    break;
+                case 8:
+                    s = "TRANSITION_METAL";
+                    break;
+                case 9:
+                    s = "POST_TRANSITION_METAL";
+                    break;
+                case 10:
+                    s = "ACTINIDE";
+                    break;
+                case 11:
+                    s = "LANTHANIDE";
+                    break;
+            }
+            Text text = new Text(510, 34 + i * 17, s);
+            text.setFont(new Font(12));
+            group.getChildren().add(text);
+
+        }
+
         group.getChildren().add(display);
         group.getChildren().add(currElem);
         Scene s = new Scene(group, 1080, 800);
@@ -213,6 +271,22 @@ public class PeriodicTableView extends Stage {
                 } else {
                     b.setSelected(false);
                     b.normalize();
+                }
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    System.out.println("LEFT" + ((PeriodicTableButton) b).getElement());
+                    Stage stage = new Stage();
+                    TextArea area = new TextArea("Bohr Model will go here!");
+                    Scene scene = new Scene(area, 200, 200);
+                    stage.setScene(scene);
+                    stage.show();
+
+                } else if (event.getButton() == MouseButton.SECONDARY) {
+                    System.out.println("Right " + ((PeriodicTableButton)b).getElement().getSymbol() + "\n" +((PeriodicTableButton) b).getElement().geteConfigString() );
+                    Stage stage = new Stage();
+                    TextArea area = new TextArea("Atom Model 3D might go here!");
+                    Scene scene = new Scene(area, 200, 200);
+                    stage.setScene(scene);
+                    stage.show();
                 }
             }
         });

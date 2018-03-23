@@ -1,3 +1,4 @@
+import web.WebService;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
@@ -28,8 +29,8 @@ public class WebServiceTest {
                 fail("ethyl methyl ether should be C_{3}H_{8}O");
             }
         } catch (Exception e) {
-            fail("Python script missing OR python dependencies not installed\n\tCheck that Python & chemspipy are installed");
             e.printStackTrace();
+            fail("Python script missing OR python dependencies not installed\n\tCheck that Python & chemspipy are installed");
         }
     }
 
@@ -57,8 +58,9 @@ public class WebServiceTest {
                 fail("C_{3}H_{8}O should be Isopropanol");
             }
         } catch (Exception e) {
-            fail("Python script missing OR python dependencies not installed\n\tCheck that Python & chemspipy are installed");
+            System.out.println(System.getProperty("user.dir"));
             e.printStackTrace();
+            fail("Python script missing OR python dependencies not installed\n\tCheck that Python & chemspipy are installed");
         }
     }
 }

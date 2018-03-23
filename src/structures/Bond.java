@@ -23,6 +23,7 @@ public class Bond {
 
     private final Atom atomOne;
     private final Atom atomTwo;
+    private double bondingAngle;
 
     public Bond(BondOrder order, Atom atomOne, Atom atomTwo) {
         //TODO: Proper checking that the bond can be formed.
@@ -53,6 +54,14 @@ public class Bond {
 
     public Atom getAtomTwo() {
         return atomTwo;
+    }
+
+    public double getBondingAngle() {
+        return bondingAngle;
+    }
+
+    public void setBondingAngle(double angle) {
+        bondingAngle = angle;
     }
 
     @Override
