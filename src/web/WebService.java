@@ -1,5 +1,7 @@
 package web;
 
+import com.sun.javafx.PlatformUtil;
+
 import java.io.*;
 
 public class WebService {
@@ -14,13 +16,20 @@ public class WebService {
     public static String getFormula(String chem) throws IOException {
 
         // -f flag for formula
-        Process p = new ProcessBuilder("python", ".//src//ChemSpider.py", "-f", chem).start();
+
+        Process p;
+        if ( PlatformUtil.isWindows() ) {
+            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe", "./src/ChemSpider.py", "-f", chem});
+        }
+        else {
+            p = Runtime.getRuntime().exec(new String[]{"python", "./src/ChemSpider.py", "-f", chem});
+        }
         // Process allows for us to run external scripts and receive their output. ProcessBuilder makes the process.
 
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
         // pin is the Process IN, which allows for us to read the output from the executed script.
 
-        String form = null;
+        String form;
         if ((form = pin.readLine()) != null) {
             return form;
         } else {
@@ -43,9 +52,15 @@ public class WebService {
         // ^^reformats the string passed in (which is in our standard form) to work with the python script
 
         //getName & getFormula behave the same from here out. -n flag for name
-        Process p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files (x86)\\Python36-32\\python.exe","./src/ChemSpider.py", "-n", formEdit});
+        Process p;
+        if ( PlatformUtil.isWindows() ) {
+            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe","./src/ChemSpider.py", "-n", formEdit});
+        }
+        else {
+            p = Runtime.getRuntime().exec(new String[]{"python", "./src/ChemSpider.py", "-n", formEdit});
+        }
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String name = null;
+        String name;
         if ((name = pin.readLine()) != null) {
             return name;
         } else {
