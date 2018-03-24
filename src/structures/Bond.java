@@ -6,13 +6,9 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Bond , Chemical structures.Bond -
- *
- * @author Emily Anible
- * A bond forms between two atoms and has a couple of properties.
- * <p>
- * //TODO: What happens when we create a Bond?
- * //TODO: What happens when we break  a Bond?
+ * Bond structure. Connects two atoms.
+ * @author  Emily Anible
+ * CS3141, Spring 2018, Team ATOM
  */
 public class Bond {
 
@@ -36,10 +32,16 @@ public class Bond {
         atomTwo.getAttachedBonds().add(this);
     }
 
+    /**
+     * @return order of bond
+     */
     public BondOrder getOrder() {
         return order;
     }
 
+    /**
+     * @return atoms attached to bond
+     */
     public ArrayList<Atom> getBondedAtoms() {
         ArrayList<Atom> bondedAtoms = new ArrayList<>(2);
         bondedAtoms.set(0, atomOne);
@@ -48,6 +50,7 @@ public class Bond {
         return bondedAtoms;
     }
 
+    //TODO: We don't care what atom one or atom two is... will just be confusing in the future.
     public Atom getAtomOne() {
         return atomOne;
     }
@@ -56,10 +59,18 @@ public class Bond {
         return atomTwo;
     }
 
+    /**
+     * @return bonding angle of bond.
+     * //TODO... maybe integrate this into molecule instead.
+     */
     public double getBondingAngle() {
         return bondingAngle;
     }
 
+    /**
+     * Sets bonding angle of bond
+     * @param angle angle to set
+     */ //TODO... Maybe integrate this into molecule instead
     public void setBondingAngle(double angle) {
         bondingAngle = angle;
     }

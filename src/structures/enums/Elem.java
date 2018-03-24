@@ -4,11 +4,10 @@ package structures.enums;
 import javafx.scene.paint.Color;
 
 /**
- *  Elem Enum
- *      @author Emily Anible
- *      Contains information about the elements of the periodic table, easily accessible from anywhere in the program.
- *
- *      To reference, use Elem.[ELEMENT_NAME].get[PROPERTY]() or Elem.get( atomicNumber ).get[Property}().
+ * Contains information about the elements of the periodic table, easily accessible from anywhere in the program.
+ * To reference, use Elem.[ELEMENT_NAME].get[PROPERTY]() or Elem.get( atomicNumber ).get[Property}().
+ * @author  Emily Anible
+ * CS3141, Spring 2018, Team ATOM
  */
 public enum Elem {
     //  Name           num sym  mass        color    econfig                  eneg   radius bonding            density   group           type                  state

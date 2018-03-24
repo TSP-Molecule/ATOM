@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Atominomicon -
+ * @author  Emily Anible
+ * CS3141, Spring 2018, Team ATOM
  *
- * @author Emily Anible
  * Each instance of Atominomicon provides a full set of Atoms and their isotopes to be used as reference or
  * for building molecules.
- * <p>
  * ArrayList of HashMaps by atomic number
  * - Each Hashmap has
  * key - isotope number
