@@ -4,8 +4,9 @@ package structures.enums;
 import javafx.scene.paint.Color;
 
 /**
- *  Enum Type
  *      @author Emily Anible
+ *      CS3141, Spring 2018, Team ATOM
+ *
  *      Stores the type of an element. Set in Elem.java.
  */
 public enum Type {

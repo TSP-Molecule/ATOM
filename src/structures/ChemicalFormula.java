@@ -7,7 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ChemicalFormula attempts to parse a given chemical formula from search bar input.
+ * Stores Chemical Formula, Parses from string.
+ * Used to create proper molecule.
+ * @author  Emily Anible
+ * CS3141, Spring 2018, Team ATOM
  */
 public class ChemicalFormula {
 

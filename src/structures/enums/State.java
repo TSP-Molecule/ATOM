@@ -1,8 +1,9 @@
 package structures.enums;
 
 /**
- *  State
  *      @author Emily Anible
+ *      CS3141, Spring 2018, Team ATOM
+ *
  *      Enumeration for the state of an Element. Stores the state that
  *      the element is naturally found in, set in Elem.java.
  */

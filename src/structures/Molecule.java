@@ -4,8 +4,15 @@ import structures.enums.Elem;
 
 import java.util.ArrayList;
 
+/**
+ * Main data structure for a Molecule. Handles all molecule logic.
+ *
+ * @author Emily Anible
+ * CS3141, Spring 2018, Team ATOM
+ */
 public class Molecule {
 
+    //TODO: Tree-Structure for Molecule for ease of drawing and computation.
     private final ArrayList<Atom> atoms; //List of all of the atoms in the molecule
     private final ArrayList<Bond> bonds; //List of all of the bonds in the molecule
     private Atom center;                 //Atom in the center (lowest eNeg, not Hydrogen)

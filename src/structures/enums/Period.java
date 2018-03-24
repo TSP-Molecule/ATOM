@@ -1,5 +1,10 @@
 package structures.enums;
 
+/**
+ * Period of an element. Used for placement in periodic table.
+ * @author  Emily Anible
+ * CS3141, Spring 2018, Team ATOM
+ */
 public enum Period {
     Period1 (1),
     Period2 (2),
@@ -17,6 +22,10 @@ public enum Period {
     Period (int num) {
         this.num = num;
     }
+
+    /**
+     * @return Integer value of period
+     */
     public int getInt() {
         return num;
     }
