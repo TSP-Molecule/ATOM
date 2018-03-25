@@ -14,6 +14,8 @@ To run ATOM, you will need both Python 3.x.x and Java 1.8.x JRE installed on you
 ***IMPORTANT NOTE***:
 If you are on Windows, you will need to set the `PYTHONPATH` environment variable to the location of your Python executable. ***ATOM WILL NOT WORK PROPERLY IF THIS IS NOT DONE***.
 
+![System Variable Screen](https://i.imgur.com/B4FZpKz.png)
+
 # To run ATOM
 Commandline compilation isn't currently functioning, but we've built a jar available in the repo, as well as provided one in our deliverables with the most up-to-date functional changes. 
 
