@@ -9,7 +9,7 @@ Element data from [andrejewski's periodic table](https://github.com/andrejewski/
 * Deliverables 1: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-1.0/ATOM.jar) | [Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-1.0/)
 
 # Requirements
-To run ATOM, you will need both Python 3.x.x and Java 1.8.x JRE installed on your machine.
+To run ATOM, you will need both Python 3.6.x and Java 1.8.x JRE installed on your machine.
 
 ***IMPORTANT NOTE***:
 If you are on Windows, you will need to set the `PYTHONPATH` environment variable to the location of your Python executable. ***ATOM WILL NOT WORK PROPERLY IF THIS IS NOT DONE***.
@@ -35,8 +35,14 @@ To use, simply click any GUI items available. The periodic table popup is availa
 The flag must come before other arguments.
 
 # Project Screenshots
+Main Window
 ![Main Window](https://i.imgur.com/ect59gc.png)
+
+Rotating the molecular model
 
 <img src="https://i.imgur.com/F4g0Jh9.gif" width="30%" height="30%"/>
 <img src="https://i.imgur.com/mWVuCdB.gif" width="30%" height="30%"/>
+
+Parsing a chemical name into formula and atoms
+
 <img src="https://i.imgur.com/yxhulwd.gif" width="100%" height="100%"/>
