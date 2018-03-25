@@ -27,6 +27,14 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.TreeMap;
 
+/**
+ * A test model used throughout development to try out new ideas for displaying 3D images.  Will become outdated during
+ * the next sprint.  Currently displays a 3D key-board navigable scene.
+ * @author Sarah Larkin
+ * CS3141, Spring 2018
+ * Date Last Modified: March 25, 2018
+ *
+ */
 public class ModelTestMolecule extends Application {
 
     double camX = 0;
@@ -39,7 +47,7 @@ public class ModelTestMolecule extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Group group = new Group();//grouper();
+        Group group = grouper();
         //displayElement(Elem.Oxygen, group);
 //        Camera cam = new PerspectiveCamera(true);
 //        cam.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -71,12 +79,12 @@ public class ModelTestMolecule extends Application {
 //        for (int i = 0; i < d.length(); i++) {
 //            s += d.charAt(i);
 //        }
-        Rectangle rectangle = new Rectangle(0, 0, 400, 400);
-        rectangle.setFill(Color.rgb(200, 200, 200));
+       // Rectangle rectangle = new Rectangle(0, 0, 400, 400);
+       // rectangle.setFill(Color.rgb(200, 200, 200));
       //  group.getChildren().add(rectangle);
       //  scene.setFill(Color.web(((Integer)Elem.Carbon.getColor()).toString()));
        // scene.setFill(Elem.Chlorine.getColor());
-       scene.setFill(Elem.Chlorine.getColor());
+      // scene.setFill(Elem.Chlorine.getColor());
         Camera cam = new PerspectiveCamera(true);
         cam.setNearClip(0.1);
         cam.setFarClip(10000);
@@ -164,6 +172,10 @@ public class ModelTestMolecule extends Application {
 
     }
 
+    /**
+     * Makes a simple 3D scene.
+     * @return the scene
+     */
     public Group grouper() {
         Group group = makeScene();
 //        Camera cam = new PerspectiveCamera(true);
@@ -184,6 +196,10 @@ public class ModelTestMolecule extends Application {
 
     }
 
+    /**
+     * Creates a data structure for a water molecule - copied from Molecule Test
+     * @return
+     */
     public Molecule createAWaterMolecule() {
         ArrayList<Atom> atoms = new ArrayList<>();
         ArrayList<Bond> bonds = new ArrayList<>();
@@ -209,6 +225,10 @@ public class ModelTestMolecule extends Application {
         return water;
     }
 
+    /**
+     * Work is progress:  will build a molecule 3D view from a molecule structure through a pre-order tree traversal.
+     * @return null - will not return anything until work is complete
+     */
     public Group buildMolecule() {
         Group mole = new Group();
         Molecule water = createAWaterMolecule();
@@ -242,6 +262,14 @@ public class ModelTestMolecule extends Application {
 
     }
 
+    /**
+     * Draws a sphere of the color of its element in a specified location
+     * @param elem  the element
+     * @param x     the x coordinate of the sphere's center
+     * @param y     the y coordinate of the sphere's center
+     * @param z     the z coordinate of the sphere's center
+     * @param group the group to which the sphere belongs
+     */
     public void displayElement(Elem elem, double x, double y, double z, Group group) {
         Sphere sphere = new Sphere(100);
         sphere.setMaterial(new PhongMaterial(elem.getColor()));
@@ -253,6 +281,10 @@ public class ModelTestMolecule extends Application {
     }
 
 
+    /**
+     * Makes and returns a simple scene.
+     * @return  the scene
+     */
     public Group makeScene() {
         Group molecule = new Group();
         Sphere sphere = new Sphere(100);

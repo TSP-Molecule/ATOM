@@ -23,10 +23,11 @@ import java.util.ArrayList;
 
 /**
  * Displays the periodic table of the elements with the ability to click on any
- * element to select it, as well as scroll-over highlighting.
+ * element to select it and open a window with further information.  It also provides scroll-over highlighting with the
+ * large rectangle at the top displaying information on the current element.
  * @author  Sarah Larkin
  * CS3141, Spring 2018, Team ATOM
- * Date Last Modified: March 22, 2018
+ * Date Last Modified: March 25, 2018
  */
 public class PeriodicTableView extends Stage {
 
@@ -36,9 +37,8 @@ public class PeriodicTableView extends Stage {
             Color.rgb(188, 255, 128, 1), Color.rgb(240, 128, 128, 1),
             Color.rgb(255, 209, 128, 1), Color.rgb(166, 160, 67, 1),
             Color.rgb(94, 224, 255, 1), Color.rgb(134, 252, 110, 1),
-            Color.rgb(215, 184, 255, 1),Color.rgb(255, 95, 168, 1),// 55 128
-            /*Color.rgb(255, 114, 247, 1),*/ Color.rgb(230, 180, 180, 1),
-            Color.rgb(195, 195, 195, 1), /*Color.rgb(120, 120, 120, 1),*/
+            Color.rgb(215, 184, 255, 1),Color.rgb(255, 95, 168, 1),
+            Color.rgb(230, 180, 180, 1),Color.rgb(195, 195, 195, 1),
             Color.rgb(255, 185, 105, 1)
     };
 
@@ -57,6 +57,8 @@ public class PeriodicTableView extends Stage {
             }
         });
         group.getChildren().add(pane);
+
+        // Display the text indicating the lanthanides and actinides
         Text lanthanides = new Text(145, 620, "Lanthanides");
         group.getChildren().add(lanthanides);
         Line line1 = new Line(122,440, 142, 680 );
@@ -65,15 +67,18 @@ public class PeriodicTableView extends Stage {
         Line line2 = new Line(122, 520, 142, 760);
         Line line2h = new Line(142, 760, 178, 760);
         group.getChildren().addAll(line1, line1h, actinides, line2, line2h);
+
+        // Display the current element - defaults to hydrogen when first opened
         Rectangle display = new Rectangle(250, 20, 200, 200);
         display.setFill(Color.rgb(225, 255, 195));
         Elem hydrogen = Elem.get(1);
         String origElem = hydrogen.getNum() +  "\n" + hydrogen.getSymbol() + "\n" + hydrogen.getName() + "\n" + hydrogen.getAtomicMass();
         currElem = new Text(260, 75, origElem);
-        // number, symbol, name mass electron config top right
+
         currElem.setFill(Color.rgb(0, 0, 0));
         currElem.setFont(new Font(28));
 
+        // Display the key
         for (int i = 0; i < 11; i++) {
             Rectangle rectangle = new Rectangle(500, 20 + i * 17, 180, 17);
             rectangle.setFill(plainCols[i]);
@@ -127,9 +132,6 @@ public class PeriodicTableView extends Stage {
         setTitle("The Periodic Table of the Elements");
         show();
     }
-
-    private boolean hover = false;
-    private boolean selected = false;
 
     Button [][] table = new Button [10][18];
 
@@ -274,6 +276,8 @@ public class PeriodicTableView extends Stage {
                 }
                 if (event.getButton() == MouseButton.PRIMARY) {
                     System.out.println("LEFT" + ((PeriodicTableButton) b).getElement());
+                    PeriodicTableButton bu = (PeriodicTableButton)b;
+                    Elem elem = b.getElement();
                     Stage stage = new Stage();
                     TextArea area = new TextArea("Bohr Model will go here!");
                     Scene scene = new Scene(area, 200, 200);
@@ -291,6 +295,8 @@ public class PeriodicTableView extends Stage {
             }
         });
     }
+
+
 
     /**
      * Checks if any buttons are currently selected

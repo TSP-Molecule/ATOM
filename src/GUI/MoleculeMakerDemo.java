@@ -9,6 +9,12 @@ import structures.enums.Elem;
 
 import java.util.ArrayList;
 
+/**
+ * Demonstrates the current way of combining bond lists with atom lists to create molecules.
+ * @author Sarah Larkin
+ * CS3141, Spring 2018
+ * Date Last Modified:  March 25, 2018
+ */
 public class MoleculeMakerDemo {
 
     /**
@@ -34,6 +40,10 @@ public class MoleculeMakerDemo {
         return water;
     }
 
+    /**
+     * Creates and returns a methane molecule.
+     * @return the methane molecule
+     */
     public Molecule methane(String formulaString) {
         // Demonstrating parsing of formula for atoms
         ChemicalFormula formula = new ChemicalFormula(formulaString);
@@ -53,6 +63,10 @@ public class MoleculeMakerDemo {
         return methane;
     }
 
+    /**
+     * Creates and returns a carbonDioxide molecule.
+     * @return the carbonDioxide molecule
+     */
     public Molecule carbonDioxide(String formulaString) {
         // Demonstrating parsing of formula for atoms
         ChemicalFormula formula = new ChemicalFormula(formulaString);
@@ -72,25 +86,5 @@ public class MoleculeMakerDemo {
         return cO2;
     }
 
-    public Molecule defaultDemo(String formulaString) {
 
-        // Manually entered bonds and atoms for now
-        // Will be automated by end of 3rd sprint
-
-        ArrayList<Atom>atoms = new ArrayList<>();
-        ArrayList<Bond> bonds = new ArrayList<>();
-
-
-
-        // Hardcoded in the methane bonds for now
-        for (int i = 1; i < atoms.size(); i++) {
-            Bond bond = new Bond(BondOrder.SINGLE, atoms.get(0), atoms.get(i));
-            bond.setBondingAngle(120);
-            bonds.add(bond);
-        }
-
-        // Create the carbon dioxide molecule and return it.
-        Molecule cO2 = new Molecule(atoms, bonds);
-        return cO2;
-    }
 }

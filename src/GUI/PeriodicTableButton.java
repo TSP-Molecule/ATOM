@@ -13,7 +13,7 @@ import structures.enums.Type;
  * Wrapper class allows additional properties for the periodic table buttons.
  * @author  Sarah Larkin
  * CS3141, Spring 2018, Team ATOM
- * Date Last Modified: March 1, 2018
+ * Date Last Modified: March 25, 2018
  */
 public class PeriodicTableButton extends Button {
 
@@ -30,12 +30,6 @@ public class PeriodicTableButton extends Button {
             Color.rgb(255, 185, 105, 1)
     };
 
-//    private static Color selectCols [] = {
-//            Color.rgb(188, 255, 128, q), Color.rgb(240, 128, 128, q), Color.rgb(255, 209, 128, q), Color.rgb(166, 160, 67, q),
-//            Color.rgb(94, 224, 255, q), Color.rgb(134, 252, 110, q), Color.rgb(132, 118, 255, q), Color.rgb(255, 55, 128, q),
-//            Color.rgb(255, 114, 247, q), Color.rgb(166, 67, 160, q), Color.rgb(195, 195, 195, q), Color.rgb(120, 120, 120, q),
-//            Color.rgb(255, 185, 105, q)
-//    };
 
     private CornerRadii cnorm = new CornerRadii(3);// normal corner radius
     private CornerRadii chigh = new CornerRadii(5);// highlighted state corner radius

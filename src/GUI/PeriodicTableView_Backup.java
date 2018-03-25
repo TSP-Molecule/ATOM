@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 /**
  * Displays the periodic table of the elements with the ability to click on any
- * element to select it, as well as scroll-over highlighting.
+ * element to select it, as well as scroll-over highlighting.  Used as a backup only.
  * @author  Sarah Larkin
  * CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 1, 2018

@@ -17,7 +17,15 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.paint.Color;
 import structures.enums.Elem;
 
-
+/**
+ * A test class used throughout development to try new ideas for displaying multiple scenes together
+ * and for testing new UI ideas before incorporating them.  Currently displays a 3D scene on the left side,
+ * which can be rotated using mouse input and panned and zoomed with keyboard input (standard wasd with r and f for
+ * moving vertically).  The right panel is an editable textbox.
+ * @author Sarah Larkin
+ * CS3141, Spring 2018
+ * Date Last Modified:  March 25, 2018
+ */
 public class ViewMolecule3D extends Application {
 
     double camX = 0;
@@ -31,11 +39,12 @@ public class ViewMolecule3D extends Application {
     double oldY = 0;
     double oldZ = 0;
     boolean subf = true;
+    Group group;
 
     @Override
     public void start(Stage primaryStage) {
-        Group group = grouper();
-//        Camera cam = new PerspectiveCamera(true);
+        group = new Group();  //grouper();
+      //  Camera cam = new PerspectiveCamera(true);
 //        cam.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
 //            public void handle(KeyEvent event) {
@@ -44,15 +53,15 @@ public class ViewMolecule3D extends Application {
 //                cam.getTransforms().add(new Rotate(45, 200, 0, 0, Rotate.Y_AXIS));
 //            }
 //        });
-//        group.getChildren().add(cam);
-//        group = grouper();
+       // group.getChildren().add(cam);
+       group = grouper();
 //        group.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
 //            public void handle(KeyEvent event) {
 //                System.out.println(event.getCharacter());
 //            }
 //        });
-//        group.getTransforms().add(new Translate(200, 200, 0));
+     //   group.getTransforms().add(new Translate(200, 200, 0));
 //        SubScene subScene = new SubScene(group, 400, 400);
 //        subScene.setCamera(cam);
 //        Group fin = new Group();
@@ -60,23 +69,26 @@ public class ViewMolecule3D extends Application {
         Camera cam = new PerspectiveCamera(true);
         cam.setNearClip(0.1);
         cam.setFarClip(10000);
+
         SubScene sub = new SubScene(group, 400, 400);
         sub.setCamera(cam);
         cam.getTransforms().add(new Translate(0, 0, -100));
         GridPane pane = new GridPane();
+        pane.setPrefSize(800, 600);
         pane.add(sub, 0, 0);
         Button bob = new Button("BLUE\nBELLS\nBLOOM");
-     //   pane.add(bob, 1, 0);
+        bob.setPrefSize(200, 200);
+
+       // pane.add(bob, 1, 0);
         TextField job = new TextField("blah");
        // job.setEditable(false);
         job.setPrefSize(200, 400);
         pane.add(job, 1, 0);
-        Scene scene = new Scene(pane, 600, 400, true);
+//        pane.add(job, 1, 0);
+        Scene scene = new Scene(pane, 800, 600, true);
 
-        //scene.setCamera(cam);
+      //  scene.setCamera(cam);
       //  scene.getCamera().getTransforms().add(new Rotate(0, 0, 0, 0));
-        //.getCamera().getTransforms().add(new Translate(0, 0, 0));
-        //camX = -200;
         //scene.getCamera().setLayoutX(0);
         job.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -117,7 +129,7 @@ public class ViewMolecule3D extends Application {
                 double x = event.getX();
                 double y = event.getY();
                 if (x < oldX && Math.abs(x - oldX) > 20) {
-                   // System.out.println("BAAA");
+                    System.out.println("BAAA");
                     //cam.getTransforms().add(new Rotate(5, 0, 0, 0, Rotate.Y_AXIS));
                     group.getTransforms().add(new Rotate(5, 0, 0, 0, Rotate.Y_AXIS));
                     oldX = x;
@@ -397,7 +409,7 @@ public class ViewMolecule3D extends Application {
     }
 
     public Group grouper() {
-        Group group = waterMolecule();
+        Group group = makeScene();
 //        Camera cam = new PerspectiveCamera(true);
 //        cam.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
