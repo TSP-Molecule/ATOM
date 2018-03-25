@@ -36,4 +36,7 @@ The flag must come before other arguments.
 
 # Project Screenshots
 ![Main Window](https://i.imgur.com/ect59gc.png)
-![Spinny](https://i.imgur.com/F4g0Jh9.gif)
+
+<img src="https://i.imgur.com/F4g0Jh9.gif" width="30%" height="30%"/>
+<img src="https://i.imgur.com/mWVuCdB.gif" width="30%" height="30%"/>
+<img src="https://i.imgur.com/yxhulwd.gif" width="100%" height="100%"/>
