@@ -15,6 +15,7 @@ Element data from [andrejewski's periodic table](https://github.com/andrejewski/
     * `pip install chemspipy`
 
 Please make sure that the `ChemSpider.py` script is in the same directory as `ATOM.jar` when running the project, else the search functionality will _not_ work.
+
 ![Example Dir](https://i.imgur.com/k9Qa5xy.png)
 
 ***IMPORTANT NOTE***:
