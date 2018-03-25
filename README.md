@@ -34,3 +34,6 @@ To use, simply click any GUI items available. The periodic table popup is availa
   
 The flag must come before other arguments.
 
+# Project Screenshots
+![Main Window](https://i.imgur.com/ect59gc.png)
+![Spinny](https://i.imgur.com/F4g0Jh9.gif)
