@@ -17,8 +17,9 @@ public class WebService {
             if (pythonPath == null) {
                 throw new FileNotFoundException(); //TODO: Custom exception class.
             }
+        } else {
+            pythonPath = "python";
         }
-
     }
 
     /**
@@ -31,15 +32,8 @@ public class WebService {
     public static String getFormula(String chem) throws IOException {
 
         // -f flag for formula
+        Process p = Runtime.getRuntime().exec(new String[]{pythonPath, "./src/ChemSpider.py", "-f", chem});
 
-        Process p;
-        if ( PlatformUtil.isWindows() ) {
-//            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe", "./src/ChemSpider.py", "-f", chem});
-            p = Runtime.getRuntime().exec(new String[]{pythonPath, "./src/ChemSpider.py", "-f", chem});
-        }
-        else {
-            p = Runtime.getRuntime().exec(new String[]{"python", "./src/ChemSpider.py", "-f", chem});
-        }
         // Process allows for us to run external scripts and receive their output. ProcessBuilder makes the process.
 
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -68,14 +62,8 @@ public class WebService {
         // ^^reformats the string passed in (which is in our standard form) to work with the python script
 
         //getName & getFormula behave the same from here out. -n flag for name
-        Process p;
-        if ( PlatformUtil.isWindows() ) {
-//            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe","./src/ChemSpider.py", "-n", formEdit});
-            p = Runtime.getRuntime().exec(new String[]{pythonPath,"./src/ChemSpider.py", "-n", formEdit});
-        }
-        else {
-            p = Runtime.getRuntime().exec(new String[]{"python", "./src/ChemSpider.py", "-n", formEdit});
-        }
+        Process p = Runtime.getRuntime().exec(new String[]{pythonPath,"./src/ChemSpider.py", "-n", formEdit});
+
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String name;
         if ((name = pin.readLine()) != null) {
