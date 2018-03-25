@@ -30,7 +30,9 @@ public class Atominomicon {
         atominomicon = new ArrayList<>();
         HashMap<Integer, Atom> atomMap = new HashMap<>();
 
-        for (int i = 0; i < 119; i++) {
+        atominomicon.add(0, null);
+
+        for (int i = 1; i < 119; i++) {
             Atom atom = new Atom ( Elem.get(i), null);
             atomMap.put(0, atom);
             atominomicon.add(i, atomMap);
