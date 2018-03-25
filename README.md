@@ -46,3 +46,8 @@ Rotating the molecular model
 Parsing a chemical name into formula and atoms
 
 <img src="https://i.imgur.com/yxhulwd.gif" width="100%" height="100%"/>
+
+Interactive Periodic Table
+
+<img src="https://i.imgur.com/lc60jLM.png" width="50%" height="50%"/>
+<img src="https://i.imgur.com/b7NeVCB.gif" width="50%" height="50%"/>
