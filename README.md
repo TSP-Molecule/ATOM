@@ -6,7 +6,10 @@ Project SDK: Java 1.8
 Element data from [andrejewski's periodic table](https://github.com/andrejewski/periodic-table) 
 
 # Releases
-* Deliverables 1: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-1.0/ATOM.jar) | [Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-1.0/)
+* Deliverables 1: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-2.0/release/ATOM-1.0.zip) | 
+[Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-1.0/)
+* Deliverables 2: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-2.0/release/ATOM-2.0.zip) | 
+[Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-2.0/)
 
 # Requirements
 * Java 1.8.x JRE
@@ -23,6 +26,9 @@ If you are on Windows, you will need to make sure to have your Python directory 
 
 ***ATOM will not function on Windows if this is not set!***
 ![System Variable Screen](https://i.imgur.com/SJopMh7.png)
+
+# Installation
+To install, simply extract the contents of `ATOM-x.x.zip` into a folder and run the JAR. It does support double-clicking the JAR to run, but this is dependent on your OS settings. `$ java -jar ATOM.jar` will suffice.
 
 # To run ATOM
 Commandline compilation isn't currently functioning, but we've built a jar available in the repo, as well as provided one in our deliverables with the most up-to-date functional changes. 
