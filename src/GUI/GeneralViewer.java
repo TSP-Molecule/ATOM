@@ -663,6 +663,8 @@ public class GeneralViewer extends Application {
                 try {
                     WebService spider = new WebService(); //TODO: This can throw an exception on Windows if the path isn't found!
                     String formula = spider.getFormula(searchText);
+                    System.out.println("Input was  : " + searchText);
+                    System.out.println("We got this: " + formula);
                     TextArea info = new TextArea();
                     String printout = String.format("%s has the formula %s.\n  ", searchText, formula);
                     ArrayList<Atom> elemList = new ChemicalFormula(formula).getAtoms();
