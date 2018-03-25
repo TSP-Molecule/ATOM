@@ -661,7 +661,7 @@ public class GeneralViewer extends Application {
             public void handle(ActionEvent event) {
                 String searchText = search.getText();
                 try {
-                    WebService spider = new WebService();
+                    WebService spider = new WebService(); //TODO: This can throw an exception on Windows if the path isn't found!
                     String formula = spider.getFormula(searchText);
                     TextArea info = new TextArea();
                     String printout = String.format("%s has the formula %s.\n  ", searchText, formula);

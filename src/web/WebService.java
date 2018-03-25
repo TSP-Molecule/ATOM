@@ -1,10 +1,25 @@
 package web;
 
 import com.sun.javafx.PlatformUtil;
+import com.sun.tracing.dtrace.DependencyClass;
+import javafx.application.Platform;
 
 import java.io.*;
 
 public class WebService {
+
+    private static String pythonPath = null;
+
+    public WebService() throws IOException {
+        if (PlatformUtil.isWindows()) {
+            pythonPath = System.getenv("PYTHONPATH");
+
+            if (pythonPath == null) {
+                throw new FileNotFoundException(); //TODO: Custom exception class.
+            }
+        }
+
+    }
 
     /**
      *
@@ -19,7 +34,8 @@ public class WebService {
 
         Process p;
         if ( PlatformUtil.isWindows() ) {
-            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe", "./src/ChemSpider.py", "-f", chem});
+//            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe", "./src/ChemSpider.py", "-f", chem});
+            p = Runtime.getRuntime().exec(new String[]{pythonPath, "./src/ChemSpider.py", "-f", chem});
         }
         else {
             p = Runtime.getRuntime().exec(new String[]{"python", "./src/ChemSpider.py", "-f", chem});
@@ -54,7 +70,8 @@ public class WebService {
         //getName & getFormula behave the same from here out. -n flag for name
         Process p;
         if ( PlatformUtil.isWindows() ) {
-            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe","./src/ChemSpider.py", "-n", formEdit});
+//            p = Runtime.getRuntime().exec(new String[]{"C:\\Program Files\\Python36\\python.exe","./src/ChemSpider.py", "-n", formEdit});
+            p = Runtime.getRuntime().exec(new String[]{pythonPath,"./src/ChemSpider.py", "-n", formEdit});
         }
         else {
             p = Runtime.getRuntime().exec(new String[]{"python", "./src/ChemSpider.py", "-n", formEdit});
