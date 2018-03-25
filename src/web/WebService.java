@@ -1,8 +1,6 @@
 package web;
 
 import com.sun.javafx.PlatformUtil;
-import com.sun.tracing.dtrace.DependencyClass;
-import javafx.application.Platform;
 
 import java.io.*;
 
@@ -13,12 +11,16 @@ public class WebService {
     public WebService() throws IOException {
         if (PlatformUtil.isWindows()) {
             pythonPath = System.getenv("PYTHONPATH");
+            System.out.println("Hey, you're running windows! Neat!");
+            System.out.println(pythonPath);
 
             if (pythonPath == null) {
+                System.out.println("There's an issue with the path!");
                 throw new FileNotFoundException(); //TODO: Custom exception class.
             }
         } else {
             pythonPath = "python";
+            System.out.println("NOT WINDOWS");
         }
     }
 
@@ -33,6 +35,9 @@ public class WebService {
 
         // -f flag for formula
         Process p = Runtime.getRuntime().exec(new String[]{pythonPath, "./src/ChemSpider.py", "-f", chem});
+
+        String[] test = new String[]{pythonPath,"./src/ChemSpider.py", "-f", chem};
+        for (String s: test) System.out.print(s + " ");
 
         // Process allows for us to run external scripts and receive their output. ProcessBuilder makes the process.
 
@@ -62,7 +67,7 @@ public class WebService {
         // ^^reformats the string passed in (which is in our standard form) to work with the python script
 
         //getName & getFormula behave the same from here out. -n flag for name
-        Process p = Runtime.getRuntime().exec(new String[]{pythonPath,"./src/ChemSpider.py", "-n", formEdit});
+        Process p = Runtime.getRuntime().exec(new String[]{pythonPath, "./src/ChemSpider.py", "-n", formEdit});
 
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String name;
