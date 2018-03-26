@@ -22,8 +22,8 @@ public class MoleculeTest {
         atoms.add(new Atom(Elem.Oxygen));
 
         //TODO: figure out what gets bonded to what -- may or may not be able to do programmatically
-        Bond bond1 = new Bond(BondOrder.SINGLE, atoms.get(0), atoms.get(2));
-        Bond bond2 = new Bond(BondOrder.SINGLE, atoms.get(1), atoms.get(2));
+        Bond bond1 = new Bond(atoms.get(0), atoms.get(2));
+        Bond bond2 = new Bond(atoms.get(1), atoms.get(2));
 
         //Add bonds to bond list after creation
         bonds.add(bond1);

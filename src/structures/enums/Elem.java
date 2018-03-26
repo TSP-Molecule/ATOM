@@ -171,7 +171,7 @@ public enum Elem {
         for (Elem e : Elem.values()) {
             if (e.getNum() == atomicNumber) return e;
         }
-        return null;
+        return Elem.NULL;
     }
 
     public static Elem getBySymbol(String symbol) {

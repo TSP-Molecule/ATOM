@@ -3,6 +3,8 @@ package structures;
 import structures.enums.Elem;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
  * @author  Emily Anible
@@ -24,20 +26,6 @@ public class Atom {
     private final int maxBonds;   // Maximum number of covalent attachedBonds this atom can form
 
     /**
-     * Create an Atom with both an element and attached attachedBonds.
-     *
-     * @param element The Atom's element.
-     * @param bonds   ArrayList of attached attachedBonds.
-     */
-    public Atom(Elem element, ArrayList<Bond> bonds){
-        this.element = element;
-        this.attachedBonds = bonds;
-        this.maxBonds = 8 - element.getGroup().getValenceE();
-        this.valenceShell = element.getGroup().getValenceE();
-    }
-
-
-    /**
      * Create an Atom with only an element, no attached attachedBonds.
      *
      * @param element The Atom's element.
@@ -50,17 +38,56 @@ public class Atom {
     }
 
     /**
+     * Attempts to add bond to list of attached bonds.
+     *
+     * @param bond Bond to attach
+     * @return     Bond attached if successful, null if not.
+     */
+    public Bond addBond(Bond bond) {
+        if ( getAttachedBonds().contains(bond)) return bond;
+
+        if ( getAvailableElectrons() >= 2 ) {
+            this.getAttachedBonds().add(bond);
+            bondedElectrons += 2;
+            return bond;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param  bond the bond to check for
+     * @return True if the bond is attached to this atom.
+     */
+    public boolean containsBond(Bond bond) {
+        return getAttachedBonds().contains(bond);
+    }
+
+    /**
+     * @return number of available electrons
+     */
+    public int getAvailableElectrons() {
+        int ret = valenceShell;
+        for (Bond b : getAttachedBonds()) {
+            ret -= b.getOrder().getNum();
+        }
+
+        // check for program error.
+        if (ret != (valenceShell - bondedElectrons)) try {
+            throw new Exception();
+        } catch (Exception e) {
+            System.err.println("Bonds are desynced!");
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
      * @return Element associated to Atom.
      */
     public Elem getElement() {
         return element;
-    }
-
-    /**
-     * @param attachedBonds bonds to attach to atom.
-     */
-    public void setAttachedBonds(ArrayList<Bond> attachedBonds) {
-        this.attachedBonds = attachedBonds;
     }
 
     /**

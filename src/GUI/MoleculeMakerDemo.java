@@ -30,7 +30,7 @@ public class MoleculeMakerDemo {
 
         // Hardcoded in the methane bonds for now
         for (int i = 1; i < atoms.size(); i++) {
-            Bond bond = new Bond(BondOrder.SINGLE, atoms.get(0), atoms.get(i));
+            Bond bond = new Bond(atoms.get(0), atoms.get(i));
             bond.setBondingAngle(120);
             bonds.add(bond);
         }
@@ -53,7 +53,7 @@ public class MoleculeMakerDemo {
 
         // Hardcoded in the methane bonds for now
         for (int i = 1; i < atoms.size(); i++) {
-            Bond bond = new Bond(BondOrder.SINGLE, atoms.get(0), atoms.get(i));
+            Bond bond = new Bond(atoms.get(0), atoms.get(i));
             bond.setBondingAngle(110);
             bonds.add(bond);
         }
@@ -76,7 +76,7 @@ public class MoleculeMakerDemo {
 
         // Hardcoded in the methane bonds for now
         for (int i = 1; i < atoms.size(); i++) {
-            Bond bond = new Bond(BondOrder.SINGLE, atoms.get(0), atoms.get(i));
+            Bond bond = new Bond(atoms.get(0), atoms.get(i));
             bond.setBondingAngle(120);
             bonds.add(bond);
         }

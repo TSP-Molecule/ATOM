@@ -11,13 +11,13 @@ public enum BondOrder {
     DOUBLE  (2),
     TRIPLE  (3);
 
-    private final int numOfBonds;
+    private final int num;
 
-    BondOrder(int numOfBonds) {
-        this.numOfBonds = numOfBonds;
+    BondOrder(int num) {
+        this.num = num;
     }
 
-    public int getNumOfBonds() {
-        return numOfBonds;
+    public int getNum() {
+        return num;
     }
 }

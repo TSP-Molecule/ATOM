@@ -11,7 +11,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -25,7 +24,6 @@ import structures.enums.Elem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
-import java.util.TreeMap;
 
 /**
  * A test model used throughout development to try out new ideas for displaying 3D images.  Will become outdated during
@@ -210,8 +208,8 @@ public class ModelTestMolecule extends Application {
         atoms.add(new Atom(Elem.Oxygen));
 
         //TODO: figure out what gets bonded to what -- may or may not be able to do programmatically
-        Bond bond1 = new Bond(BondOrder.SINGLE, atoms.get(0), atoms.get(2));
-        Bond bond2 = new Bond(BondOrder.SINGLE, atoms.get(1), atoms.get(2));
+        Bond bond1 = new Bond(atoms.get(0), atoms.get(2));
+        Bond bond2 = new Bond(atoms.get(1), atoms.get(2));
 
         //Add bonds to bond list after creation
         bonds.add(bond1);
@@ -247,8 +245,8 @@ public class ModelTestMolecule extends Application {
             displayElement(atom.getElement(), x, y, z, mole);
             ArrayList<Bond> bonds = atom.getAttachedBonds();
             for(Bond b: bonds) {
-               Atom one =  b.getAtomOne();
-               Atom two =  b.getAtomTwo();
+               Atom one =  b.getAtoms().get(0);
+               Atom two =  b.getAtoms().get(1);
                if (one.equals(atom)) {
                    toDisplay.push(two);
                } else {

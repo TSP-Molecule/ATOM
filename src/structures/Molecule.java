@@ -1,5 +1,6 @@
 package structures;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 import structures.enums.Elem;
 
 import java.util.ArrayList;
@@ -24,6 +25,16 @@ public class Molecule {
         center = findCenter(atoms);
     }
 
+    private Molecule buildMolecule() {
+        ArrayList<Atom> atomCpy = new ArrayList<>(atoms);
+
+        Atom center = findCenter(atomCpy);
+
+
+
+        return null;
+    }
+
     /**
      * Finds the center atom of the molecule based on Lowest Electronegativity
      * Excludes Hydrogen!
@@ -32,7 +43,7 @@ public class Molecule {
      * @return Center Atom
      */
     private Atom findCenter(ArrayList<Atom> atoms) {
-        Atom center = atoms.get(0);
+        Atom center = null;
 
         for (Atom a : atoms) {
             if ((center.getElement() == Elem.Hydrogen)

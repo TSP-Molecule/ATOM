@@ -604,8 +604,8 @@ public class GeneralViewerOld_2 extends Application {
                     molecule.getChildren().add(cylinder);
 
                     // Add atom at opposite end to the stack if it has not been drawn
-                    Atom one = bond.getAtomOne();
-                    Atom two = bond.getAtomTwo();
+                    Atom one = bond.getAtoms().get(0);
+                    Atom two = bond.getAtoms().get(1);
                     if (!one.equals(atom) && drawnMap.get(one) == null) {
                         toDraw.push(one);
                     } else if (drawnMap.get(two) == null) {

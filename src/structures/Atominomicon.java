@@ -33,7 +33,7 @@ public class Atominomicon {
         atominomicon.add(0, null);
 
         for (int i = 1; i < 119; i++) {
-            Atom atom = new Atom ( Elem.get(i), null);
+            Atom atom = new Atom ( Elem.get(i) );
             atomMap.put(0, atom);
             atominomicon.add(i, atomMap);
             System.out.println(atominomicon.get(i));
