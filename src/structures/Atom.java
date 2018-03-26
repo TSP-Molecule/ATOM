@@ -21,9 +21,10 @@ public class Atom {
 
     private final Elem element;
     private ArrayList<Bond> attachedBonds;   //Attached bonds
+    private ArrayList<Atom> attachedAtoms;
     private int valenceShell;     // Number of electrons currently in valence shell (includes electrons currently being shared from other atoms)
     private int bondedElectrons;  // Number of electrons in the atom already being bonded
-    private final int maxBonds;   // Maximum number of covalent attachedBonds this atom can form
+    private int availableElectrons; //Number of free electrons not yet bonded.
 
     /**
      * Create an Atom with only an element, no attached attachedBonds.
@@ -33,9 +34,11 @@ public class Atom {
     public Atom(Elem element) {
         this.element = element;
         this.attachedBonds = new ArrayList<>();
-        this.maxBonds = 8 - element.getGroup().getValenceE();
+        this.attachedAtoms = new ArrayList<>();
         this.valenceShell = element.getGroup().getValenceE();
+        this.availableElectrons = valenceShell;
     }
+
 
     /**
      * Attempts to add bond to list of attached bonds.
@@ -46,9 +49,10 @@ public class Atom {
     public Bond addBond(Bond bond) {
         if ( getAttachedBonds().contains(bond)) return bond;
 
-        if ( getAvailableElectrons() >= 2 ) {
+        if ( isBondable() ) {
             this.getAttachedBonds().add(bond);
-            bondedElectrons += 2;
+            incrementAttachedElectrons();
+            attachedAtoms.add(bond.getAtoms().get(0).equals(this) ? bond.getAtoms().get(0) : bond.getAtoms().get(1));
             return bond;
         } else {
             return null;
@@ -63,24 +67,8 @@ public class Atom {
         return getAttachedBonds().contains(bond);
     }
 
-    /**
-     * @return number of available electrons
-     */
-    public int getAvailableElectrons() {
-        int ret = valenceShell;
-        for (Bond b : getAttachedBonds()) {
-            ret -= b.getOrder().getNum();
-        }
-
-        // check for program error.
-        if (ret != (valenceShell - bondedElectrons)) try {
-            throw new Exception();
-        } catch (Exception e) {
-            System.err.println("Bonds are desynced!");
-            e.printStackTrace();
-        }
-
-        return ret;
+    public boolean isBondable() {
+        return (getAvailableElectrons() >= 1);
     }
 
     /**
@@ -97,11 +85,36 @@ public class Atom {
         return attachedBonds;
     }
 
+    /**
+     * @return number of available electrons
+     */
+    public int getAvailableElectrons() {
+        return availableElectrons;
+    }
+
+    /**
+     * @return list of attached atoms
+     */
+    public ArrayList<Atom> getAttachedAtoms() {
+//        ArrayList<Atom> ret = new ArrayList<>();
+//        for (Bond b: getAttachedBonds()) {
+//            Atom one = b.getAtoms().get(0);
+//            Atom two = b.getAtoms().get(1);
+//            if (one.equals(this)) ret.add(one);
+//            if (two.equals(this)) ret.add(two);
+//        }
+//
+//        return ret;
+        return attachedAtoms;
+    }
+
+    public void incrementAttachedElectrons() {
+        bondedElectrons += 1;
+        availableElectrons -= 1;
+    }
+
     @Override
     public String toString() {
-        return "\nAtom{" +
-                "\n  element=" + element.getName() +
-                ",\n  attachedBonds=" + attachedBonds +
-                '}';
+        return "\n  Atom[" +element.getName() + ", bonds: " + attachedBonds.size() + ": " + attachedBonds + "]";
     }
 }
