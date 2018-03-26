@@ -3,6 +3,7 @@ package structures;
 import structures.enums.Elem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Main data structure for a Molecule. Handles all molecule logic.
@@ -38,9 +39,9 @@ public class Molecule {
      * @return built Molecule.
      */
     private void buildMolecule(ArrayList<Atom> initAtoms) {
+        boolean ret = false;
         //Molecule's ArrayList of Atoms.
-        atoms = sortByENeg(initAtoms); //sorts atoms be eneg
-        ArrayList<Atom> hydrogens = initAtoms;
+        atoms = sortByENeg(initAtoms); //sorts atoms by eneg
 
         center = findCenter(atoms);
         bonds = new ArrayList<>();
@@ -75,6 +76,14 @@ public class Molecule {
                 }
             }
         }
+        //Now consider the center.
+        if (center.isBondable() && initAtoms.size() > 0) {
+            while (center.isBondable()) {
+                Atom h = initAtoms.remove(0);
+                bonds.add(new Bond(center, h));
+                addedH.add(h);
+            }
+        }
         atoms.addAll(addedH);
 
         System.out.println("Checking availability:");
@@ -98,8 +107,19 @@ public class Molecule {
             }
         }
 
+            //Check Validity of Molecule
+            boolean check = true;
+            for (Atom a: atoms) {
+                if (a.getAvailableElectrons() % 2 != 0) {
+                    check = false;
+                    System.err.println("------ THE MOLECULE PROBABLY DIDN'T BUILD PROPERLY ------");
+                }
+            }
+            if (check) return;
 
+            //TODO: If we need to repeat the creation... rip.
     }
+
 
     /**
      * Sorts list of atoms by electronegativity, placing Hydrogen at the end of the list.

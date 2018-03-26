@@ -68,10 +68,10 @@ public class MoleculeTest {
 
 
     @Test
-    public void ethylTest() throws IOException {
+    public void alcoholTest() throws IOException {
         WebService ws = new WebService();
-        String formula = ws.getFormula("ethyl methyl ether");
-        System.out.println("eme is " + formula);
+        String formula = ws.getFormula("isopropyl alcohol");
+        System.out.println("isopropyl alcohol is " + formula);
 
         Molecule mol = new Molecule(formula);
         System.out.println(mol);

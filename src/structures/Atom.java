@@ -22,10 +22,9 @@ public class Atom {
     private final Elem element;
     private ArrayList<Bond> attachedBonds;   //Attached bonds
     private ArrayList<Atom> attachedAtoms;
-    private int valenceShell;     // Number of electrons currently in valence shell (includes electrons currently being shared from other atoms)
-    private int bondedElectrons;  // Number of electrons in the atom already being bonded
+    private int valenceShell;       // Number of electrons currently in valence shell (includes electrons currently being shared from other atoms)
+//    private int bondedElectrons;  // Number of electrons in the atom already being bonded
     private int availableElectrons; //Number of free electrons not yet bonded.
-
     /**
      * Create an Atom with only an element, no attached attachedBonds.
      *
@@ -36,7 +35,11 @@ public class Atom {
         this.attachedBonds = new ArrayList<>();
         this.attachedAtoms = new ArrayList<>();
         this.valenceShell = element.getGroup().getValenceE();
-        this.availableElectrons = valenceShell;
+        if (element.getNum() > 2) {
+            this.availableElectrons = 8 - valenceShell;
+        } else {
+            this.availableElectrons = 2 - valenceShell;
+        } //Massive oversimplification
     }
 
 
@@ -68,7 +71,7 @@ public class Atom {
     }
 
     public boolean isBondable() {
-        return (getAvailableElectrons() >= 1);
+        return (availableElectrons >= 1);
     }
 
     /**
@@ -109,7 +112,7 @@ public class Atom {
     }
 
     public void incrementAttachedElectrons() {
-        bondedElectrons += 1;
+        valenceShell += 1;
         availableElectrons -= 1;
     }
 
