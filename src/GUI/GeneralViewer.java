@@ -414,23 +414,41 @@ public class GeneralViewer extends Application {
                 try {
                     WebService spider = new WebService();
                     String formula = spider.getFormula(searchText);
+
                     System.out.println("Input was  : " + searchText);
                     System.out.println("We got this: " + formula);
-                    TextArea info = new TextArea();
-                    String printout = String.format("%s has the formula %s.\n  ", searchText, formula);
-                    ArrayList<Atom> elemList = new ChemicalFormula(formula).getAtoms();
-                    String chemicals = String.format("It contains the following elements:\n");
-                    String atoms = "";
-                    for (int i = 0; i < elemList.size(); i++) {
-                        atoms += elemList.get(i).getElement().getName();
-                        if (i < elemList.size() - 1) {
-                            atoms += ", ";
-                        }
-                        atoms += "\n";
+
+                    //If we get a bad input, alert the user and don't proceed.
+                    if (formula == null) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("No result found for \"" + searchText + "\"");
+                        alert.setContentText("We couldn't seem to find a chemical formula that corresponds to the input! Please try again or try a different input.");
+
+                        alert.showAndWait();
+                        return;
                     }
-                    String output = printout + chemicals + atoms;
+
+                    TextArea info = new TextArea();
+                    Molecule mol = new Molecule(formula, searchText);
+
+                    String printout = String.format("%s has the formula %s.\n\n", searchText.substring(0,1).toUpperCase() + searchText.substring(1), formula);
+                    String output = printout + mol;
+
                     info.setText(output);
+                    info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
                     textPane.setContent(info);
+
+//                    ArrayList<Atom> elemList = new ChemicalFormula(formula).getAtoms();
+//                    String chemicals = String.format("It contains the following elements:\n");
+//                    String atoms = "";
+//                    for (int i = 0; i < elemList.size(); i++) {
+//                        atoms += elemList.get(i).getElement().getName();
+//                        if (i < elemList.size() - 1) {
+//                            atoms += ", ";
+//                        }
+//                        atoms += "\n";
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

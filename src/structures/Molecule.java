@@ -3,10 +3,10 @@ package structures;
 import structures.enums.Elem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Main data structure for a Molecule. Handles all molecule logic.
+ * It's best to think of a Molecule as a Graph, with Atoms for vertices and Bonds for edges.
  *
  * @author Emily Anible
  * CS3141, Spring 2018, Team ATOM
@@ -15,8 +15,35 @@ public class Molecule {
 
     private ArrayList<Atom> atoms; //List of all of the atoms in the molecule
     private ArrayList<Bond> bonds; //List of all of the bonds in the molecule
-    private Atom center;                 //Atom in the center (lowest eNeg, not Hydrogen)
+    private Atom center;           //Atom in the center (lowest eNeg, not Hydrogen)
+    private String name;
 
+    /**
+     * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
+     * @param chemFormula chemical formula
+     */
+    public Molecule(String chemFormula) {
+        ChemicalFormula chem = new ChemicalFormula(chemFormula);
+        buildMolecule(chem.getAtoms());
+    }
+
+    /**
+     * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
+     * @param chemFormula chemical formula
+     */
+    public Molecule(String chemFormula, String name) {
+        ChemicalFormula chem = new ChemicalFormula(chemFormula);
+        buildMolecule(chem.getAtoms());
+        this.name = name;
+    }
+
+    /**
+     * Creates a molecule given atoms and bonds.
+     * Note, assumes that these are finished, and will not attempt to update them upon object creation.
+     *
+     * @param atoms list of atoms
+     * @param bonds list of bonds
+     */
     public Molecule(ArrayList<Atom> atoms, ArrayList<Bond> bonds) {
         this.atoms = atoms;
         this.bonds = bonds;
@@ -24,22 +51,20 @@ public class Molecule {
         center = findCenter(atoms);
     }
 
+
+    /**
+     * Dynamically creates a molecule given a list of atoms.
+     * @param atoms list of atoms.
+     */
     public Molecule(ArrayList<Atom> atoms) {
         buildMolecule(atoms);
-    }
-
-    public Molecule(String chemFormula) {
-        ChemicalFormula chem = new ChemicalFormula(chemFormula);
-        buildMolecule(chem.getAtoms());
     }
 
     /**
      * Attempts to create a molecule with bonds from a molecule with a list of atoms.
      *
-     * @return built Molecule.
      */
     private void buildMolecule(ArrayList<Atom> initAtoms) {
-        boolean ret = false;
         //Molecule's ArrayList of Atoms.
         atoms = sortByENeg(initAtoms); //sorts atoms by eneg
 
@@ -63,11 +88,11 @@ public class Molecule {
             i++;
         }
 
-        //Now that we're done with the initial atoms, attempt to add hydrogens.
-        ArrayList<Atom> addedH = new ArrayList<>(); //Stores added hydrogens.
+        //Now that we're done with the initial atoms, attempt to add hydrogen atoms.
+        ArrayList<Atom> addedH = new ArrayList<>(); //Stores added hydrogen atoms.
         for (Atom a : atoms) {
 
-            if (a.equals(center)) continue;
+            if (a.equals(center)) continue; //We'll add hydrogen to the center later, if there's any left.
             if (a.isBondable() && initAtoms.size() > 0) {
                 while (a.isBondable() && initAtoms.size() > 0) {
                     Atom h = initAtoms.remove(0);
@@ -86,38 +111,29 @@ public class Molecule {
         }
         atoms.addAll(addedH);
 
-        System.out.println("Checking availability:");
-        for (Atom a : atoms) {
-            System.out.println(a.getElement().getName() + ": " + a.getAvailableElectrons() + ". Bondable: " + a.isBondable());
-        }
-
-        //TODO: If we still have leftover electrons in connected atoms, attempt to make double bonds instead of single bonds.
+        //If we still have leftover electrons in connected atoms, attempt to make double bonds instead of single bonds.
         for (Atom a : atoms) {
             if (a.isBondable()) {
-                System.out.println(a.getElement().getName() + " is bondable. has the following bonds: " + a.getAttachedBonds());
-
+                //System.out.println(a.getElement().getName() + " is bondable. has the following bonds: " + a.getAttachedBonds());
                 for (Bond b : a.getAttachedBonds()) {
                     Atom other = b.getAtoms().get(0).equals(a) ? b.getAtoms().get(1) : b.getAtoms().get(0);
                     if (other.isBondable()) {
-                        System.out.println("About to increase " + a.getElement().getName() + " and " + other.getElement().getName()
-                                + ", who have " + a.getAvailableElectrons() + "," + other.getAvailableElectrons());
+                        //System.out.println("About to increase " + a.getElement().getName() + " and " + other.getElement().getName() + ",
+                        //who have " + a.getAvailableElectrons() + "," + other.getAvailableElectrons());
                         b.increaseOrder();
                     }
                 }
             }
         }
 
-            //Check Validity of Molecule
-            boolean check = true;
-            for (Atom a: atoms) {
-                if (a.getAvailableElectrons() % 2 != 0) {
-                    check = false;
-                    System.err.println("------ THE MOLECULE PROBABLY DIDN'T BUILD PROPERLY ------");
-                }
+        //Check Validity of Molecule
+        boolean check = true;
+        for (Atom a : atoms) {
+            if (a.getAvailableElectrons() % 2 != 0) {
+                check = false;
             }
-            if (check) return;
-
-            //TODO: If we need to repeat the creation... rip.
+            if (!check) System.err.println("------ THE MOLECULE PROBABLY DIDN'T BUILD PROPERLY ------");
+        }
     }
 
 
@@ -172,7 +188,13 @@ public class Molecule {
 
     @Override
     public String toString() {
-        return "Molecule{" + atoms + "}";
+        StringBuilder molstr = new StringBuilder();
+        molstr.append("Molecule: ");
+        for(Atom a: atoms) {
+            molstr.append("\n  " + a);
+        }
+        molstr.append("\n");
+        return molstr.toString();
     }
 
 

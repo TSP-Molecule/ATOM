@@ -5,7 +5,9 @@ import structures.enums.BondOrder;
 import java.util.ArrayList;
 
 /**
- * Bond structure. Connects two atoms.
+ * Bond structure.
+ * It's best to think of a bond as an edge in a graph, with more properties.
+ *
  * @author  Emily Anible
  * CS3141, Spring 2018, Team ATOM
  */
@@ -34,9 +36,9 @@ public class Bond {
 
         one.addBond(this);
         two.addBond(this);
-        System.out.println("bonded " + one.getElement().getName() + " to " + two.getElement().getName()
-                    + ". Remaining " + one.getAvailableElectrons() + ":" + one.isBondable() + ", " + two.getAvailableElectrons() + ":" + two.isBondable()
-                    + "    Equal: " + one.equals(two));
+//        System.out.println("bonded " + one.getElement().getName() + " to " + two.getElement().getName()
+//                    + ". Remaining " + one.getAvailableElectrons() + ":" + one.isBondable() + ", " + two.getAvailableElectrons() + ":" + two.isBondable()
+//                    + "    Equal: " + one.equals(two));
     }
 
     /**
@@ -53,17 +55,6 @@ public class Bond {
         return atoms;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("<bond: ");
-        for( Atom a: getAtoms() ) {
-            str.append(a.getElement().getName()+ " ");
-        }
-        str.append(", " + order + ">");
-        return str.toString();
-    }
-
 
     public double getBondingAngle() {
         return bondingAngle;
@@ -78,12 +69,17 @@ public class Bond {
             order = BondOrder.values()[order.ordinal() + 1];
             getAtoms().get(0).incrementAttachedElectrons();
             getAtoms().get(1).incrementAttachedElectrons();
-            System.out.println("INCREASED ORDER OF " + this + " " + this.getAtoms().get(0).getAvailableElectrons() + ", " + this.getAtoms().get(1).getAvailableElectrons());
+            //System.out.println("INCREASED ORDER OF " + this + " " + this.getAtoms().get(0).getAvailableElectrons() + ", " + this.getAtoms().get(1).getAvailableElectrons());
         }
         return order;
     }
 
     public void setBondingAngle(double bondingAngle) {
         this.bondingAngle = bondingAngle;
+    }
+
+    @Override
+    public String toString() {
+        return getAtoms().get(0).getElement().getSymbol() + getOrder() + getAtoms().get(1).getElement().getSymbol();
     }
 }
