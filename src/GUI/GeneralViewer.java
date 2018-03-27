@@ -64,7 +64,9 @@ public class GeneralViewer extends Application {
 
         pane.add(sub, 0, 0);
 
-        TextArea right = new TextArea("Molecule Info will go here");
+        TextArea right = new TextArea();
+        right.setPromptText("Molecule info will go here");
+        right.setEditable(false);
         right.setMinSize(600, 700);
         right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
         textPane.setContent(right);
@@ -98,6 +100,7 @@ public class GeneralViewer extends Application {
         });
         stage.setScene(scene);
         stage.setTitle("ATOM - A Tiny Object Modeler");
+        pane.requestFocus();
         return stage;
 
     }
@@ -397,7 +400,7 @@ public class GeneralViewer extends Application {
     private BorderPane searchBar() {
         BorderPane grid = new BorderPane();
         TextField search = new TextField();
-        search.setText("search");
+        search.setPromptText("search");
         search.setEditable(true);
         search.setPrefSize(800, 40);
         grid.setLeft(search);
@@ -436,6 +439,7 @@ public class GeneralViewer extends Application {
                     String output = printout + mol;
 
                     info.setText(output);
+                    info.setEditable(false);
                     info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
                     textPane.setContent(info);
 
