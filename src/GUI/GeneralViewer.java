@@ -414,8 +414,20 @@ public class GeneralViewer extends Application {
                 try {
                     WebService spider = new WebService();
                     String formula = spider.getFormula(searchText);
+
                     System.out.println("Input was  : " + searchText);
                     System.out.println("We got this: " + formula);
+
+                    //If we get a bad input, alert the user.
+                    if (formula == null) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("No result found for \"" + searchText + "\"");
+                        alert.setContentText("We couldn't seem to find a chemical formula that corresponds to the input! Please try again or try a different input.");
+
+                        alert.showAndWait();
+                        return;
+                    }
                     TextArea info = new TextArea();
                     String printout = String.format("%s has the formula %s.\n  ", searchText, formula);
                     ArrayList<Atom> elemList = new ChemicalFormula(formula).getAtoms();
