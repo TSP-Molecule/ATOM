@@ -10,10 +10,8 @@ import java.util.ArrayList;
  * @author  Emily Anible
  * CS3141, Spring 2018, Team ATOM
  *
- * Atom. Each instance of this object is a "physical" atom, with attributes
- * - Element - What element is this atom?
- * - Bonds    - What attachedBonds object are bonded here?
- * - (maybe atom.getBonded() to get a list of the atoms it's bonded to)
+ * Atom. Each instance of this object is a "physical" atom.
+ * It's best to think of an Atom as a vertex in a graph, with more properties.
  */
 
 public class Atom {
@@ -118,6 +116,6 @@ public class Atom {
 
     @Override
     public String toString() {
-        return "\n  Atom[" +element.getName() + ", bonds: " + attachedBonds.size() + ": " + attachedBonds + "]";
+        return element.getName() + ": " + attachedBonds;
     }
 }

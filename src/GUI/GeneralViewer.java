@@ -418,7 +418,7 @@ public class GeneralViewer extends Application {
                     System.out.println("Input was  : " + searchText);
                     System.out.println("We got this: " + formula);
 
-                    //If we get a bad input, alert the user.
+                    //If we get a bad input, alert the user and don't proceed.
                     if (formula == null) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
@@ -428,21 +428,27 @@ public class GeneralViewer extends Application {
                         alert.showAndWait();
                         return;
                     }
+
                     TextArea info = new TextArea();
-                    String printout = String.format("%s has the formula %s.\n  ", searchText, formula);
-                    ArrayList<Atom> elemList = new ChemicalFormula(formula).getAtoms();
-                    String chemicals = String.format("It contains the following elements:\n");
-                    String atoms = "";
-                    for (int i = 0; i < elemList.size(); i++) {
-                        atoms += elemList.get(i).getElement().getName();
-                        if (i < elemList.size() - 1) {
-                            atoms += ", ";
-                        }
-                        atoms += "\n";
-                    }
-                    String output = printout + chemicals + atoms;
+                    Molecule mol = new Molecule(formula, searchText);
+
+                    String printout = String.format("%s has the formula %s.\n\n", searchText.substring(0,1).toUpperCase() + searchText.substring(1), formula);
+                    String output = printout + mol;
+
                     info.setText(output);
+                    info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
                     textPane.setContent(info);
+
+//                    ArrayList<Atom> elemList = new ChemicalFormula(formula).getAtoms();
+//                    String chemicals = String.format("It contains the following elements:\n");
+//                    String atoms = "";
+//                    for (int i = 0; i < elemList.size(); i++) {
+//                        atoms += elemList.get(i).getElement().getName();
+//                        if (i < elemList.size() - 1) {
+//                            atoms += ", ";
+//                        }
+//                        atoms += "\n";
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
