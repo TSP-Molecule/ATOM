@@ -133,7 +133,7 @@ public class GeneralViewer extends Application {
      * @return the subscene
      */
     private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
-        SubScene scene1 = new SubScene(scene, w, h, b, s);
+        SubScene scene1 = new SubScene(scene, w, h, b, SceneAntialiasing.BALANCED);
         scene1.setWidth(500);
         scene1.setHeight(600);
 
@@ -397,7 +397,10 @@ public class GeneralViewer extends Application {
         ArrayList<Cylinder> bondList = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             Cylinder cy = new Cylinder(10, bond);
-            cy.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+            PhongMaterial mat = new PhongMaterial(Color.LIGHTGREY);
+            mat.setSpecularColor(Color.LIGHTGREY);
+            mat.setDiffuseColor(Color.LIGHTGREY);
+            cy.setMaterial(mat);
             bondList.add(cy);
         }
 

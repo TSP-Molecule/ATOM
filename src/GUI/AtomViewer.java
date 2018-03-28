@@ -1,11 +1,18 @@
 package GUI;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import structures.enums.Elem;
 
 import java.util.Arrays;
 
@@ -18,14 +25,15 @@ import java.util.Arrays;
  */
 public class AtomViewer extends Application {
 
-    private int numElectrons = 0;
-    private final int [] shells = {2, 10, 18, 36, 54, 86};
-    private int [] numAtoms = new int[6];
+    private int numElectrons = 8;
+    private final int [] shells = {2, 8, 8, 18, 18, 32, 32};
+    private final double [] thetas = {Math.PI, 2 * Math.PI/8, 2 * Math.PI/8, 2 * Math.PI/18, 2 * Math.PI/18, 2 * Math.PI/32, 2 * Math.PI/32};
+    private int [] numAtoms = new int[7];
     private Group orbits = new Group();
 
-    public AtomViewer(int numElectrons) {
-        this.numElectrons = numElectrons;
-    }
+//    public AtomViewer(int numElectrons) {
+//        this.numElectrons = numElectrons;
+//    }
 
     public void fillShells() {
         int shell = 0;
@@ -33,7 +41,7 @@ public class AtomViewer extends Application {
             System.out.println(numElectrons);
             if (numAtoms[shell] < shells[shell]) {
                 numAtoms[shell]++;
-                System.out.println(shell + ":  " + numAtoms[shell]);
+                System.out.println("shell: atoms " + shell + ":  " + numAtoms[shell]);
                 numElectrons--;
             } else {
                 shell++;
@@ -56,7 +64,7 @@ public class AtomViewer extends Application {
             SCREEN 500x 500
 
          */
-        double radius = shellNum * 50 + 100;
+        double radius = shellNum * 25 + 75;
         double x = 250;
         double y = 250;
         Ellipse ellipse = new Ellipse(x, y, radius, radius);
@@ -67,14 +75,20 @@ public class AtomViewer extends Application {
 
         // Draw atoms
         double numAtom = numAtoms[shellNum];
-        double theta = (Math.PI * 2) / shells[shellNum];
-        double er = 40;
+        System.out.println(numAtom + " : " + shellNum);
+        double theta = (Math.PI * 2) / (double)shells[shellNum];
+        double er = 10;
         for (int i = 0; i < numAtom; i++) {
-            double ex = radius * Math.cos(theta * i);
-            double ey = radius * Math.sin(theta * i);
+
+            System.out.println("red");
+
+            double ex = 250 + radius * Math.cos(theta);
+            double ey = 250 + radius * Math.sin(theta);
             Ellipse e = new Ellipse(ex, ey, er, er);
             e.setFill(Color.RED);
             g.getChildren().add(e);
+            theta += thetas[shellNum];
+            System.out.println("Theta: " + theta);
         }
 
     }
@@ -94,18 +108,61 @@ public class AtomViewer extends Application {
      * Creates a new group for drawing the Bohr model of an atom
      * @return the group
      */
-    private Group bohr() {
+    private Group bohr(int num) {
+        numElectrons = num;
+        fillShells();
         Group group = new Group();
-        //TODO:  implement the drawing of the atom
+        for (int i = shells.length - 1; i >= 0; i--) {
+            if (numAtoms[i] > 0) {
+                drawOrbit(group, i);
+            }
+        }
+        Ellipse center = new Ellipse(250, 250, 50, 50);
+        center.setFill(Elem.get(numElectrons).getColor());
+        group.getChildren().add(center);
+        String string = Elem.get(num).getSymbol();
+        System.out.println("string: " + string);
+        Text text = new Text(225, 260, string);
+        text.setFill(Color.BLACK);
+        text.setFont(new Font(50));
+        group.getChildren().add(text);
         return group;
     }
 
+    Group group = new Group();
+    int ind = 0;
+    Scene s;
     @Override
     public void start(Stage stage) throws Exception {
-        Group group = new Group();
-        fillShells();
-        drawOrbit(group, 1);
-        Scene s = new Scene(group, 500, 500);
+       // Group group = new Group();
+      //  group.getChildren().add(new Ellipse(100, 100, 100, 100));
+      //  Rectangle rectangle = new Rectangle(20, 20, 50, 300);
+      //  rectangle.setFill(Color.RED);
+        //group.getChildren().add(rectangle);
+        //fillShells();
+        //drawOrbit(group, 1);
+        int i = 0;
+        group = bohr(90);
+        group.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                ind++;
+                group = bohr(ind);
+                System.out.println(ind);
+            }
+        });
+        s = new Scene(group, 500, 500);
+        s.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ind++;
+                group = bohr(ind);
+                System.out.println(ind);
+                s = new Scene(group, 500, 500);
+                stage.setScene(s);
+            }
+        });
+        stage.setScene(s);
         stage.show();
     }
 
