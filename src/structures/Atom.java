@@ -4,6 +4,7 @@ import structures.enums.BondOrder;
 import structures.enums.Elem;
 import structures.enums.Geometry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * It's best to think of an Atom as a vertex in a graph, with more properties.
  */
 
-public class Atom {
+public class Atom implements Serializable {
 
 
     private final Elem element;

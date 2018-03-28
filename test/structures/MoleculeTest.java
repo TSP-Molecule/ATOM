@@ -38,7 +38,7 @@ public class MoleculeTest {
     public void alcoholTest() throws IOException {
         WebService ws = new WebService();
         String formula = ws.getFormula("isopropyl alcohol");
-        System.out.println("isopropyl alcohol is " + formula);
+        System.out.println("Isopropyl alcohol is " + formula);
 
         Molecule mol = new Molecule(formula);
         System.out.println(mol);
@@ -48,7 +48,7 @@ public class MoleculeTest {
     public void acetoneTest() throws IOException {
         WebService ws = new WebService();
         String formula = ws.getFormula("acetone");
-        System.out.println("acetone is " + formula);
+        System.out.println("Acetone is " + formula);
 
         Molecule mol = new Molecule(formula);
 //        System.out.println("center: " + mol.getCenter());
@@ -66,27 +66,23 @@ public class MoleculeTest {
 //        System.out.println("center: " + mol.getCenter());
     }
 
-    //    @Test
-    //    public void CreateAWaterMolecule() {
-    //        ArrayList<Atom> atoms = new ArrayList<>();
-    //        ArrayList<Bond> bonds = new ArrayList<>();
-    //
-    //        //List of elements to add can be grabbed when parsing chemical formula, e.g. H_{2}O gives the following:
-    //        atoms.add(new Atom(Elem.Hydrogen));
-    //        atoms.add(new Atom(Elem.Hydrogen));
-    //        atoms.add(new Atom(Elem.Oxygen));
-    //
-    //        Bond bond1 = new Bond(atoms.get(0), atoms.get(2));
-    //        Bond bond2 = new Bond(atoms.get(1), atoms.get(2));
-    //
-    //        //Add bonds to bond list after creation
-    //        bonds.add(bond1);
-    //        bonds.add(bond2);
-    //
-    //        //Create a new molecule "water", containing the created atoms and bonds
-    //        Molecule water = new Molecule(atoms, bonds);
-    //
-    //        //Print out data structure
-    //        System.out.println(water.toString());
-    //    }
+    @Test
+    public void alcoholSave() throws IOException {
+        String chem = "Isopropyl Alcohol";
+        String formula = WebService.getFormula(chem);
+        System.out.println(chem + " is " + formula);
+
+        Molecule mol = new Molecule(formula, chem);
+
+        System.out.println(mol);
+
+        System.out.println("Attempting to save...");
+        MolFile.saveMolecule(mol, "alcohol");
+    }
+
+    @Test
+    public void alcoholLoad() throws IOException, ClassNotFoundException {
+        Molecule mol = MolFile.loadMolecule("alcohol");
+        System.out.println(mol);
+    }
 }
