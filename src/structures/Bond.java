@@ -2,6 +2,7 @@ package structures;
 
 import structures.enums.BondOrder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @author  Emily Anible
  * CS3141, Spring 2018, Team ATOM
  */
-public class Bond {
+public class Bond implements Serializable{
 
     /**
      * BondOrder - 1 for single bonds, 2 for double, 3 for triple.
