@@ -51,4 +51,20 @@ public class WebService {
         }
     }
 
+    /**
+     *
+     * @param term - Search Term
+     * @return name - First paragrah of wikipedia article
+     *          (null if no article found)
+     * @throws IOException - thrown if python script is missing
+     */
+    public static String getWiki(String term) throws IOException {
+
+        Process p = Runtime.getRuntime().exec(new String[]{"python", "Wikipedia.py", term});
+
+        BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        return pin.readLine(); //Returns null if not found or issue occurs
+    }
+
 }
