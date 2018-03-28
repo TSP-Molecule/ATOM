@@ -1,6 +1,7 @@
 package structures;
 
 import structures.enums.Elem;
+import structures.enums.Geometry;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,9 @@ public class Molecule {
     public Molecule(String chemFormula, String name) {
         ChemicalFormula chem = new ChemicalFormula(chemFormula);
         buildMolecule(chem.getAtoms());
-        this.name = name;
+
+        if (name.length() > 1) this.name = name.substring(0,1).toUpperCase() + name.substring(1);
+        else this.name = name;
     }
 
     /**
@@ -69,6 +72,8 @@ public class Molecule {
         atoms = sortByENeg(initAtoms); //sorts atoms by eneg
 
         center = findCenter(atoms);
+        System.out.println("Center lone electrons: " + center.getAvailableElectrons());
+        System.out.println();
         bonds = new ArrayList<>();
 
         int i = 0;
@@ -134,7 +139,11 @@ public class Molecule {
             }
             if (!check) System.err.println("------ THE MOLECULE PROBABLY DIDN'T BUILD PROPERLY ------");
         }
+
+        //Now that we're done, try to check the geometry!
+        Geometry.calculateGeometry(this);
     }
+
 
 
     /**
@@ -185,15 +194,24 @@ public class Molecule {
         return atoms;
     }
 
+    /**
+     * @return Center Atom's Geometry
+     */
+    public Geometry getCenterGeometry() {
+        return center.getGeometry();
+    }
 
     @Override
     public String toString() {
         StringBuilder molstr = new StringBuilder();
-        molstr.append("Molecule: ");
+        molstr.append("Mol: ");
+        molstr.append(name != null ? name : "");
+
         for(Atom a: atoms) {
             molstr.append("\n  " + a);
         }
         molstr.append("\n");
+        molstr.append("\nCenter Geometry: " + getCenterGeometry().getName() + "\nBond Angle: " + getCenterGeometry().getBondAngle());
         return molstr.toString();
     }
 
