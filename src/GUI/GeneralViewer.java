@@ -24,6 +24,7 @@ import structures.enums.Elem;
 import sun.plugin.javascript.navig.Anchor;
 import web.WebService;
 
+import java.io.File;
 import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 public class GeneralViewer extends Application {
 
     Atominomicon atominimicon;
+    Molecule mol;
     ScrollPane textPane = new ScrollPane();
     SubScene imageScene;
     double oldX = 400;
@@ -606,7 +608,7 @@ public class GeneralViewer extends Application {
         }
 
         TextArea info = new TextArea();
-        Molecule mol = new Molecule(formula, searchText);
+        mol = new Molecule(formula, searchText);
 
         String printout = String.format("%s has the formula %s.\n\n", searchText.substring(0, 1).toUpperCase() + searchText.substring(1), formula);
         String output = printout + mol;
@@ -713,14 +715,46 @@ public class GeneralViewer extends Application {
     private Menu makeFileMenu(Stage p) {
         Menu file = new Menu("File");
         MenuItem open = new MenuItem("Open");
-        open.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser chooser = new FileChooser();
-                chooser.showOpenDialog(p);
+        open.setOnAction(event -> {
+            FileChooser chooser = new FileChooser();
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
+
+            File molload = chooser.showOpenDialog(p.getScene().getWindow());
+
+            if (molload != null) {
+                String filename = molload.getAbsolutePath();
+                try {
+                    mol = MolFile.loadMolecule(filename);
+                    System.out.println("We loaded this in: ");
+                    System.out.println(mol);
+                    //TODO: Update information and model with loaded molecule
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        MenuItem saveImage = new MenuItem("Save");
+
+        MenuItem save = new MenuItem("Save");
+        save.setOnAction(event -> {
+            FileChooser chooser = new FileChooser();
+//            chooser.showSaveDialog(p);
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
+
+            File molsave = chooser.showSaveDialog(p.getScene().getWindow());
+
+            if (molsave != null) {
+                String filename = molsave.getAbsolutePath();
+                try {
+                    MolFile.saveMolecule(mol, filename);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -735,7 +769,7 @@ public class GeneralViewer extends Application {
                 p.close();
             }
         });
-        file.getItems().addAll(open, saveImage, exit);
+        file.getItems().addAll(open, save, saveImage, exit);
         return file;
     }
 

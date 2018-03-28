@@ -41,5 +41,4 @@ public class WebService {
 
         return pin.readLine(); //Returns null if not found or issue occurs
     }
-
 }

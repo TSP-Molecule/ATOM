@@ -3,6 +3,7 @@ package structures;
 import structures.enums.Elem;
 import structures.enums.Geometry;
 
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -12,19 +13,24 @@ import java.util.ArrayList;
  * @author Emily Anible
  * CS3141, Spring 2018, Team ATOM
  */
-public class Molecule {
+public class Molecule implements Serializable{
+
+    private static final long serialVersionUID = 7355608;
+
+    private String formula;        //Chemical formula associated with Molecule
 
     private ArrayList<Atom> atoms; //List of all of the atoms in the molecule
     private ArrayList<Bond> bonds; //List of all of the bonds in the molecule
     private Atom center;           //Atom in the center (lowest eNeg, not Hydrogen)
     private String name;
-
     /**
      * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
      * @param chemFormula chemical formula
      */
     public Molecule(String chemFormula) {
         ChemicalFormula chem = new ChemicalFormula(chemFormula);
+
+        this.formula = chemFormula.replace("{","").replace("}","").replace("_","");
         buildMolecule(chem.getAtoms());
     }
 
@@ -36,6 +42,7 @@ public class Molecule {
         ChemicalFormula chem = new ChemicalFormula(chemFormula);
         buildMolecule(chem.getAtoms());
 
+        this.formula = chemFormula.replace("{","").replace("}","").replace("_","");
         if (name.length() > 1) this.name = name.substring(0,1).toUpperCase() + name.substring(1);
         else this.name = name;
     }
@@ -72,8 +79,6 @@ public class Molecule {
         atoms = sortByENeg(initAtoms); //sorts atoms by eneg
 
         center = findCenter(atoms);
-        System.out.println("Center lone electrons: " + center.getAvailableElectrons());
-        System.out.println();
         bonds = new ArrayList<>();
 
         int i = 0;
@@ -144,8 +149,6 @@ public class Molecule {
         Geometry.calculateGeometry(this);
     }
 
-
-
     /**
      * Sorts list of atoms by electronegativity, placing Hydrogen at the end of the list.
      *
@@ -204,9 +207,10 @@ public class Molecule {
     @Override
     public String toString() {
         StringBuilder molstr = new StringBuilder();
-        molstr.append("Mol: ");
-        molstr.append(name != null ? name : "");
-
+//        molstr.append("Molecule ");
+        molstr.append(name != null ? name: "");
+        molstr.append(formula != null ? " " + formula : "");
+        molstr.append(":");
         for(Atom a: atoms) {
             molstr.append("\n  " + a);
         }
@@ -215,5 +219,7 @@ public class Molecule {
         return molstr.toString();
     }
 
-
+    public String getFormula() {
+        return formula;
+    }
 }
