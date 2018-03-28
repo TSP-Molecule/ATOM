@@ -10,10 +10,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import structures.enums.Elem;
 import structures.enums.Type;
@@ -279,8 +281,8 @@ public class PeriodicTableView extends Stage {
                     PeriodicTableButton bu = (PeriodicTableButton)b;
                     Elem elem = b.getElement();
                     Stage stage = new Stage();
-                    TextArea area = new TextArea("Bohr Model will go here!");
-                    Scene scene = new Scene(area, 200, 200);
+                    //TextArea area = new TextArea("Bohr Model will go here!");
+                    Scene scene = new Scene(bohrModel(stage, bu.getElement()), 400, 400);
                     stage.setScene(scene);
                     stage.show();
 
@@ -288,12 +290,63 @@ public class PeriodicTableView extends Stage {
                     System.out.println("Right " + ((PeriodicTableButton)b).getElement().getSymbol() + "\n" +((PeriodicTableButton) b).getElement().geteConfigString() );
                     Stage stage = new Stage();
                     TextArea area = new TextArea("Atom Model 3D might go here!");
-                    Scene scene = new Scene(area, 200, 200);
+                    Scene scene = new Scene(area, 400, 400);
                     stage.setScene(scene);
                     stage.show();
                 }
             }
         });
+    }
+
+    private Group bohrModel(Stage s, Elem elem) {
+        Group group = new Group();
+//        for (int i = 0; i < 360; i += 60) {
+//            double x = 40 * Math.cos(i);
+//            double y = 40 * Math.sin(i);
+//            System.out.println("x:  " + x + "  y: " + y);
+//            Ellipse e = new Ellipse(x, y, 20, 20);
+//            group.getChildren().add(e);
+//        }
+        int electrons = elem.getNum();
+
+        int [] shells = {2, 10, 18, 36, 54, 86};
+        int [] elec = new int[shells.length];
+        for (int i = 0; i < shells.length; i++) {
+            int rem = electrons - shells[i];
+            if (rem >= 0) {
+                elec[i] = shells[i];
+            } else {
+                elec[i] = rem;
+            }
+        }
+        for (int i = 7; i > 1; i--) {
+           // System.out.println("blue bayou");
+            Ellipse e = new Ellipse(0, 0, i * 50, i * 50);
+            e.setStroke(Color.BLACK);
+            e.setStrokeWidth(1);
+           // e.setFill(Color.GREEN);
+            group.getChildren().add(e);
+            double d = 360 / shells[i - 2];
+            double rad = 15;
+            double radi = i * 50;
+            System.out.println("Shell " + i + ":  " + elec[i - 2]);
+            for (int j  = 0; j < elec[i - 2]; j++) {
+
+                double x = radi * Math.cos(d * i);
+                double y = radi * Math.sin(d * i);
+                Ellipse electron = new Ellipse(x, y, rad, rad);
+                electron.setFill(Color.TURQUOISE);
+                group.getChildren().add(electron);
+            }
+        }
+
+        Text atom = new Text(elem.getSymbol());
+        atom.setFont(new Font(18));
+        Ellipse cen = new Ellipse(0, 0, 50, 50);
+        cen.setFill(elem.getType().getFill());
+        group.getChildren().addAll(cen, atom);
+        group.getTransforms().add(new Translate(s.getWidth()/2, s.getHeight()/2));
+        return group;
     }
 
 

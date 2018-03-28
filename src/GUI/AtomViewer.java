@@ -23,7 +23,7 @@ public class AtomViewer extends Stage {
     }
 
     // Note of the display pattern for electron shells.
-    /*
+    /*  s = 2, p = 6, d = 10
     1s  has 2 electrons
     2s has 2 electrons
     2p has 6 electrons
