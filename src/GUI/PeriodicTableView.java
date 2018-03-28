@@ -132,7 +132,8 @@ public class PeriodicTableView extends Stage {
         Scene s = new Scene(group, 1080, 800);
         setScene(s);
         setTitle("The Periodic Table of the Elements");
-        show();
+
+       // show();
     }
 
     Button [][] table = new Button [10][18];
@@ -254,6 +255,7 @@ public class PeriodicTableView extends Stage {
         });
     }
 
+    private Stage bohr = new Stage();
     /**
      * Provides utility of selecting only one button at a time by attaching an
      * event listener.
@@ -280,19 +282,35 @@ public class PeriodicTableView extends Stage {
                     System.out.println("LEFT" + ((PeriodicTableButton) b).getElement());
                     PeriodicTableButton bu = (PeriodicTableButton)b;
                     Elem elem = b.getElement();
-                    Stage stage = new Stage();
-                    //TextArea area = new TextArea("Bohr Model will go here!");
-                    Scene scene = new Scene(bohrModel(stage, bu.getElement()), 400, 400);
-                    stage.setScene(scene);
-                    stage.show();
+//                    PeriodicTableButton bu = (PeriodicTableButton)b;
+                    int num = bu.getElement().getNum();
+                    // Group bore = AtomView(num);
+                    Group bore = new AtomView(num);
+                    //TextArea area = new TextArea("Atom Model 3D might go here!");
+                    Scene scene = new Scene(bore, 400, 400);
+                    bohr.setScene(scene);
+                    // AtomView atom = new AtomView(num, stage);
+                    bohr.show();
+//                    try {
+//                        bohr = new AtomViewer(elem.getNum());
+//                      //  bohr.setScene(new Scene(new AtomViewer(elem.getNum()));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    bohr.show();
 
                 } else if (event.getButton() == MouseButton.SECONDARY) {
                     System.out.println("Right " + ((PeriodicTableButton)b).getElement().getSymbol() + "\n" +((PeriodicTableButton) b).getElement().geteConfigString() );
-                    Stage stage = new Stage();
-                    TextArea area = new TextArea("Atom Model 3D might go here!");
-                    Scene scene = new Scene(area, 400, 400);
-                    stage.setScene(scene);
-                    stage.show();
+                   // Stage stage = new Stage();
+                    PeriodicTableButton bu = (PeriodicTableButton)b;
+                    int num = bu.getElement().getNum();
+                   // Group bore = AtomView(num);
+                    Group bore = new AtomView(num);
+                    //TextArea area = new TextArea("Atom Model 3D might go here!");
+                    Scene scene = new Scene(bore, 400, 400);
+                    bohr.setScene(scene);
+                   // AtomView atom = new AtomView(num, stage);
+                    bohr.show();
                 }
             }
         });
