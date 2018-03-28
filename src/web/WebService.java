@@ -15,7 +15,7 @@ public class WebService {
 
         // Process allows for us to run external scripts and receive their output.
         // -f flag for formula
-        Process p = Runtime.getRuntime().exec(new String[]{"python", "ChemSpider.py", "-f", chem});
+        Process p = Runtime.getRuntime().exec(new String[]{"python", "scripts/ChemSpider.py", "-f", chem});
 
         // pin is the Process IN, which allows for us to read the output from the executed script.
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -35,7 +35,7 @@ public class WebService {
         // ^^reformats the string passed in (which is in our standard form) to work with the python script
 
         //getName & getFormula behave the same from here out. -n flag for name
-        Process p = Runtime.getRuntime().exec(new String[]{"python", "ChemSpider.py", "-n", formEdit});
+        Process p = Runtime.getRuntime().exec(new String[]{"python", "scripts/ChemSpider.py", "-n", formEdit});
 
         BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
