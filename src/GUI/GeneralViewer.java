@@ -47,6 +47,7 @@ public class GeneralViewer extends Application {
     double oldY = 0;
     double oldZ = 0;
     boolean subf = true;
+    Stage periodic = new PeriodicTableView();
 
     @Override
     public void start(Stage primaryStage) {
@@ -79,6 +80,12 @@ public class GeneralViewer extends Application {
         TextArea right = new TextArea();
         right.setPromptText("Molecule information will be displayed here.");
         right.setEditable(false);
+        right.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                sub.requestFocus();
+            }
+        });
         right.setPrefSize(500, 700);
         right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
         textPane.setContent(right);
@@ -640,7 +647,7 @@ public class GeneralViewer extends Application {
 
     /**
      * Creates and returns a pane to display results of a search
-     *
+     *not in use!!!!!!!!!!!!!!!!
      * @param p
      * @param results
      * @return
@@ -686,8 +693,12 @@ public class GeneralViewer extends Application {
         viewPeriodicTable.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                PeriodicTableView view = new PeriodicTableView();
-                view.show();
+//                periodic = new PeriodicTableView();
+
+               // periodic.centerOnScreen();
+               // periodic.close();
+               // periodic.requestFocus();
+                periodic.show();
             }
         });
         navigation.getItems().add(view2D);

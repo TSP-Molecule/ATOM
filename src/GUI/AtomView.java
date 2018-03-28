@@ -1,6 +1,5 @@
 package GUI;
 
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -8,14 +7,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import structures.Atom;
 import structures.enums.Elem;
-
-import java.util.Arrays;
 
 /**
  * This class will provide a view of a single atom at the subatomic level.
@@ -24,7 +19,7 @@ import java.util.Arrays;
  * CS3141, Spring 2018
  * Date Last Modified:  March 25, 2018.
  */
-public class AtomViewer extends Stage {
+public class AtomView extends Group {
 
     private int numElectrons = 0;
     private final int [] shells = {2, 8, 8, 18, 18, 32, 32};
@@ -36,7 +31,7 @@ public class AtomViewer extends Stage {
 //        this.numElectrons = numElectrons;
 //    }
 
-    public AtomViewer (int num) {
+    public AtomView(int num) {
         this.numElectrons = num;
         bohr(num);
         numElectrons = num;
@@ -48,28 +43,28 @@ public class AtomViewer extends Stage {
         //fillShells();
         //drawOrbit(group, 1);
         int i = 0;
-        group = bohr(num);
-        group.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        bohr(num);
+        setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 ind++;
-                group = bohr(ind);
+                bohr(ind);
                 System.out.println(ind);
             }
         });
-        s = new Scene(group, 500, 500);
-        s.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                ind++;
-                group = bohr(ind);
-                System.out.println(ind);
-                s = new Scene(group, 500, 500);
-                stage.setScene(s);
-            }
-        });
-        setScene(s);
-        show();
+//        s = new Scene(group, 500, 500);
+//        s.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                ind++;
+//                bohr(ind);
+//                System.out.println(ind);
+//                s = new Scene(group, 500, 500);
+//                stage.setScene(s);
+//            }
+//        });
+//        stage.setScene(s);
+
     }
 
     public void fillShells() {
@@ -86,7 +81,7 @@ public class AtomViewer extends Stage {
         }
     }
 
-    public void drawOrbit(Group g, int shellNum) {
+    public void drawOrbit(int shellNum) {
         /*
                *   ***   *
               *   *   *   *
@@ -108,7 +103,7 @@ public class AtomViewer extends Stage {
         ellipse.setStrokeWidth(1);
         ellipse.setStroke(Color.BLACK);
         ellipse.setFill(Color.PALETURQUOISE);
-        g.getChildren().add(ellipse);
+        getChildren().add(ellipse);
 
         // Draw atoms
         double numAtom = numAtoms[shellNum];
@@ -123,7 +118,7 @@ public class AtomViewer extends Stage {
             double ey = 250 + radius * Math.sin(theta);
             Ellipse e = new Ellipse(ex, ey, er, er);
             e.setFill(Color.RED);
-            g.getChildren().add(e);
+            getChildren().add(e);
             theta += thetas[shellNum];
             System.out.println("Theta: " + theta);
         }
@@ -145,65 +140,65 @@ public class AtomViewer extends Stage {
      * Creates a new group for drawing the Bohr model of an atom
      * @return the group
      */
-    private Group bohr(int num) {
+    private void bohr(int num) {
         numElectrons = num;
         fillShells();
-        Group group = new Group();
+//        Group group = new Group();
         for (int i = shells.length - 1; i >= 0; i--) {
             if (numAtoms[i] > 0) {
-                drawOrbit(group, i);
+                drawOrbit(i);
             }
         }
         Ellipse center = new Ellipse(250, 250, 50, 50);
         center.setFill(Elem.get(numElectrons).getColor());
-        group.getChildren().add(center);
+        getChildren().add(center);
         String string = Elem.get(num).getSymbol();
         System.out.println("string: " + string);
         Text text = new Text(225, 260, string);
         text.setFill(Color.BLACK);
         text.setFont(new Font(50));
-        group.getChildren().add(text);
-        return group;
+        getChildren().add(text);
+//        return group;
     }
 
-    Group group = new Group();
+//    Group group = new Group();
     int ind = 0;
     Scene s;
 
-    public Stage getStage (int num) throws Exception {
-        numElectrons = num;
-       // Group group = new Group();
-      //  group.getChildren().add(new Ellipse(100, 100, 100, 100));
-      //  Rectangle rectangle = new Rectangle(20, 20, 50, 300);
-      //  rectangle.setFill(Color.RED);
-        //group.getChildren().add(rectangle);
-        //fillShells();
-        //drawOrbit(group, 1);
-        int i = 0;
-        group = bohr(num);
-        group.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                ind++;
-                group = bohr(ind);
-                System.out.println(ind);
-            }
-        });
-        s = new Scene(group, 500, 500);
-        s.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                ind++;
-                group = bohr(ind);
-                System.out.println(ind);
-                s = new Scene(group, 500, 500);
-                stage.setScene(s);
-            }
-        });
-        stage.setScene(s);
-        stage.show();
-        return stage;
-    }
+//    public Stage getStage (int num) throws Exception {
+//        numElectrons = num;
+//       // Group group = new Group();
+//      //  group.getChildren().add(new Ellipse(100, 100, 100, 100));
+//      //  Rectangle rectangle = new Rectangle(20, 20, 50, 300);
+//      //  rectangle.setFill(Color.RED);
+//        //group.getChildren().add(rectangle);
+//        //fillShells();
+//        //drawOrbit(group, 1);
+//        int i = 0;
+//        bohr(num);
+//        setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//                ind++;
+//                 bohr(ind);
+//                System.out.println(ind);
+//            }
+//        });
+////        s = new Scene(group, 500, 500);
+////        s.setOnMouseClicked(new EventHandler<MouseEvent>() {
+////            @Override
+////            public void handle(MouseEvent event) {
+////                ind++;
+////                bohr(ind);
+////                System.out.println(ind);
+////                s = new Scene(group, 500, 500);
+////                stage.setScene(s);
+////            }
+////        });
+////        stage.setScene(s);
+////        stage.show();
+////        return stage;
+//    }
 
     // Note of the display pattern for electron shells.
     /*  s = 2, p = 6, d = 10
