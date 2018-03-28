@@ -24,6 +24,7 @@ import structures.enums.Elem;
 import sun.plugin.javascript.navig.Anchor;
 import web.WebService;
 
+import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -68,7 +69,8 @@ public class GeneralViewer extends Application {
         TextArea left = new TextArea("Molecule here");
         left.setPrefSize(500, 770);
         left.setBackground(new Background(new BackgroundFill(Color.rgb(255, 200, 220), new CornerRadii(2), new Insets(0))));
-        SubScene sub = sub(waterMolecule(), 500, 700);
+        Group g = salt();
+        SubScene sub = sub(salt(), 500, 700, true, SceneAntialiasing.DISABLED);
 
         pane.add(sub, 0, 0);
 
@@ -130,8 +132,8 @@ public class GeneralViewer extends Application {
      * @param h     the height of the subscene
      * @return the subscene
      */
-    private SubScene sub(Parent scene, double w, double h) {
-        SubScene scene1 = new SubScene(scene, w, h);
+    private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
+        SubScene scene1 = new SubScene(scene, w, h, b, s);
         scene1.setWidth(500);
         scene1.setHeight(600);
 
@@ -335,6 +337,160 @@ public class GeneralViewer extends Application {
         group.getChildren().addAll(s1, s2, s3, s4, c1, c2, c3, c4);
 
         return group;
+    }
+
+    public Group salt() {
+        Group group = new Group();
+        Color c = Elem.getBySymbol("Cl").getColor();
+        Color s = Elem.getBySymbol("Na").getColor();
+        int bond = 300;
+
+        Sphere c1 = atom(Elem.getBySymbol("Cl"));
+//        c1.setMaterial(new PhongMaterial(c));
+        c1.setTranslateX(300);
+        c1.setTranslateY(0);
+        c1.setTranslateZ(0);
+
+        Sphere c2 = atom(Elem.getBySymbol("Cl"));
+//        c2.setMaterial(new PhongMaterial(c));
+        c2.setTranslateX(0);
+        c2.setTranslateY(300);
+        c2.setTranslateZ(0);
+
+        Sphere c3 = atom(Elem.getBySymbol("Cl"));
+//        c3.setMaterial(new PhongMaterial(c));
+        c3.setTranslateX(300);
+        c3.setTranslateY(300);
+        c3.setTranslateZ(300);
+
+        Sphere c4 = atom(Elem.getBySymbol("Cl"));
+//        c4.setMaterial(new PhongMaterial(c));
+        c4.setTranslateX(0);
+        c4.setTranslateY(0);
+        c4.setTranslateZ(300);
+
+        Sphere s1 = atom(Elem.getBySymbol("Na"));
+//        s1.setMaterial(new PhongMaterial(s));
+        s1.setTranslateX(0);
+        s1.setTranslateY(0);
+        s1.setTranslateZ(0);
+
+        Sphere s2 = atom(Elem.getBySymbol("Na"));
+//        s2.setMaterial(new PhongMaterial(s));
+        s2.setTranslateX(300);
+        s2.setTranslateY(300);
+        s2.setTranslateZ(0);
+
+        Sphere s3 = atom(Elem.getBySymbol("Na"));
+//        s3.setMaterial(new PhongMaterial(s));
+        s3.setTranslateX(300);
+        s3.setTranslateY(0);
+        s3.setTranslateZ(300);
+
+        Sphere s4 = atom(Elem.getBySymbol("Na"));
+//        s4.setMaterial(new PhongMaterial(s));
+        s4.setTranslateX(0);
+        s4.setTranslateY(300);
+        s4.setTranslateZ(300);
+
+        double p = 150;
+        ArrayList<Cylinder> bondList = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            Cylinder cy = new Cylinder(10, bond);
+            cy.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+            bondList.add(cy);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateX(150);
+            cy.setRotationAxis(Rotate.Z_AXIS);
+            cy.setRotate(90);
+
+            switch (i) {
+                case 0:
+                    cy.setTranslateZ(0);
+                    break;
+                case 1:
+                    cy.setTranslateZ(300);
+                    break;
+                case 2:
+                    cy.setTranslateZ(300);
+                    cy.setTranslateY(300);
+                    break;
+                case 3:
+                    cy.setTranslateZ(0);
+                    cy.setTranslateY(300);
+                    break;
+            }
+        }
+
+        for (int i = 4; i < 8; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateY(150);
+
+            switch (i) {
+                case 4:
+                    cy.setTranslateX(0);
+                    cy.setTranslateZ(0);
+                    break;
+                case 5:
+                    cy.setTranslateX(0);
+                    cy.setTranslateZ(300);
+                    break;
+                case 6:
+                    cy.setTranslateX(300);
+                    cy.setTranslateZ(0);
+                    break;
+                case 7:
+                    cy.setTranslateX(300);
+                    cy.setTranslateZ(300);
+                    break;
+            }
+        }
+
+        for (int i = 8; i < 12; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateZ(150);
+            cy.setRotationAxis(Rotate.X_AXIS);
+            cy.setRotate(90);
+
+            switch (i) {
+                case 8:
+                    cy.setTranslateX(0);
+                    cy.setTranslateY(0);
+                    break;
+                case 9:
+                    cy.setTranslateX(300);
+                    cy.setTranslateY(0);
+                    break;
+                case 10:
+                    cy.setTranslateX(300);
+                    cy.setTranslateY(300);
+                    break;
+                case 11:
+                    cy.setTranslateX(0);
+                    cy.setTranslateY(300);
+                    break;
+            }
+        }
+        for (Cylinder cy : bondList) {
+            group.getChildren().add(cy);
+        }
+
+        group.getChildren().addAll(s1, s2, s3, s4, c1, c2, c3, c4);
+
+        return group;
+    }
+
+    public Sphere atom(Elem elem) {
+        Color c = elem.getColor();
+        PhongMaterial material = new PhongMaterial();
+        material.setSpecularColor(c);
+        material.setDiffuseColor(c);
+        Sphere sphere = new Sphere(50);
+        sphere.setMaterial(material);
+        return sphere;
     }
 
     /**
