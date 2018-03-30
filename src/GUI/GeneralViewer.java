@@ -40,15 +40,15 @@ import java.util.Optional;
  */
 public class GeneralViewer extends Application {
 
-    ScrollPane textPane = new ScrollPane();
-    SubScene imageScene;
-    Stage periodic = new PeriodicTableView();
+    private ScrollPane textPane = new ScrollPane();
+    private SubScene imageScene;
+    private Stage periodic = new PeriodicTableView();
     private Molecule mol;
-    double oldX = 400;
-    double oldY = 0;
-    double oldZ = 0;
-    boolean subf = true;
-    int failCount = 0;
+    private double oldX = 400;
+    private double oldY = 0;
+    private double oldZ = 0;
+    private boolean subf = true;
+    private int failCount = 0;
 
     @Override
     public void start(Stage primaryStage) {
@@ -345,7 +345,7 @@ public class GeneralViewer extends Application {
         String formula = null;
         HashMap<String, String> results = WebService.getFormula(searchText);
 
-        //If the script returns nothing
+        // What to do based on the size (or existence) of results returned
         if (results == null) {
             failCount++;
             if (failCount < 3) {
@@ -354,31 +354,31 @@ public class GeneralViewer extends Application {
                         "We couldn't seem to find a chemical formula that corresponds to the input! "
                                 + "Please try again or try a different input.");
             } else {
+                //If we get 3 fails in a row, let the user know that there's something strange in their neighborhood.
                 alert(Alert.AlertType.ERROR,
                         "No result found for \"" + searchText + "\"",
                         "We couldn't seem to find a chemical formula that corresponds to the input! "
                                 + "Please try again or try a different input."
-                                + "\n\nIf there appears to be an issue unrelated to your search query, "
-                                + "try running the standalone ChemSpider script outside of ATOM.");
+                                + "\n\nIf there appears to be an issue unrelated to your search query "
+                                + "or internet connection, "
+                                + "try running the standalone ChemSpider.py script outside of ATOM.");
             }
             return null;
-        }
-
-        //Multi-Result Dialogue
-        if (results.size() > 1) {
-            name = selectResult(results);
-            formula = (name != null) ? results.get(name) : null;
-        } else {
+        } else if (results.size() == 1) {
             // Not really a for loop... just gets the first (only) value.
             for (String s : results.keySet()) {
                 name = s;
                 formula = results.get(s);
             }
+        } else if (results.size() > 1) {
+            name = selectResult(results);
+            formula = (name != null) ? results.get(name) : null;
         }
 
         //If the user didn't select something or something went wrong, we're done.
-        if (name == null || formula == null) return null;
-        failCount = 0; //Reset fail counter
+        if (name == null || formula == null) {
+            return null;
+        }
 
         //From here, we have a name and formula, and can proceed.
         mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.
@@ -390,6 +390,7 @@ public class GeneralViewer extends Application {
         info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
         textPane.setContent(info);
 
+        failCount = 0; //Reset fail counter
         return mol;
     }
 
