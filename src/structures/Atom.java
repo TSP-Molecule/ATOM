@@ -18,8 +18,6 @@ import java.util.ArrayList;
  */
 
 public class Atom implements Serializable {
-
-
     private final Elem element;
     private ArrayList<Bond> attachedBonds;   //Attached bonds
     private ArrayList<Atom> attachedAtoms;

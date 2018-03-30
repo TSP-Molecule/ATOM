@@ -1,7 +1,8 @@
 package GUI;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,33 +22,33 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import structures.*;
 import structures.enums.Elem;
-import sun.plugin.javascript.navig.Anchor;
 import web.WebService;
 
 import java.io.File;
-import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 
 /**
  * Displays the main window of the app with a menu, search bar, and two panels for models and information.
  *
- * @author Sarah Larkin
+ * @author Sarah Larkin, Emily Anible
  * CS3141, Spring 2018, Team ATOM
- * Date Last Modified: March 25, 2018
+ * Date Last Modified: March 30, 2018
  */
 public class GeneralViewer extends Application {
 
-    Atominomicon atominimicon;
-    Molecule mol;
-    ScrollPane textPane = new ScrollPane();
-    SubScene imageScene;
-    double oldX = 400;
-    double oldY = 0;
-    double oldZ = 0;
-    boolean subf = true;
-    Stage periodic = new PeriodicTableView();
+    private ScrollPane textPane = new ScrollPane();
+    private SubScene imageScene;
+    private Stage periodic = new PeriodicTableView();
+    private Molecule mol;
+    private double oldX = 400;
+    private double oldY = 0;
+    private double oldZ = 0;
+    private boolean subf = true;
+    private int failCount = 0;
 
     @Override
     public void start(Stage primaryStage) {
@@ -80,12 +81,7 @@ public class GeneralViewer extends Application {
         TextArea right = new TextArea();
         right.setPromptText("Molecule information will be displayed here.");
         right.setEditable(false);
-        right.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sub.requestFocus();
-            }
-        });
+        right.setOnMouseClicked(event -> sub.requestFocus());
         right.setPrefSize(500, 700);
         right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
         textPane.setContent(right);
@@ -118,20 +114,6 @@ public class GeneralViewer extends Application {
         return stage;
 
     }
-
-    /**
-     * Makes a central pane that can be used for organizing panels.
-     *
-     * @param stage the window of display
-     * @return the grid pane
-     */
-    private GridPane displayPane(Stage stage) {
-        GridPane p = new GridPane();
-        // p.setMinSize(stage.getWidth()/2, stage.getHeight() *2/3);
-        p.setBackground(new Background(new BackgroundFill(Color.rgb(255, 0, 0), new CornerRadii(2), new Insets(2))));
-        return p;
-    }
-
 
     /**
      * Makes a subscene which is an alternate option for displaying a 3D model
@@ -199,6 +181,286 @@ public class GeneralViewer extends Application {
         return scene1;
     }
 
+
+    public Sphere atom(Elem elem) {
+        Color c = elem.getColor();
+        PhongMaterial material = new PhongMaterial();
+        material.setSpecularColor(c);
+        material.setDiffuseColor(c);
+        Sphere sphere = new Sphere(50);
+        sphere.setMaterial(material);
+        return sphere;
+    }
+
+    /**
+     * Search bar: handles searching for molecules
+     *
+     * @return the search bar
+     */
+    private BorderPane searchBar() {
+        BorderPane grid = new BorderPane();
+        TextField search = new TextField();
+        search.setPromptText("search");
+        search.setEditable(true);
+        search.setPrefWidth(390);
+        grid.setLeft(search);
+
+        Button go = new Button("GO");
+        go.setPrefWidth(100);
+        go.setTextFill(Color.GREEN);
+        grid.setRight(go);
+
+        //If a user presses "GO" after entering search input, search for a molecule.
+        go.setOnAction(event -> {
+            try {
+                searchForMolecule(search.getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        //If a user presses the enter key after searching, search for a molecule.
+        search.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                try {
+                    searchForMolecule(search.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return grid;
+    }
+
+    /**
+     * Makes and returns a menu bar to be displayed in the given stage.
+     *
+     * @param p the stage in which to display the menu
+     * @return the new menu bar
+     */
+    private MenuBar makeMenuBar(Stage p) {
+        MenuBar bar = new MenuBar();
+        bar.getMenus().add(makeFileMenu(p));
+
+        Menu navigation = new Menu("Navigation");
+        MenuItem view3D = new MenuItem("3D View");
+        MenuItem view2D = new MenuItem("2D View");
+        MenuItem search = new MenuItem("Search");
+        MenuItem viewInfoWindow = new MenuItem("View molecule info in new window");
+        MenuItem viewPeriodicTable = new MenuItem("View periodic table");
+        viewPeriodicTable.setOnAction(event -> {
+            PeriodicTableView view = new PeriodicTableView();
+            view.show();
+        });
+        navigation.getItems().add(view2D);
+        navigation.getItems().add(view3D);
+        navigation.getItems().add(search);
+        navigation.getItems().add(viewInfoWindow);
+        navigation.getItems().add(viewPeriodicTable);
+        bar.getMenus().add(navigation);
+
+        Menu help = new Menu("Help");
+        MenuItem userManual = new MenuItem("User Manual");
+        MenuItem about = new MenuItem("About");
+        MenuItem sources = new MenuItem("Sources");
+        help.getItems().addAll(userManual, about, sources);
+        bar.getMenus().add(help);
+//        bar.setPrefHeight(40);
+        bar.setPrefWidth(500);
+        return bar;
+    }
+
+    /**
+     * Makes a "file" menu with options to open, save, and exit
+     *
+     * @param p the stage in which the menu is displayed
+     * @return the new menu
+     */
+    private Menu makeFileMenu(Stage p) {
+        Menu file = new Menu("File");
+
+        //Open Action. Opens a .mol file to a Molecule.
+        MenuItem open = new MenuItem("Open");
+        open.setOnAction(event -> {
+            FileChooser chooser = new FileChooser();
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
+
+            File molLoad = chooser.showOpenDialog(p.getScene().getWindow());
+
+            if (molLoad != null) {
+                String filename = molLoad.getAbsolutePath();
+                try {
+                    mol = MolFile.loadMolecule(filename);
+                    System.out.println("We loaded in: " + mol);
+                    //TODO: Update information and model with loaded molecule
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        //Save Action. Saves a Molecule to a .mol.
+        MenuItem save = new MenuItem("Save");
+        save.setOnAction(event -> {
+            FileChooser chooser = new FileChooser();
+//            chooser.showSaveDialog(p);
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
+
+            File molsave = chooser.showSaveDialog(p.getScene().getWindow());
+
+            if (molsave != null) {
+                String filename = molsave.getAbsolutePath();
+                try {
+                    MolFile.saveMolecule(mol, filename);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        //TODO: SaveImage. Saves an image of the 3D Model
+        MenuItem saveImage = new MenuItem("Save Image");
+        saveImage.setOnAction(event -> {
+            FileChooser chooser = new FileChooser();
+            chooser.showSaveDialog(p);
+        });
+
+        //Exit Action. Closes the program.
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(event -> p.close());
+        file.getItems().addAll(open, save, saveImage, exit);
+        return file;
+    }
+
+    /**
+     * Searches for molecule and attempts to update relevant information
+     *
+     * @param searchText User-inputted search text
+     * @return Molecule if found, else null.
+     * @throws IOException
+     */
+    private Molecule searchForMolecule(String searchText) throws IOException {
+        String name = null;
+        String formula = null;
+        HashMap<String, String> results = WebService.getFormula(searchText);
+
+        // What to do based on the size (or existence) of results returned
+        if (results == null) {
+            failCount++;
+            if (failCount < 3) {
+                alert(Alert.AlertType.ERROR,
+                        "No result found for \"" + searchText + "\"",
+                        "We couldn't seem to find a chemical formula that corresponds to the input! "
+                                + "Please try again or try a different input.");
+            } else {
+                //If we get 3 fails in a row, let the user know that there's something strange in their neighborhood.
+                alert(Alert.AlertType.ERROR,
+                        "No result found for \"" + searchText + "\"",
+                        "We couldn't seem to find a chemical formula that corresponds to the input! "
+                                + "Please try again or try a different input."
+                                + "\n\nIf there appears to be an issue unrelated to your search query "
+                                + "or internet connection, "
+                                + "try running the standalone ChemSpider.py script outside of ATOM.");
+            }
+            return null;
+        } else if (results.size() == 1) {
+            // Not really a for loop... just gets the first (only) value.
+            for (String s : results.keySet()) {
+                name = s;
+                formula = results.get(s);
+            }
+        } else if (results.size() > 1) {
+            name = selectResult(results);
+            formula = (name != null) ? results.get(name) : null;
+        }
+
+        //If the user didn't select something or something went wrong, we're done.
+        if (name == null || formula == null) {
+            return null;
+        }
+
+        //From here, we have a name and formula, and can proceed.
+        mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.
+
+        //Display Molecule information in TextArea
+        TextArea info = new TextArea();
+        info.setText(String.format("%s has the formula %s.\n\n %s", name, formula, mol));
+        info.setEditable(false);
+        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
+        textPane.setContent(info);
+
+        failCount = 0; //Reset fail counter
+        return mol;
+    }
+
+    /**
+     * Dialogue window to select a result if search returns multiple results.
+     *
+     * @param searchResults HashMap of results from search
+     * @return String of name in HashMap, or null if the user selects nothing.
+     */
+    private String selectResult(HashMap<String, String> searchResults) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        VBox vbox = new VBox();
+
+        vbox.setMinWidth(dialog.getDialogPane().getWidth());
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(5);
+        ComboBox<String> comboBox;
+
+        ObservableList<String> comboBoxData = FXCollections.observableArrayList();
+        comboBoxData.addAll(searchResults.keySet());
+
+        dialog.setTitle("Multiple Results Found");
+        dialog.getDialogPane().setContent(vbox);
+
+        comboBox = new ComboBox<>(comboBoxData);
+        comboBox.setMinWidth(200);
+        comboBox.getSelectionModel().selectFirst();
+
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType select = new ButtonType("Select", ButtonBar.ButtonData.OK_DONE);
+
+        Label helpText = new Label();
+        Label selected = new Label();
+
+        helpText.setText("Select one of the results, or try refining your search.");
+        selected.setText("Selected: " + WebService.simplifyFormula(searchResults.get(comboBox.getValue()), true));
+
+        dialog.getDialogPane().getButtonTypes().addAll(cancel, select);
+        vbox.getChildren().addAll(helpText, comboBox, selected);
+
+        //Update Selected text if the user changes their selection
+        HashMap<String, String> finalResults = searchResults; //final form of results for lambda
+        comboBox.valueProperty().addListener((ob, oldV, newV) -> {
+            selected.setText("Selected: " + WebService.simplifyFormula(finalResults.get(newV), true));
+        });
+
+        //Update the name and formula if the user OKs the input
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == select) {
+            return comboBox.getValue();
+        } else return null;
+    }
+
+    /**
+     * Creates an Alert and displays it.
+     *
+     * @param alertType    Type that the alert should be
+     * @param header       header of the alert
+     * @param alertMessage message of the alert
+     */
+    private void alert(Alert.AlertType alertType, String header, String alertMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(alertType.toString());
+        alert.setHeaderText(header);
+        alert.setContentText(alertMessage);
+        alert.showAndWait();
+    }
+
+    // TEST MOLECULES
+
     /**
      * Depicts a hard-coded salt molecule using colors from the element enum.
      *
@@ -254,150 +516,6 @@ public class GeneralViewer extends Application {
 
         Sphere s4 = new Sphere(50);
         s4.setMaterial(new PhongMaterial(s));
-        s4.setTranslateX(0);
-        s4.setTranslateY(300);
-        s4.setTranslateZ(300);
-
-        double p = 150;
-        ArrayList<Cylinder> bondList = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            Cylinder cy = new Cylinder(10, bond);
-            cy.setMaterial(new PhongMaterial(Color.LIGHTGREY));
-            bondList.add(cy);
-        }
-
-        for (int i = 0; i < 4; i++) {
-            Cylinder cy = bondList.get(i);
-            cy.setTranslateX(150);
-            cy.setRotationAxis(Rotate.Z_AXIS);
-            cy.setRotate(90);
-
-            switch (i) {
-                case 0:
-                    cy.setTranslateZ(0);
-                    break;
-                case 1:
-                    cy.setTranslateZ(300);
-                    break;
-                case 2:
-                    cy.setTranslateZ(300);
-                    cy.setTranslateY(300);
-                    break;
-                case 3:
-                    cy.setTranslateZ(0);
-                    cy.setTranslateY(300);
-                    break;
-            }
-        }
-
-        for (int i = 4; i < 8; i++) {
-            Cylinder cy = bondList.get(i);
-            cy.setTranslateY(150);
-
-            switch (i) {
-                case 4:
-                    cy.setTranslateX(0);
-                    cy.setTranslateZ(0);
-                    break;
-                case 5:
-                    cy.setTranslateX(0);
-                    cy.setTranslateZ(300);
-                    break;
-                case 6:
-                    cy.setTranslateX(300);
-                    cy.setTranslateZ(0);
-                    break;
-                case 7:
-                    cy.setTranslateX(300);
-                    cy.setTranslateZ(300);
-                    break;
-            }
-        }
-
-        for (int i = 8; i < 12; i++) {
-            Cylinder cy = bondList.get(i);
-            cy.setTranslateZ(150);
-            cy.setRotationAxis(Rotate.X_AXIS);
-            cy.setRotate(90);
-
-            switch (i) {
-                case 8:
-                    cy.setTranslateX(0);
-                    cy.setTranslateY(0);
-                    break;
-                case 9:
-                    cy.setTranslateX(300);
-                    cy.setTranslateY(0);
-                    break;
-                case 10:
-                    cy.setTranslateX(300);
-                    cy.setTranslateY(300);
-                    break;
-                case 11:
-                    cy.setTranslateX(0);
-                    cy.setTranslateY(300);
-                    break;
-            }
-        }
-        for (Cylinder cy : bondList) {
-            group.getChildren().add(cy);
-        }
-
-        group.getChildren().addAll(s1, s2, s3, s4, c1, c2, c3, c4);
-
-        return group;
-    }
-
-    public Group salt() {
-        Group group = new Group();
-        Color c = Elem.getBySymbol("Cl").getColor();
-        Color s = Elem.getBySymbol("Na").getColor();
-        int bond = 300;
-
-        Sphere c1 = atom(Elem.getBySymbol("Cl"));
-//        c1.setMaterial(new PhongMaterial(c));
-        c1.setTranslateX(300);
-        c1.setTranslateY(0);
-        c1.setTranslateZ(0);
-
-        Sphere c2 = atom(Elem.getBySymbol("Cl"));
-//        c2.setMaterial(new PhongMaterial(c));
-        c2.setTranslateX(0);
-        c2.setTranslateY(300);
-        c2.setTranslateZ(0);
-
-        Sphere c3 = atom(Elem.getBySymbol("Cl"));
-//        c3.setMaterial(new PhongMaterial(c));
-        c3.setTranslateX(300);
-        c3.setTranslateY(300);
-        c3.setTranslateZ(300);
-
-        Sphere c4 = atom(Elem.getBySymbol("Cl"));
-//        c4.setMaterial(new PhongMaterial(c));
-        c4.setTranslateX(0);
-        c4.setTranslateY(0);
-        c4.setTranslateZ(300);
-
-        Sphere s1 = atom(Elem.getBySymbol("Na"));
-//        s1.setMaterial(new PhongMaterial(s));
-        s1.setTranslateX(0);
-        s1.setTranslateY(0);
-        s1.setTranslateZ(0);
-
-        Sphere s2 = atom(Elem.getBySymbol("Na"));
-//        s2.setMaterial(new PhongMaterial(s));
-        s2.setTranslateX(300);
-        s2.setTranslateY(300);
-        s2.setTranslateZ(0);
-
-        Sphere s3 = atom(Elem.getBySymbol("Na"));
-//        s3.setMaterial(new PhongMaterial(s));
-        s3.setTranslateX(300);
-        s3.setTranslateY(0);
-        s3.setTranslateZ(300);
-
-        Sphere s4 = atom(Elem.getBySymbol("Na"));
-//        s4.setMaterial(new PhongMaterial(s));
         s4.setTranslateX(0);
         s4.setTranslateY(300);
         s4.setTranslateZ(300);
@@ -495,16 +613,6 @@ public class GeneralViewer extends Application {
         return group;
     }
 
-    public Sphere atom(Elem elem) {
-        Color c = elem.getColor();
-        PhongMaterial material = new PhongMaterial();
-        material.setSpecularColor(c);
-        material.setDiffuseColor(c);
-        Sphere sphere = new Sphere(50);
-        sphere.setMaterial(material);
-        return sphere;
-    }
-
     /**
      * Depicts a hard-coded water molecule.
      *
@@ -568,223 +676,147 @@ public class GeneralViewer extends Application {
 
     }
 
-    /**
-     * Makes the search bar.
-     *
-     * @return the search bar
-     */
-    private BorderPane searchBar() {
-        BorderPane grid = new BorderPane();
-        TextField search = new TextField();
-        search.setPromptText("search");
-        search.setEditable(true);
-        search.setPrefWidth(390);
-        grid.setLeft(search);
+    public Group salt() {
+        Group group = new Group();
+        Color c = Elem.getBySymbol("Cl").getColor();
+        Color s = Elem.getBySymbol("Na").getColor();
+        int bond = 300;
 
-        search.setOnKeyPressed(ke -> {
-            if (ke.getCode().equals(KeyCode.ENTER)) {
-                searchForMolecule(search.getText());
-            }
-        });
+        Sphere c1 = atom(Elem.getBySymbol("Cl"));
+        //        c1.setMaterial(new PhongMaterial(c));
+        c1.setTranslateX(300);
+        c1.setTranslateY(0);
+        c1.setTranslateZ(0);
 
-        Button go = new Button("GO");
-        go.setPrefWidth(100);
-        go.setTextFill(Color.GREEN);
-        grid.setRight(go);
-        go.setOnAction(event -> searchForMolecule(search.getText()));
-        return grid;
-    }
+        Sphere c2 = atom(Elem.getBySymbol("Cl"));
+        //        c2.setMaterial(new PhongMaterial(c));
+        c2.setTranslateX(0);
+        c2.setTranslateY(300);
+        c2.setTranslateZ(0);
 
-    /**
-     * Searches for molecule and attempts to update relevant information
-     *
-     * @param searchText User-inputted search text.
-     */
-    private void searchForMolecule(String searchText) {
-        String formula = null;
-        try {
-            formula = WebService.getFormula(searchText);
-        } catch (IOException e) {
-            e.printStackTrace();
+        Sphere c3 = atom(Elem.getBySymbol("Cl"));
+        //        c3.setMaterial(new PhongMaterial(c));
+        c3.setTranslateX(300);
+        c3.setTranslateY(300);
+        c3.setTranslateZ(300);
+
+        Sphere c4 = atom(Elem.getBySymbol("Cl"));
+        //        c4.setMaterial(new PhongMaterial(c));
+        c4.setTranslateX(0);
+        c4.setTranslateY(0);
+        c4.setTranslateZ(300);
+
+        Sphere s1 = atom(Elem.getBySymbol("Na"));
+        //        s1.setMaterial(new PhongMaterial(s));
+        s1.setTranslateX(0);
+        s1.setTranslateY(0);
+        s1.setTranslateZ(0);
+
+        Sphere s2 = atom(Elem.getBySymbol("Na"));
+        //        s2.setMaterial(new PhongMaterial(s));
+        s2.setTranslateX(300);
+        s2.setTranslateY(300);
+        s2.setTranslateZ(0);
+
+        Sphere s3 = atom(Elem.getBySymbol("Na"));
+        //        s3.setMaterial(new PhongMaterial(s));
+        s3.setTranslateX(300);
+        s3.setTranslateY(0);
+        s3.setTranslateZ(300);
+
+        Sphere s4 = atom(Elem.getBySymbol("Na"));
+        //        s4.setMaterial(new PhongMaterial(s));
+        s4.setTranslateX(0);
+        s4.setTranslateY(300);
+        s4.setTranslateZ(300);
+
+        double p = 150;
+        ArrayList<Cylinder> bondList = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            Cylinder cy = new Cylinder(10, bond);
+            cy.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+            bondList.add(cy);
         }
 
-        //If we get a bad input, alert the user and don't proceed.
-        if (formula == null) {
-            giveAlert(Alert.AlertType.ERROR,
-                    "No result found for" + searchText,
-                    "We couldn't seem to find a chemical formula that corresponds to the input! " +
-                            "Please try again or try a different input.");
-            return;
+        for (int i = 0; i < 4; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateX(150);
+            cy.setRotationAxis(Rotate.Z_AXIS);
+            cy.setRotate(90);
+
+            switch (i) {
+                case 0:
+                    cy.setTranslateZ(0);
+                    break;
+                case 1:
+                    cy.setTranslateZ(300);
+                    break;
+                case 2:
+                    cy.setTranslateZ(300);
+                    cy.setTranslateY(300);
+                    break;
+                case 3:
+                    cy.setTranslateZ(0);
+                    cy.setTranslateY(300);
+                    break;
+            }
         }
 
-        TextArea info = new TextArea();
-        mol = new Molecule(formula, searchText);
+        for (int i = 4; i < 8; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateY(150);
 
-        String printout = String.format("%s has the formula %s.\n\n", searchText.substring(0, 1).toUpperCase() + searchText.substring(1), formula);
-        String output = printout + mol;
-
-        info.setText(output);
-        info.setEditable(false);
-        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
-        textPane.setContent(info);
-    }
-
-    /**
-     * Creates an Alert and displays it.
-     *
-     * @param alertType    Type that the alert should be
-     * @param header       header of the alert
-     * @param alertMessage message of the alert
-     */
-    private void giveAlert(Alert.AlertType alertType, String header, String alertMessage) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(alertType.toString());
-        alert.setHeaderText(header);
-        alert.setContentText(alertMessage);
-        alert.showAndWait();
-    }
-
-
-    /**
-     * Creates and returns a pane to display results of a search
-     *not in use!!!!!!!!!!!!!!!!
-     * @param p
-     * @param results
-     * @return
-     */
-    private GridPane resultPane(BorderPane p, ArrayList<String> results) {
-        GridPane pane = new GridPane();
-        Label res = new Label("Results");
-        pane.addRow(0, res);
-        pane.addRow(1, new Label("Results will be listed here"));
-        pane.addRow(2, new Label("Click a result to view the molecule"));
-        for (Node node : pane.getChildren()) {
-            node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (node instanceof Label) {
-                        Label l = (Label) node;
-                        String s = l.getText();
-                        // TODO: Display molecule
-                    }
-                }
-            });
+            switch (i) {
+                case 4:
+                    cy.setTranslateX(0);
+                    cy.setTranslateZ(0);
+                    break;
+                case 5:
+                    cy.setTranslateX(0);
+                    cy.setTranslateZ(300);
+                    break;
+                case 6:
+                    cy.setTranslateX(300);
+                    cy.setTranslateZ(0);
+                    break;
+                case 7:
+                    cy.setTranslateX(300);
+                    cy.setTranslateZ(300);
+                    break;
+            }
         }
-        return pane;
+
+        for (int i = 8; i < 12; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateZ(150);
+            cy.setRotationAxis(Rotate.X_AXIS);
+            cy.setRotate(90);
+
+            switch (i) {
+                case 8:
+                    cy.setTranslateX(0);
+                    cy.setTranslateY(0);
+                    break;
+                case 9:
+                    cy.setTranslateX(300);
+                    cy.setTranslateY(0);
+                    break;
+                case 10:
+                    cy.setTranslateX(300);
+                    cy.setTranslateY(300);
+                    break;
+                case 11:
+                    cy.setTranslateX(0);
+                    cy.setTranslateY(300);
+                    break;
+            }
+        }
+        for (Cylinder cy : bondList) {
+            group.getChildren().add(cy);
+        }
+
+        group.getChildren().addAll(s1, s2, s3, s4, c1, c2, c3, c4);
+
+        return group;
     }
-
-
-    /**
-     * Makes and returns a menu bar to be displayed in the given stage.
-     *
-     * @param p the stage in which to display the menu
-     * @return the new menu bar
-     */
-    private MenuBar makeMenuBar(Stage p) {
-        MenuBar bar = new MenuBar();
-        bar.getMenus().add(makeFileMenu(p));
-
-        Menu navigation = new Menu("Navigation");
-        MenuItem view3D = new MenuItem("3D View");
-        MenuItem view2D = new MenuItem("2D View");
-        MenuItem search = new MenuItem("Search");
-        MenuItem viewInfoWindow = new MenuItem("View molecule info in new window");
-        MenuItem viewPeriodicTable = new MenuItem("View periodic table");
-        viewPeriodicTable.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-//                periodic = new PeriodicTableView();
-
-               // periodic.centerOnScreen();
-               // periodic.close();
-               // periodic.requestFocus();
-                periodic.show();
-            }
-        });
-        navigation.getItems().add(view2D);
-        navigation.getItems().add(view3D);
-        navigation.getItems().add(search);
-        navigation.getItems().add(viewInfoWindow);
-        navigation.getItems().add(viewPeriodicTable);
-        bar.getMenus().add(navigation);
-
-        Menu help = new Menu("Help");
-        MenuItem userManual = new MenuItem("User Manual");
-        MenuItem about = new MenuItem("About");
-        MenuItem sources = new MenuItem("Sources");
-        help.getItems().addAll(userManual, about, sources);
-        bar.getMenus().add(help);
-//        bar.setPrefHeight(40);
-        bar.setPrefWidth(500);
-        return bar;
-    }
-
-
-    /**
-     * Makes a "file" menu with options to open, save, and exit
-     *
-     * @param p the stage in which the menu is displayed
-     * @return the new menu
-     */
-    private Menu makeFileMenu(Stage p) {
-        Menu file = new Menu("File");
-        MenuItem open = new MenuItem("Open");
-        open.setOnAction(event -> {
-            FileChooser chooser = new FileChooser();
-            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
-
-            File molload = chooser.showOpenDialog(p.getScene().getWindow());
-
-            if (molload != null) {
-                String filename = molload.getAbsolutePath();
-                try {
-                    mol = MolFile.loadMolecule(filename);
-                    System.out.println("We loaded this in: ");
-                    System.out.println(mol);
-                    //TODO: Update information and model with loaded molecule
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        MenuItem save = new MenuItem("Save");
-        save.setOnAction(event -> {
-            FileChooser chooser = new FileChooser();
-//            chooser.showSaveDialog(p);
-            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
-
-            File molsave = chooser.showSaveDialog(p.getScene().getWindow());
-
-            if (molsave != null) {
-                String filename = molsave.getAbsolutePath();
-                try {
-                    MolFile.saveMolecule(mol, filename);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        MenuItem saveImage = new MenuItem("Save Image");
-        saveImage.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser chooser = new FileChooser();
-                chooser.showSaveDialog(p);
-            }
-        });
-        MenuItem exit = new MenuItem("Exit");
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                p.close();
-            }
-        });
-        file.getItems().addAll(open, save, saveImage, exit);
-        return file;
-    }
-
 }

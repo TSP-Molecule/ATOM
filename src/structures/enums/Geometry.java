@@ -72,6 +72,8 @@ public enum Geometry {
 
     /**
      * Calculates the molecular geometry of the center atom of a molecule
+     * @param  molecule Molecule for which to calculate Molecular Geometry
+     * @return Geometry Molecular Geometry of the molecule.
      */
     public static Geometry calculateGeometry(Molecule molecule) {
         Atom center = molecule.getCenter();
