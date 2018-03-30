@@ -3,7 +3,6 @@ package GUI;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,39 +24,34 @@ import structures.*;
 import structures.enums.Elem;
 import web.WebService;
 
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Optional;
 
 
 /**
  * Displays the main window of the app with a menu, search bar, and two panels for models and information.
  *
- * @author Sarah Larkin
+ * @author Sarah Larkin, Emily Anible
  * CS3141, Spring 2018, Team ATOM
- * Date Last Modified: March 25, 2018
+ * Date Last Modified: March 30, 2018
  */
 public class GeneralViewer extends Application {
 
-    Atominomicon atominimicon;
-    Molecule mol;
     ScrollPane textPane = new ScrollPane();
     SubScene imageScene;
+    Stage periodic = new PeriodicTableView();
+    private Molecule mol;
     double oldX = 400;
     double oldY = 0;
     double oldZ = 0;
     boolean subf = true;
-    Stage periodic = new PeriodicTableView();
-    Stage primary;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage = window();
-        this.primary = primaryStage;
         primaryStage.show();
     }
 
@@ -86,12 +80,7 @@ public class GeneralViewer extends Application {
         TextArea right = new TextArea();
         right.setPromptText("Molecule information will be displayed here.");
         right.setEditable(false);
-        right.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sub.requestFocus();
-            }
-        });
+        right.setOnMouseClicked(event -> sub.requestFocus());
         right.setPrefSize(500, 700);
         right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
         textPane.setContent(right);
@@ -203,7 +192,7 @@ public class GeneralViewer extends Application {
     }
 
     /**
-     * Makes the search bar.
+     * Search bar: handles searching for molecules
      *
      * @return the search bar
      */
@@ -215,6 +204,21 @@ public class GeneralViewer extends Application {
         search.setPrefWidth(390);
         grid.setLeft(search);
 
+        Button go = new Button("GO");
+        go.setPrefWidth(100);
+        go.setTextFill(Color.GREEN);
+        grid.setRight(go);
+
+        //If a user presses "GO" after entering search input, search for a molecule.
+        go.setOnAction(event -> {
+            try {
+                searchForMolecule(search.getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        //If a user presses the enter key after searching, search for a molecule.
         search.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 try {
@@ -225,33 +229,7 @@ public class GeneralViewer extends Application {
             }
         });
 
-        Button go = new Button("GO");
-        go.setPrefWidth(100);
-        go.setTextFill(Color.GREEN);
-        grid.setRight(go);
-        go.setOnAction(event -> {
-            try {
-                searchForMolecule(search.getText());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
         return grid;
-    }
-
-    /**
-     * Creates an Alert and displays it.
-     *
-     * @param alertType    Type that the alert should be
-     * @param header       header of the alert
-     * @param alertMessage message of the alert
-     */
-    private void giveAlert(Alert.AlertType alertType, String header, String alertMessage) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(alertType.toString());
-        alert.setHeaderText(header);
-        alert.setContentText(alertMessage);
-        alert.showAndWait();
     }
 
     /**
@@ -270,12 +248,9 @@ public class GeneralViewer extends Application {
         MenuItem search = new MenuItem("Search");
         MenuItem viewInfoWindow = new MenuItem("View molecule info in new window");
         MenuItem viewPeriodicTable = new MenuItem("View periodic table");
-        viewPeriodicTable.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                PeriodicTableView view = new PeriodicTableView();
-                view.show();
-            }
+        viewPeriodicTable.setOnAction(event -> {
+            PeriodicTableView view = new PeriodicTableView();
+            view.show();
         });
         navigation.getItems().add(view2D);
         navigation.getItems().add(view3D);
@@ -295,7 +270,6 @@ public class GeneralViewer extends Application {
         return bar;
     }
 
-
     /**
      * Makes a "file" menu with options to open, save, and exit
      *
@@ -304,28 +278,28 @@ public class GeneralViewer extends Application {
      */
     private Menu makeFileMenu(Stage p) {
         Menu file = new Menu("File");
+
+        //Open Action. Opens a .mol file to a Molecule.
         MenuItem open = new MenuItem("Open");
         open.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
 
-            File molload = chooser.showOpenDialog(p.getScene().getWindow());
+            File molLoad = chooser.showOpenDialog(p.getScene().getWindow());
 
-            if (molload != null) {
-                String filename = molload.getAbsolutePath();
+            if (molLoad != null) {
+                String filename = molLoad.getAbsolutePath();
                 try {
                     mol = MolFile.loadMolecule(filename);
-                    System.out.println("We loaded this in: ");
-                    System.out.println(mol);
+                    System.out.println("We loaded in: " + mol);
                     //TODO: Update information and model with loaded molecule
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         });
 
+        //Save Action. Saves a Molecule to a .mol.
         MenuItem save = new MenuItem("Save");
         save.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
@@ -344,11 +318,14 @@ public class GeneralViewer extends Application {
             }
         });
 
+        //TODO: SaveImage. Saves an image of the 3D Model
         MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
             chooser.showSaveDialog(p);
         });
+
+        //Exit Action. Closes the program.
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(event -> p.close());
         file.getItems().addAll(open, save, saveImage, exit);
@@ -357,21 +334,23 @@ public class GeneralViewer extends Application {
 
     /**
      * Searches for molecule and attempts to update relevant information
+     *
      * @param searchText User-inputted search text
+     * @return Molecule if found, else null.
      * @throws IOException
      */
-    private void searchForMolecule(String searchText) throws IOException {
+    private Molecule searchForMolecule(String searchText) throws IOException {
         String name = null;
         String formula = null;
         HashMap<String, String> results = WebService.getFormula(searchText);
 
         //If the script returns nothing
         if (results == null) {
-            giveAlert(Alert.AlertType.ERROR,
+            alert(Alert.AlertType.ERROR,
                     "No result found for \"" + searchText + "\"",
                     "We couldn't seem to find a chemical formula that corresponds to the input! " +
                             "Please try again or try a different input.");
-            return;
+            return null;
         }
 
         //Multi-Result Dialogue
@@ -387,24 +366,24 @@ public class GeneralViewer extends Application {
         }
 
         //If the user didn't select something or something went wrong, we're done.
-        if (name == null || formula == null) return;
+        if (name == null || formula == null) return null;
 
         //From here, we have a name and formula, and can proceed.
         mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.
 
         //Display Molecule information in TextArea
-        String printout = String.format("%s has the formula %s.\n\n", name, formula);
-        String output = printout + mol;
-
         TextArea info = new TextArea();
-        info.setText(output);
+        info.setText(String.format("%s has the formula %s.\n\n %s", name, formula, mol));
         info.setEditable(false);
         info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
         textPane.setContent(info);
+
+        return mol;
     }
 
     /**
      * Dialogue window to select a result if search returns multiple results.
+     *
      * @param searchResults HashMap of results from search
      * @return String of name in HashMap, or null if the user selects nothing.
      */
@@ -450,6 +429,21 @@ public class GeneralViewer extends Application {
         if (result.isPresent() && result.get() == select) {
             return comboBox.getValue();
         } else return null;
+    }
+
+    /**
+     * Creates an Alert and displays it.
+     *
+     * @param alertType    Type that the alert should be
+     * @param header       header of the alert
+     * @param alertMessage message of the alert
+     */
+    private void alert(Alert.AlertType alertType, String header, String alertMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(alertType.toString());
+        alert.setHeaderText(header);
+        alert.setContentText(alertMessage);
+        alert.showAndWait();
     }
 
     // TEST MOLECULES

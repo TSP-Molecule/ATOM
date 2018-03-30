@@ -1,3 +1,5 @@
+package web;
+
 import web.WebService;
 import org.junit.Test;
 
