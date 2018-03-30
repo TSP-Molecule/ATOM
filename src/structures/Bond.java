@@ -83,4 +83,19 @@ public class Bond implements Serializable{
     public String toString() {
         return getAtoms().get(0).getElement().getSymbol() + getOrder() + getAtoms().get(1).getElement().getSymbol();
     }
+
+
+    public boolean equals(Bond bond1) {
+        boolean oneOne = getAtoms().get(1).equals(bond1.getAtoms().get(1));
+        boolean oneTwo = getAtoms().get(1).equals(bond1.getAtoms().get(2));
+        boolean twoOne = getAtoms().get(2).equals(bond1.getAtoms().get(1));
+        boolean twoTwo = getAtoms().get(2).equals(bond1.getAtoms().get(2));
+        if (oneOne && twoTwo ) {
+            return true;
+        }
+        if (oneTwo && twoOne) {
+            return true;
+        }
+        return false;
+    }
 }

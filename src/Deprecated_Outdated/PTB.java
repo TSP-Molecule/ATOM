@@ -87,11 +87,9 @@ public class PTB extends Button {
         col = c;
         chosen = false;
         hover = false;
-        try {
+
             atom = new Atominomicon();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         // Display atomic num, atomSymbol, atomicWeight
         if (num > 0) {
             label = String.format("%d\n%s\n%.2f", num, Elem.get(num).getSymbol(), Elem.get(num).getAtomicMass());

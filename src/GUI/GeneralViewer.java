@@ -56,6 +56,7 @@ public class GeneralViewer extends Application {
         primaryStage.show();
     }
 
+    SubScene sub;
     /**
      * Displays the full window with a split view
      *
@@ -389,6 +390,10 @@ public class GeneralViewer extends Application {
         info.setEditable(false);
         info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
         textPane.setContent(info);
+
+        // Display Molecule in 3D graphics
+        sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.DISABLED);
+
 
         failCount = 0; //Reset fail counter
         return mol;

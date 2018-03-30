@@ -57,7 +57,7 @@ public class Atom implements Serializable {
         if (isBondable()) {
             this.getAttachedBonds().add(bond);
             incrementAttachedElectrons();
-            attachedAtoms.add(bond.getAtoms().get(0).equals(this) ? bond.getAtoms().get(0) : bond.getAtoms().get(1));
+            attachedAtoms.add(bond.getAtoms().get(1).equals(this) ? bond.getAtoms().get(0) : bond.getAtoms().get(1));
             return bond;
         } else {
             return null;
