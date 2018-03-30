@@ -48,6 +48,7 @@ public class GeneralViewer extends Application {
     double oldY = 0;
     double oldZ = 0;
     boolean subf = true;
+    int failCount = 0;
 
     @Override
     public void start(Stage primaryStage) {
@@ -346,10 +347,20 @@ public class GeneralViewer extends Application {
 
         //If the script returns nothing
         if (results == null) {
-            alert(Alert.AlertType.ERROR,
-                    "No result found for \"" + searchText + "\"",
-                    "We couldn't seem to find a chemical formula that corresponds to the input! " +
-                            "Please try again or try a different input.");
+            failCount++;
+            if (failCount < 3) {
+                alert(Alert.AlertType.ERROR,
+                        "No result found for \"" + searchText + "\"",
+                        "We couldn't seem to find a chemical formula that corresponds to the input! "
+                                + "Please try again or try a different input.");
+            } else {
+                alert(Alert.AlertType.ERROR,
+                        "No result found for \"" + searchText + "\"",
+                        "We couldn't seem to find a chemical formula that corresponds to the input! "
+                                + "Please try again or try a different input."
+                                + "\n\nIf there appears to be an issue unrelated to your search query, "
+                                + "try running the standalone ChemSpider script outside of ATOM.");
+            }
             return null;
         }
 
@@ -367,6 +378,7 @@ public class GeneralViewer extends Application {
 
         //If the user didn't select something or something went wrong, we're done.
         if (name == null || formula == null) return null;
+        failCount = 0; //Reset fail counter
 
         //From here, we have a name and formula, and can proceed.
         mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.

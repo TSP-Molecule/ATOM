@@ -7,15 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * @author  Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * Each instance of Atominomicon provides a full set of Atoms and their isotopes to be used as reference or for building molecules.
  *
- * Each instance of Atominomicon provides a full set of Atoms and their isotopes to be used as reference or
- * for building molecules.
- * ArrayList of HashMaps by atomic number
- * - Each Hashmap has
- * key - isotope number
- * value - Atom object corresponding to that isotope
+ * @author Emily Anible
+ * @author CS3141 Spring 2018: Team ATOM
  */
 public class Atominomicon {
 
@@ -25,7 +20,7 @@ public class Atominomicon {
     /**
      * Generates a copy of the Atominomicon in memory.
      */
-    public Atominomicon() throws IOException {
+    public Atominomicon() {
 
         atominomicon = new ArrayList<>();
         HashMap<Integer, Atom> atomMap = new HashMap<>();
@@ -33,7 +28,7 @@ public class Atominomicon {
         atominomicon.add(0, null);
 
         for (int i = 1; i < 119; i++) {
-            Atom atom = new Atom ( Elem.get(i) );
+            Atom atom = new Atom(Elem.get(i));
             atomMap.put(0, atom);
             atominomicon.add(i, atomMap);
             System.out.println(atominomicon.get(i));

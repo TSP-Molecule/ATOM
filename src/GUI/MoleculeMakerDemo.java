@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 /**
  * Demonstrates the current way of combining bond lists with atom lists to create molecules.
+ *
  * @author Sarah Larkin
  * CS3141, Spring 2018
  * Date Last Modified:  March 25, 2018
@@ -19,12 +20,14 @@ public class MoleculeMakerDemo {
 
     /**
      * Creates and returns a water molecule.
+     *
+     * @param formulaString Chemical formula
      * @return the water molecule
      */
-    public Molecule water (String formulaString) {
+    public Molecule water(String formulaString) {
         // Demonstrating parsing of formula for atoms
         ChemicalFormula formula = new ChemicalFormula(formulaString);
-        ArrayList<Atom>atoms = formula.getAtoms();
+        ArrayList<Atom> atoms = formula.getAtoms();
 
         ArrayList<Bond> bonds = new ArrayList<>();
 
@@ -42,12 +45,14 @@ public class MoleculeMakerDemo {
 
     /**
      * Creates and returns a methane molecule.
+     *
+     * @param formulaString Chemical formula
      * @return the methane molecule
      */
     public Molecule methane(String formulaString) {
         // Demonstrating parsing of formula for atoms
         ChemicalFormula formula = new ChemicalFormula(formulaString);
-        ArrayList<Atom>atoms = formula.getAtoms();
+        ArrayList<Atom> atoms = formula.getAtoms();
 
         ArrayList<Bond> bonds = new ArrayList<>();
 
@@ -65,12 +70,14 @@ public class MoleculeMakerDemo {
 
     /**
      * Creates and returns a carbonDioxide molecule.
+     *
+     * @param formulaString Chemical formula
      * @return the carbonDioxide molecule
      */
     public Molecule carbonDioxide(String formulaString) {
         // Demonstrating parsing of formula for atoms
         ChemicalFormula formula = new ChemicalFormula(formulaString);
-        ArrayList<Atom>atoms = formula.getAtoms();
+        ArrayList<Atom> atoms = formula.getAtoms();
 
         ArrayList<Bond> bonds = new ArrayList<>();
 
