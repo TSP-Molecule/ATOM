@@ -1,6 +1,8 @@
 package GUI;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,13 +23,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import structures.*;
 import structures.enums.Elem;
-import sun.plugin.javascript.navig.Anchor;
 import web.WebService;
 
+import javax.swing.text.html.Option;
 import java.io.File;
-import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Optional;
 
 
 /**
@@ -48,10 +52,12 @@ public class GeneralViewer extends Application {
     double oldZ = 0;
     boolean subf = true;
     Stage periodic = new PeriodicTableView();
+    Stage primary;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage = window();
+        this.primary = primaryStage;
         primaryStage.show();
     }
 
@@ -211,7 +217,11 @@ public class GeneralViewer extends Application {
 
         search.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
-                searchForMolecule(search.getText());
+                try {
+                    searchForMolecule(search.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -219,7 +229,13 @@ public class GeneralViewer extends Application {
         go.setPrefWidth(100);
         go.setTextFill(Color.GREEN);
         grid.setRight(go);
-        go.setOnAction(event -> searchForMolecule(search.getText()));
+        go.setOnAction(event -> {
+            try {
+                searchForMolecule(search.getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         return grid;
     }
 
@@ -339,152 +355,104 @@ public class GeneralViewer extends Application {
         return file;
     }
 
+    /**
+     * Searches for molecule and attempts to update relevant information
+     * @param searchText User-inputted search text
+     * @throws IOException
+     */
+    private void searchForMolecule(String searchText) throws IOException {
+        String name = null;
+        String formula = null;
+        HashMap<String, String> results = WebService.getFormula(searchText);
+
+        //If the script returns nothing
+        if (results == null) {
+            giveAlert(Alert.AlertType.ERROR,
+                    "No result found for \"" + searchText + "\"",
+                    "We couldn't seem to find a chemical formula that corresponds to the input! " +
+                            "Please try again or try a different input.");
+            return;
+        }
+
+        //Multi-Result Dialogue
+        if (results.size() > 1) {
+            name = selectResult(results);
+            formula = (name != null) ? results.get(name) : null;
+        } else {
+            // Not really a for loop... just gets the first (only) value.
+            for (String s : results.keySet()) {
+                name = s;
+                formula = results.get(s);
+            }
+        }
+
+        //If the user didn't select something or something went wrong, we're done.
+        if (name == null || formula == null) return;
+
+        //From here, we have a name and formula, and can proceed.
+        mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.
+
+        //Display Molecule information in TextArea
+        String printout = String.format("%s has the formula %s.\n\n", name, formula);
+        String output = printout + mol;
+
+        TextArea info = new TextArea();
+        info.setText(output);
+        info.setEditable(false);
+        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
+        textPane.setContent(info);
+    }
+
+    /**
+     * Dialogue window to select a result if search returns multiple results.
+     * @param searchResults HashMap of results from search
+     * @return String of name in HashMap, or null if the user selects nothing.
+     */
+    private String selectResult(HashMap<String, String> searchResults) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        VBox vbox = new VBox();
+
+        vbox.setMinWidth(dialog.getDialogPane().getWidth());
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(5);
+        ComboBox<String> comboBox;
+
+        ObservableList<String> comboBoxData = FXCollections.observableArrayList();
+        comboBoxData.addAll(searchResults.keySet());
+
+        dialog.setTitle("Multiple Results Found");
+        dialog.getDialogPane().setContent(vbox);
+
+        comboBox = new ComboBox<>(comboBoxData);
+        comboBox.setMinWidth(200);
+        comboBox.getSelectionModel().selectFirst();
+
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType select = new ButtonType("Select", ButtonBar.ButtonData.OK_DONE);
+
+        Label helpText = new Label();
+        Label selected = new Label();
+
+        helpText.setText("Select one of the results, or try refining your search.");
+        selected.setText("Selected: " + WebService.simplifyFormula(searchResults.get(comboBox.getValue()), true));
+
+        dialog.getDialogPane().getButtonTypes().addAll(cancel, select);
+        vbox.getChildren().addAll(helpText, comboBox, selected);
+
+        //Update Selected text if the user changes their selection
+        HashMap<String, String> finalResults = searchResults; //final form of results for lambda
+        comboBox.valueProperty().addListener((ob, oldV, newV) -> {
+            selected.setText("Selected: " + WebService.simplifyFormula(finalResults.get(newV), true));
+        });
+
+        //Update the name and formula if the user OKs the input
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == select) {
+            return comboBox.getValue();
+        } else return null;
+    }
 
     // TEST MOLECULES
-
-    public Group salt() {
-        Group group = new Group();
-        Color c = Elem.getBySymbol("Cl").getColor();
-        Color s = Elem.getBySymbol("Na").getColor();
-        int bond = 300;
-
-        Sphere c1 = atom(Elem.getBySymbol("Cl"));
-//        c1.setMaterial(new PhongMaterial(c));
-        c1.setTranslateX(300);
-        c1.setTranslateY(0);
-        c1.setTranslateZ(0);
-
-        Sphere c2 = atom(Elem.getBySymbol("Cl"));
-//        c2.setMaterial(new PhongMaterial(c));
-        c2.setTranslateX(0);
-        c2.setTranslateY(300);
-        c2.setTranslateZ(0);
-
-        Sphere c3 = atom(Elem.getBySymbol("Cl"));
-//        c3.setMaterial(new PhongMaterial(c));
-        c3.setTranslateX(300);
-        c3.setTranslateY(300);
-        c3.setTranslateZ(300);
-
-        Sphere c4 = atom(Elem.getBySymbol("Cl"));
-//        c4.setMaterial(new PhongMaterial(c));
-        c4.setTranslateX(0);
-        c4.setTranslateY(0);
-        c4.setTranslateZ(300);
-
-        Sphere s1 = atom(Elem.getBySymbol("Na"));
-//        s1.setMaterial(new PhongMaterial(s));
-        s1.setTranslateX(0);
-        s1.setTranslateY(0);
-        s1.setTranslateZ(0);
-
-        Sphere s2 = atom(Elem.getBySymbol("Na"));
-//        s2.setMaterial(new PhongMaterial(s));
-        s2.setTranslateX(300);
-        s2.setTranslateY(300);
-        s2.setTranslateZ(0);
-
-        Sphere s3 = atom(Elem.getBySymbol("Na"));
-//        s3.setMaterial(new PhongMaterial(s));
-        s3.setTranslateX(300);
-        s3.setTranslateY(0);
-        s3.setTranslateZ(300);
-
-        Sphere s4 = atom(Elem.getBySymbol("Na"));
-//        s4.setMaterial(new PhongMaterial(s));
-        s4.setTranslateX(0);
-        s4.setTranslateY(300);
-        s4.setTranslateZ(300);
-
-        double p = 150;
-        ArrayList<Cylinder> bondList = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            Cylinder cy = new Cylinder(10, bond);
-            cy.setMaterial(new PhongMaterial(Color.LIGHTGREY));
-            bondList.add(cy);
-        }
-
-        for (int i = 0; i < 4; i++) {
-            Cylinder cy = bondList.get(i);
-            cy.setTranslateX(150);
-            cy.setRotationAxis(Rotate.Z_AXIS);
-            cy.setRotate(90);
-
-            switch (i) {
-                case 0:
-                    cy.setTranslateZ(0);
-                    break;
-                case 1:
-                    cy.setTranslateZ(300);
-                    break;
-                case 2:
-                    cy.setTranslateZ(300);
-                    cy.setTranslateY(300);
-                    break;
-                case 3:
-                    cy.setTranslateZ(0);
-                    cy.setTranslateY(300);
-                    break;
-            }
-        }
-
-        for (int i = 4; i < 8; i++) {
-            Cylinder cy = bondList.get(i);
-            cy.setTranslateY(150);
-
-            switch (i) {
-                case 4:
-                    cy.setTranslateX(0);
-                    cy.setTranslateZ(0);
-                    break;
-                case 5:
-                    cy.setTranslateX(0);
-                    cy.setTranslateZ(300);
-                    break;
-                case 6:
-                    cy.setTranslateX(300);
-                    cy.setTranslateZ(0);
-                    break;
-                case 7:
-                    cy.setTranslateX(300);
-                    cy.setTranslateZ(300);
-                    break;
-            }
-        }
-
-        for (int i = 8; i < 12; i++) {
-            Cylinder cy = bondList.get(i);
-            cy.setTranslateZ(150);
-            cy.setRotationAxis(Rotate.X_AXIS);
-            cy.setRotate(90);
-
-            switch (i) {
-                case 8:
-                    cy.setTranslateX(0);
-                    cy.setTranslateY(0);
-                    break;
-                case 9:
-                    cy.setTranslateX(300);
-                    cy.setTranslateY(0);
-                    break;
-                case 10:
-                    cy.setTranslateX(300);
-                    cy.setTranslateY(300);
-                    break;
-                case 11:
-                    cy.setTranslateX(0);
-                    cy.setTranslateY(300);
-                    break;
-            }
-        }
-        for (Cylinder cy : bondList) {
-            group.getChildren().add(cy);
-        }
-
-        group.getChildren().addAll(s1, s2, s3, s4, c1, c2, c3, c4);
-
-        return group;
-    }
 
     /**
      * Depicts a hard-coded salt molecule using colors from the element enum.
@@ -701,37 +669,147 @@ public class GeneralViewer extends Application {
 
     }
 
-    /**
-     * Searches for molecule and attempts to update relevant information
-     *
-     * @param searchText User-inputted search text.
-     */
-    private void searchForMolecule(String searchText) {
-        String formula = null;
-        try {
-            formula = WebService.getFormula(searchText);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Group salt() {
+        Group group = new Group();
+        Color c = Elem.getBySymbol("Cl").getColor();
+        Color s = Elem.getBySymbol("Na").getColor();
+        int bond = 300;
+
+        Sphere c1 = atom(Elem.getBySymbol("Cl"));
+        //        c1.setMaterial(new PhongMaterial(c));
+        c1.setTranslateX(300);
+        c1.setTranslateY(0);
+        c1.setTranslateZ(0);
+
+        Sphere c2 = atom(Elem.getBySymbol("Cl"));
+        //        c2.setMaterial(new PhongMaterial(c));
+        c2.setTranslateX(0);
+        c2.setTranslateY(300);
+        c2.setTranslateZ(0);
+
+        Sphere c3 = atom(Elem.getBySymbol("Cl"));
+        //        c3.setMaterial(new PhongMaterial(c));
+        c3.setTranslateX(300);
+        c3.setTranslateY(300);
+        c3.setTranslateZ(300);
+
+        Sphere c4 = atom(Elem.getBySymbol("Cl"));
+        //        c4.setMaterial(new PhongMaterial(c));
+        c4.setTranslateX(0);
+        c4.setTranslateY(0);
+        c4.setTranslateZ(300);
+
+        Sphere s1 = atom(Elem.getBySymbol("Na"));
+        //        s1.setMaterial(new PhongMaterial(s));
+        s1.setTranslateX(0);
+        s1.setTranslateY(0);
+        s1.setTranslateZ(0);
+
+        Sphere s2 = atom(Elem.getBySymbol("Na"));
+        //        s2.setMaterial(new PhongMaterial(s));
+        s2.setTranslateX(300);
+        s2.setTranslateY(300);
+        s2.setTranslateZ(0);
+
+        Sphere s3 = atom(Elem.getBySymbol("Na"));
+        //        s3.setMaterial(new PhongMaterial(s));
+        s3.setTranslateX(300);
+        s3.setTranslateY(0);
+        s3.setTranslateZ(300);
+
+        Sphere s4 = atom(Elem.getBySymbol("Na"));
+        //        s4.setMaterial(new PhongMaterial(s));
+        s4.setTranslateX(0);
+        s4.setTranslateY(300);
+        s4.setTranslateZ(300);
+
+        double p = 150;
+        ArrayList<Cylinder> bondList = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            Cylinder cy = new Cylinder(10, bond);
+            cy.setMaterial(new PhongMaterial(Color.LIGHTGREY));
+            bondList.add(cy);
         }
 
-        //If we get a bad input, alert the user and don't proceed.
-        if (formula == null) {
-            giveAlert(Alert.AlertType.ERROR,
-                    "No result found for" + searchText,
-                    "We couldn't seem to find a chemical formula that corresponds to the input! " +
-                            "Please try again or try a different input.");
-            return;
+        for (int i = 0; i < 4; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateX(150);
+            cy.setRotationAxis(Rotate.Z_AXIS);
+            cy.setRotate(90);
+
+            switch (i) {
+                case 0:
+                    cy.setTranslateZ(0);
+                    break;
+                case 1:
+                    cy.setTranslateZ(300);
+                    break;
+                case 2:
+                    cy.setTranslateZ(300);
+                    cy.setTranslateY(300);
+                    break;
+                case 3:
+                    cy.setTranslateZ(0);
+                    cy.setTranslateY(300);
+                    break;
+            }
         }
 
-        TextArea info = new TextArea();
-        mol = new Molecule(formula, searchText);
+        for (int i = 4; i < 8; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateY(150);
 
-        String printout = String.format("%s has the formula %s.\n\n", searchText.substring(0, 1).toUpperCase() + searchText.substring(1), formula);
-        String output = printout + mol;
+            switch (i) {
+                case 4:
+                    cy.setTranslateX(0);
+                    cy.setTranslateZ(0);
+                    break;
+                case 5:
+                    cy.setTranslateX(0);
+                    cy.setTranslateZ(300);
+                    break;
+                case 6:
+                    cy.setTranslateX(300);
+                    cy.setTranslateZ(0);
+                    break;
+                case 7:
+                    cy.setTranslateX(300);
+                    cy.setTranslateZ(300);
+                    break;
+            }
+        }
 
-        info.setText(output);
-        info.setEditable(false);
-        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
-        textPane.setContent(info);
+        for (int i = 8; i < 12; i++) {
+            Cylinder cy = bondList.get(i);
+            cy.setTranslateZ(150);
+            cy.setRotationAxis(Rotate.X_AXIS);
+            cy.setRotate(90);
+
+            switch (i) {
+                case 8:
+                    cy.setTranslateX(0);
+                    cy.setTranslateY(0);
+                    break;
+                case 9:
+                    cy.setTranslateX(300);
+                    cy.setTranslateY(0);
+                    break;
+                case 10:
+                    cy.setTranslateX(300);
+                    cy.setTranslateY(300);
+                    break;
+                case 11:
+                    cy.setTranslateX(0);
+                    cy.setTranslateY(300);
+                    break;
+            }
+        }
+        for (Cylinder cy : bondList) {
+            group.getChildren().add(cy);
+        }
+
+        group.getChildren().addAll(s1, s2, s3, s4, c1, c2, c3, c4);
+
+        return group;
     }
 }

@@ -23,6 +23,9 @@ public class Molecule implements Serializable{
     private ArrayList<Bond> bonds; //List of all of the bonds in the molecule
     private Atom center;           //Atom in the center (lowest eNeg, not Hydrogen)
     private String name;
+
+
+
     /**
      * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
      * @param chemFormula chemical formula
@@ -113,7 +116,7 @@ public class Molecule implements Serializable{
         }
         //Now consider the center.
         if (center.isBondable() && initAtoms.size() > 0) {
-            while (center.isBondable()) {
+            while (center.isBondable() && initAtoms.size() > 0) {
                 Atom h = initAtoms.remove(0);
                 bonds.add(new Bond(center, h));
                 addedH.add(h);
@@ -221,5 +224,13 @@ public class Molecule implements Serializable{
 
     public String getFormula() {
         return formula;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
