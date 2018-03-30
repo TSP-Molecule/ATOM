@@ -1,3 +1,5 @@
+package structures;
+
 import org.junit.Test;
 import structures.Atominomicon;
 import structures.enums.Elem;

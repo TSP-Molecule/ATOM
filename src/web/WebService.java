@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utilizes Python scripts to access information about chemicals from various databases.
+ *
+ * @author Crystal Fletcher
+ * CS3141, Spring 2018, Team ATOM
+ */
 public class WebService {
 
     private static final String PY = "python";
@@ -74,10 +80,11 @@ public class WebService {
     }
 
     /**
-     * Simplifies mol formula of form Xx_{n}X_{nn}
+     * Simplifies chemical formula
      *
-     * @param formula
-     * @return
+     * @param formula Chemical Formula
+     * @param addSpaces true/false add spaces between elements
+     * @return parsed chemical formukal
      */
     public static String simplifyFormula(String formula, boolean addSpaces) {
         formula = formula.replace("{", "").replace("}", "").replace("_", "");
