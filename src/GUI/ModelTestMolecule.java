@@ -196,7 +196,7 @@ public class ModelTestMolecule extends Application {
 
     /**
      * Creates a data structure for a water molecule - copied from Molecule Test
-     * @return
+     * @return Water molecule
      */
     public Molecule createAWaterMolecule() {
         ArrayList<Atom> atoms = new ArrayList<>();

@@ -43,7 +43,7 @@ public class WebService {
             results.put(name, formula);
         }
 
-        return results;
+        return (results.size() > 0 ? results : null);
     }
 
     /**
@@ -84,7 +84,7 @@ public class WebService {
      *
      * @param formula Chemical Formula
      * @param addSpaces true/false add spaces between elements
-     * @return parsed chemical formukal
+     * @return parsed chemical formula
      */
     public static String simplifyFormula(String formula, boolean addSpaces) {
         formula = formula.replace("{", "").replace("}", "").replace("_", "");

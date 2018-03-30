@@ -2,6 +2,7 @@ package structures;
 
 import structures.enums.Elem;
 import structures.enums.Geometry;
+import web.WebService;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,28 +25,24 @@ public class Molecule implements Serializable{
     private Atom center;           //Atom in the center (lowest eNeg, not Hydrogen)
     private String name;
 
-
-
     /**
      * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
      * @param chemFormula chemical formula
      */
     public Molecule(String chemFormula) {
-        ChemicalFormula chem = new ChemicalFormula(chemFormula);
-
-        this.formula = chemFormula.replace("{","").replace("}","").replace("_","");
-        buildMolecule(chem.getAtoms());
+        this(chemFormula, WebService.simplifyFormula(chemFormula, true));
     }
 
     /**
      * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
      * @param chemFormula chemical formula
+     * @param name name of molecule
      */
     public Molecule(String chemFormula, String name) {
         ChemicalFormula chem = new ChemicalFormula(chemFormula);
         buildMolecule(chem.getAtoms());
 
-        this.formula = chemFormula.replace("{","").replace("}","").replace("_","");
+        this.formula = WebService.simplifyFormula(chemFormula, false);
         if (name.length() > 1) this.name = name.substring(0,1).toUpperCase() + name.substring(1);
         else this.name = name;
     }
