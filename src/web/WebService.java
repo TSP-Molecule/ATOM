@@ -1,6 +1,8 @@
 package web;
 
 import java.io.*;
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +18,8 @@ public class WebService {
     private static final String PY = "python";
     private static final String SRC = "scripts/";
 
-    private static final String CHEMSPIDER = "ChemSpider.PY";
-    private static final String WIKI = "Wikipedia.PY";
+    private static final String CHEMSPIDER = "ChemSpider.py";
+    private static final String WIKI = "Wikipedia.py";
 
     /**
      * @param chem - Chemical name
@@ -70,19 +72,40 @@ public class WebService {
      * (null if no article found)
      * @throws IOException - thrown if python script is missing
      */
-    public static String getWiki(String term) throws IOException {
-
+    public static ArrayList<String> getWiki(String term) throws IOException {
         Process p = Runtime.getRuntime().exec(new String[]{PY, SRC + WIKI, term});
 
-        BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));
 
-        return pin.readLine(); //Returns null if not found or issue occurs
+        ArrayList<String> ret = new ArrayList<>();
+        String read;
+
+
+//        ret.add(read);
+        while ((read = pin.readLine()) != null) {
+            String fix = Normalizer.normalize(read, Normalizer.Form.NFC);
+            fix = fix.replaceAll("(\\\\x[a-z]?[a-z]?[0-9]*)+", " [REDACTED] ");
+            ret.add(fix);
+        }
+        return ret;
+    }
+
+    public static String getWikiAsString(String term) throws IOException {
+        ArrayList<String> wiki = getWiki(term);
+        StringBuilder ret = new StringBuilder();
+
+        for (String s: wiki) {
+            ret.append("\n" + s);
+        }
+
+//        System.out.println("ret.toString() = " + ret.toString());
+        return ret.toString();
     }
 
     /**
      * Simplifies chemical formula
      *
-     * @param formula Chemical Formula
+     * @param formula   Chemical Formula
      * @param addSpaces true/false add spaces between elements
      * @return parsed chemical formula
      */
@@ -95,7 +118,8 @@ public class WebService {
         StringBuilder withSpaces = new StringBuilder();
 
         while (matcher.find()) {
-            withSpaces.append(matcher.group() + " ");
+            String append = matcher.group() + " ";
+            withSpaces.append(append);
         }
         return withSpaces.toString();
     }

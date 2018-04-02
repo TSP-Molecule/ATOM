@@ -1,30 +1,35 @@
-#Tool to access the first paragraph of a Wikipedia article
+# Tool to access the first paragraph of a Wikipedia article
 
-#Syntax to run command: python Wikipedia.py <search term>
+# Syntax to run command: python Wikipedia.py <search term>
 #       where <search term> is anything that could be searchable on Wikipedia.
 
 from bs4 import BeautifulSoup
-#Beautiful Soup for HTML parsing
+# Beautiful Soup for HTML parsing
+
+import wikipedia
+# Wikipedia python lib
 
 import requests
-#HTML requests
+# HTML requests
 
 import sys
-#system functions & arguments
+# system functions & arguments
 
 import re
-#regex
+# regex
 
-#Verify we have correct number of arguments
+# Verify we have correct number of arguments
 if len(sys.argv) < 2:
     print("Incorrect input.\n\t==> python Wikipedia.py <search term>")
-#end Verify
+    
+content = str(wikipedia.summary(sys.argv[1]).encode("utf-8"))[2:-1].split("\\n")
 
-r = requests.get('https://en.wikipedia.org/wiki/' + sys.argv[1])
-#perform the HTML request
+for x in content:
+    print(x)
+    print("\n")
 
-soup = BeautifulSoup(r.content, 'html.parser')
-#create the Beautiful Soup object
-print(re.sub("(\[.*\])","",str(soup.find_all('p')[0].get_text())))
-#finds the first paragraph element on the page,
-#   gets the text from it (removing all tags), and prints it
+file_write = open("cache/" + sys.argv[1] + ".txt", "w")
+for x in content:
+    file_write.write(x)
+    file_write.write("\n")
+file_write.close()
