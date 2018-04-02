@@ -48,7 +48,7 @@ public class MoleculeView extends Group {
         // push attached atoms
         // pop the next atom and continue
 
-        atoms.push(new AtomNode(cen, 0, 0, 0, null));
+        atoms.push(new AtomNode(cen, 0, 0, 0, null, Rotate.Z_AXIS));
 
 
         double atomTheta = 0;
@@ -81,7 +81,7 @@ public class MoleculeView extends Group {
                 System.out.println("kid " + i + ": " + atomMap.get(next));
                 if (atomMap.get(next) == null) {
                     System.out.println("new node");
-                    atoms.push(new AtomNode(next, x, y, z, atomNode));
+                    atoms.push(new AtomNode(next, x, y, z, atomNode, Rotate.Z_AXIS));
                 }
             }
 

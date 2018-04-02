@@ -395,6 +395,7 @@ public class GeneralViewer extends Application {
         sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.DISABLED);
 
 
+
         failCount = 0; //Reset fail counter
         return mol;
     }

@@ -1,14 +1,21 @@
 package GUI;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.geometry.Point3D;
+import javafx.scene.Camera;
 import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import structures.Atom;
 import structures.Bond;
@@ -139,15 +146,15 @@ public class MoleView extends Application {
 
         Atom cen = mole.getCenter();
         double angle = mole.getCenterGeometry().getBondAngle();
-       System.out.println("mol: " + mole.getAtoms());
+       //System.out.println("mol: " + mole.getAtoms());
 
         // push center to the stack
         // pop center and store in atomMap -> Atom, visited
         // draw all the bonds
         // push attached atoms
         // pop the next atom and continue
-
-        atoms.push(new AtomNode(cen, 0, 0, 0, null));
+        Point3D axis = Rotate.Z_AXIS;
+        atoms.push(new AtomNode(cen, 0, 0, 0, null, Rotate.Z_AXIS));
 
 //        double x = 0;
 //        double y = 0;
@@ -159,47 +166,113 @@ public class MoleView extends Application {
         while (!atoms.isEmpty()) {
             AtomNode atomNode = atoms.pop();
             Atom atom = atomNode.getAtom();
-            System.out.println("bon: " + atom.getAttachedAtoms());
+            if (!atom.equals(cen)) {
+                //angle = 90;
+                if (atomNode.getParent().getX() - atomNode.getX() < 1 ) {
+                    System.out.println("par: " + atomNode.getParent().getX());
+                    System.out.println("atom: " + atomNode.getX());
+                    atomTheta = 270;
+                   // angle = 60;
+                } else {
+                   // atomTheta = 180;
+                }
+                //atomTheta = 180;
+//                if (atomNode.getParent().getAxis()== Rotate.Z_AXIS) {
+//                    axis = Rotate.X_AXIS;
+//                }
+            }
+//            axis = atomNode.getAxis();
+           // System.out.println("bon: " + atom.getAttachedAtoms());
             if (atom.equals(cen)) {
                 drawAtom(atom, 0, 0, 0, group);
+                System.out.println(atom.getElement());
             } else {
                 drawAtom(atom, atomNode.getX(), atomNode.getY(), atomNode.getZ(), group);
-
+//                ArrayList<Bond> attache = atom.getAttachedBonds();
+//                Bond same = null;
+//                for (int i = 0; i < attache.size(); i++) {
+//                    Bond bobo = attache.get(i);
+//                    Atom par = atomNode.getParent().getAtom();
+//                    if (bobo.getAtoms().get(0).equals(par) || bobo.getAtoms().get(1).equals(par)) {
+//                        angle = bobo.getBondingAngle();
+//                        System.out.println("angle " + angle);
+//                    }
+//                }
+               // BondNode bon  = atom.getAttachedBonds();
             }
-            System.out.println("atom: " + atom);
+           // System.out.println("atom: " + atom);
             atomMap.put(atom, atom);
             int numKids = atom.getAttachedAtoms().size();
-            System.out.println("kids: " + atom.getAttachedAtoms());
-            System.out.println(mole);
-            System.out.println("numK; " + numKids);
 
-            for (int i = 0; i < numKids; i++) {
-                atomTheta = i * toRadians(angle);
-                double x = BOND_LENGTH * Math.cos(atomTheta) + atomNode.getX();
-                double y = BOND_LENGTH * Math.sin(atomTheta) + atomNode.getY();
-                double z = 0;
-                //System.out.println()
-                Atom next = atom.getAttachedAtoms().get(i);
-                System.out.println("kid " + i + ": " + atomMap.get(next));
-                if (atomMap.get(next) == null) {
-                    System.out.println("new node");
-                    atoms.push(new AtomNode(next, x, y, z, atomNode));
-                }
-            }
+           // System.out.println("kids: " + atom.getAttachedAtoms());
+          //  System.out.println(mole);
+          //  System.out.println("numK; " + numKids);
 
+            // Draw the bonds
             for (int i = 0; i < numKids; i++) {
                 Bond b = atom.getAttachedBonds().get(i);
                 atomTheta = i * toRadians(angle);
-                double x = BOND_LENGTH / 2 * Math.cos(atomTheta ) + atomNode.getX();
-                double y = BOND_LENGTH / 2 * Math.sin(atomTheta ) + atomNode.getY();
+                double x = 0;
+                double y = 0;
                 double z = 0;
+//                if (atom.equals(cen)) {
+//                     x = (200 + BOND_LENGTH) / 2 * Math.cos(atomTheta ) + atomNode.getX();
+//                     y = (200 + BOND_LENGTH) / 2 * Math.sin(atomTheta ) + atomNode.getY();
+//                     z = 0;
+//                } else {
+
+                     x = BOND_LENGTH / 2 * Math.cos(atomTheta) + atomNode.getX();
+                     y = BOND_LENGTH / 2 * Math.sin(atomTheta) + atomNode.getY();
+                     z = 0;
+//                }
+//                if (axis == Rotate.X_AXIS) {
+//                    z = x;
+//                    x = atomNode.getX();
+//                }
                 //  bondTheta += angle;
+
                 if (bondMap.get(b) == null) {
-                    drawBond(b,x, y, z, angle * i + 90, group);
+
+                    drawBond(b, x, y, z, angle * i + 90, axis, group);
                     bondMap.put(b, b);
                 }
 
             }
+
+            // Add the kids
+//            if (axis == Rotate.Z_AXIS) {
+//                System.out.println(atomNode.getAxis());
+//                axis = Rotate.X_AXIS;
+//            } else if (axis == Rotate.X_AXIS) {
+//                axis = Rotate.Z_AXIS;
+//            }
+            if (!atom.equals(cen)) {
+                atomTheta = angle + 360/numKids;
+            }
+            for (int i = 0; i < numKids; i++) {
+                atomTheta = i * toRadians(angle);
+//                if (atomTheta == 0) {
+//                    atomTheta = 45;
+//                }
+                double x = BOND_LENGTH * Math.cos(atomTheta) + atomNode.getX();
+//                if (atomNode.getX() - x < 0) {
+//                    x = atomNode.getX() + Math.abs(x);
+//                }
+                double y = BOND_LENGTH * Math.sin(atomTheta) + atomNode.getY();
+                double z = 0;
+                //System.out.println()
+                Atom next = atom.getAttachedAtoms().get(i);
+               // System.out.println("kid " + i + ": " + atomMap.get(next));
+                if (atomMap.get(next) == null) {
+                  //  System.out.println("new node");
+                    if (axis == Rotate.Z_AXIS)
+                        atoms.push(new AtomNode(next, x, y, z, atomNode, Rotate.X_AXIS));
+                    else if (axis == Rotate.X_AXIS)
+                        atoms.push(new AtomNode(next, x, y, x, atomNode, Rotate.Z_AXIS));
+                }
+            }
+
+
 
 
         }
@@ -265,10 +338,66 @@ public class MoleView extends Application {
 //            prev = atom;
 //
 //        }
-        System.out.println("blah");
+        //System.out.println("blah");
         group.setTranslateX(300);
         group.setTranslateY(300);
+        //group.setTranslateZ(200);
         Scene scene = new Scene(group, 600, 600, true);
+        scene.setFill(Color.ANTIQUEWHITE);
+
+
+
+        Camera cam = new PerspectiveCamera(true);
+        cam.setNearClip(0.1);
+        cam.setFarClip(100000);
+        cam.getTransforms().add(new Translate(0, 0, -1500));
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            double dist = 50;
+            double theta = 10;
+
+            @Override
+            public void handle(KeyEvent event) {
+               // scene1.requestFocus();
+
+                // rotate commands
+                if (event.getCode() == KeyCode.L) {
+                    group.getTransforms().add(new Rotate(theta, 0, 0, -100, Rotate.Y_AXIS));
+//                    if (!scene1.isFocused()) {
+//                        scene1.requestFocus();
+//                    }
+                    //subf = true;
+                } else if (event.getCode() == KeyCode.J) {
+                    group.getTransforms().add(new Rotate(-theta, 0, 0, 0, Rotate.Y_AXIS));
+                } else if (event.getCode() == KeyCode.I) {
+                    group.getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.X_AXIS));
+                } else if (event.getCode() == KeyCode.K) {
+                    group.getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.X_AXIS));
+                } else if (event.getCode() == KeyCode.Y) {
+                    group.getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.Z_AXIS));
+                } else if (event.getCode() == KeyCode.H) {
+                    group.getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.Z_AXIS));
+                } else
+                    // translate commands
+                    if (event.getCode() == KeyCode.W) {
+                        cam.getTransforms().add(new Translate(0, 0, dist));
+                    } else if (event.getCode() == KeyCode.S) {
+                        cam.getTransforms().add(new Translate(0, 0, -dist));
+                    } else if (event.getCode() == KeyCode.A) {
+                        cam.getTransforms().add(new Translate(-dist, 0, 0));
+                    } else if (event.getCode() == KeyCode.D) {
+                        cam.getTransforms().add(new Translate(dist, 0, 0));
+                    } else if (event.getCode() == KeyCode.R) {
+                        cam.getTransforms().add(new Translate(0, -dist, 0));
+                    } else if (event.getCode() == KeyCode.F) {
+                        cam.getTransforms().add(new Translate(0, dist, 0));
+                    }
+                //scene.requestFocus();
+            }
+        });
+        scene.setCamera(cam);
+
+
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -311,7 +440,7 @@ public class MoleView extends Application {
         g.getChildren().add(sphere);
     }
 
-    private void drawBond(Bond b, double x, double y, double z, double theta, Group g) {
+    private void drawBond(Bond b, double x, double y, double z, double theta, Point3D axis, Group g) {
         Color color = Color.LIGHTGREY;
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(color);
@@ -325,7 +454,7 @@ public class MoleView extends Application {
         cylinder.setTranslateZ(z);
 
 //        cylinder.getTransforms().add(new Rotate(theta, x, y, z, Rotate.Z_AXIS ));
-        cylinder.setRotationAxis(Rotate.Z_AXIS);
+        cylinder.setRotationAxis(axis);
         cylinder.setRotate(theta);
 
         g.getChildren().add(cylinder);
