@@ -75,16 +75,14 @@ public enum Geometry {
      * @param  molecule Molecule for which to calculate Molecular Geometry
      * @return Geometry Molecular Geometry of the molecule.
      */
-    public static Geometry calculateGeometry(Molecule molecule) {
-        Atom center = molecule.getCenter();
-        if (center == null) return null;
+    public static void calculateGeometry(Molecule molecule) {
+        for( Atom a : molecule.getAtoms() ) {
+            int lonePairs = a.getLonePairs();
+            int attached = a.getAttachedBonds().size();
 
-        int lonePairs = center.getLonePairs();
-        int attached = center.getAttachedBonds().size();
-
-        molecule.getCenter().setGeometry(Geometry.get(attached, lonePairs));
-
-        return center.getGeometry();
+            a.setGeometry(Geometry.get(attached, lonePairs));
+            System.out.println(a + " has geometry " + a.getGeometry());
+        }
 
     }
 

@@ -5,5 +5,5 @@ out/
 
 *.py~
 *.MF
-
+javadoc/
 scripts/__init__\.py
