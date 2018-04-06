@@ -33,7 +33,7 @@ header {
 }
 nav {
     font-family: Hack;
-    color: #FFFFFF;
+    color: #000000;
     margin-top: 1em;
     margin-right: 1em;
     margin-left: 1em;
@@ -45,7 +45,7 @@ form {
 }
 a:link {
     text-decoration: none;
-    color: #40C2FF;
+    color: #189AFF;
 }
 a:visited {
     text-decoration: none;
