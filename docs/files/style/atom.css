@@ -16,17 +16,17 @@
     position: fixed;
     left: 0;
     bottom: 0;
-    background-color: #7AF8CA;
-    color: #040201;
+    background-color: #BCFF80;
+    color: #000000;
     text-align: center;
     width: 100%;
     margin: 2em 0 0 0;
 }
 body {
-    background-color: #040201;
+    background-color: #FFF0C8;
 }
 main {
-    color: #FFFFFF;
+    color: #000000;
 }
 header {
     margin: 0px;
@@ -44,18 +44,18 @@ form {
     
 }
 a:link {
-    color: #7AF8CA;
     text-decoration: none;
+    color: #5EE0FF;
 }
 a:visited {
     text-decoration: none;
-    color: #7AF8CA;
+    color: #C3C3C3;
 }
 a:hover {
     text-decoration: none;
-    color: #F8CF80;
+    color: #F08080;
 }
 a:active {
     text-decoration: none;
-    color: #D3F44D;
+    color: #C3C3C3;
 }
