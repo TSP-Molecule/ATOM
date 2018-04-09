@@ -19,7 +19,7 @@ public class ElectronConfig {
 
     private Elem nobleHead; // uwu
 
-    public ElectronConfig(String eConfigString) {
+    ElectronConfig(String eConfigString) {
         this.eConfigString = eConfigString;
 
         String noble = null;

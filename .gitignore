@@ -7,3 +7,5 @@ out/
 *.MF
 javadoc/
 scripts/__init__\.py
+
+installer/unix/makeself-2\.3\.1/
