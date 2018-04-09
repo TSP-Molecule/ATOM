@@ -132,12 +132,14 @@ public class MoleView extends Application {
 //        }
 //
 //    }
-
+Group group = new Group();
+    Stage stagent = new Stage();
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Group group = new Group();
+       // Group group = new Group();
         Molecule mole = new Molecule("C_{3}_H_{6}_O", "acetone");//Acetone 10 : c3 h6 O
         // DFS traversal
+
 
         ArrayList<Bond> bonds = new ArrayList<>();
         Stack <AtomNode> atoms = new Stack<>();
@@ -339,6 +341,7 @@ public class MoleView extends Application {
 //
 //        }
         //System.out.println("blah");
+        group = new MoleculeView(mole);
         group.setTranslateX(300);
         group.setTranslateY(300);
         //group.setTranslateZ(200);
@@ -361,6 +364,15 @@ public class MoleView extends Application {
                // scene1.requestFocus();
 
                 // rotate commands
+                if (event.getCode() == KeyCode.H) {
+                    if(!stagent.isIconified() ) {
+                        stagent.setIconified(true);
+                    }
+                    Scene scene1 = new Scene(new MoleculeView(new Molecule("C_{3}_H_{6}_O", "acetone")), 400, 400);
+                    stagent.setScene(scene1);
+                    stagent.show();
+
+                }
                 if (event.getCode() == KeyCode.L) {
                     group.getTransforms().add(new Rotate(theta, 0, 0, -100, Rotate.Y_AXIS));
 //                    if (!scene1.isFocused()) {
