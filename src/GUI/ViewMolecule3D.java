@@ -23,7 +23,7 @@ import structures.enums.Elem;
  * which can be rotated using mouse input and panned and zoomed with keyboard input (standard wasd with r and f for
  * moving vertically).  The right panel is an editable textbox.
  * @author Sarah Larkin
- * CS3141, Spring 2018
+  @author CS3141, Spring 2018
  * Date Last Modified:  March 25, 2018
  */
 public class ViewMolecule3D extends Application {

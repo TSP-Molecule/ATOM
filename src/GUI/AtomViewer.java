@@ -21,7 +21,7 @@ import java.util.Arrays;
  * This class will provide a view of a single atom at the subatomic level.
  * It is currently just a shell in which to program new things for Sprint 3.
  * @author Sarah Larkin
- * CS3141, Spring 2018
+  @author CS3141, Spring 2018
  * Date Last Modified:  March 25, 2018.
  */
 public class AtomViewer extends Stage {

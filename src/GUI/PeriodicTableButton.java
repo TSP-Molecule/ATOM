@@ -12,7 +12,7 @@ import structures.enums.Type;
 /**
  * Wrapper class allows additional properties for the periodic table buttons.
  * @author  Sarah Larkin
- * CS3141, Spring 2018, Team ATOM
+  @author CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 25, 2018
  */
 public class PeriodicTableButton extends Button {

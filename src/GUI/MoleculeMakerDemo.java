@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Demonstrates the current way of combining bond lists with atom lists to create molecules.
  *
  * @author Sarah Larkin
- * CS3141, Spring 2018
+  @author CS3141, Spring 2018
  * Date Last Modified:  March 25, 2018
  */
 public class MoleculeMakerDemo {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  * @author Emily Anible
- * CS3141, Spring 2018, Team ATOM
+  @author CS3141, Spring 2018, Team ATOM
  * <p>
  * Atom. Each instance of this object is a "physical" atom.
  * It's best to think of an Atom as a vertex in a graph, with more properties.
