@@ -8,9 +8,6 @@
   <a href="https://github.com/CrystalSpore">Crystal Fletcher</a>
 </p>
 
-# Installation
-To install, simply extract the contents of `ATOM-x.x.zip` into a folder and run the JAR. It does support double-clicking the JAR to run, but this is dependent on your OS settings. `$ java -jar ATOM.jar` will suffice.
-
 # To run ATOM
 Commandline compilation isn't currently functioning, but we've built a jar available in the repo, as well as provided one in our deliverables with the most up-to-date functional changes. 
 
