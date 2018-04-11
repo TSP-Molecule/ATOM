@@ -8,6 +8,8 @@
   <a href="https://github.com/CrystalSpore">Crystal Fletcher</a>
 </p>
 
+<h3 align="center">Head to the <a href="https://github.com/TSP-molecule/ATOM/wiki">wiki</a> for more information!</h3>
+
 # To run ATOM
 Commandline compilation isn't currently functioning, but we've built a jar available in the repo, as well as provided one in our deliverables with the most up-to-date functional changes. 
 
