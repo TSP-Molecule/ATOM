@@ -49,6 +49,8 @@ public class GeneralViewer extends Application {
     private double oldZ = 0;
     private boolean subf = true;
     private int failCount = 0;
+    private TextArea right;
+    private SubScene sub;
 
     @Override
     public void start(Stage primaryStage) {
@@ -56,7 +58,7 @@ public class GeneralViewer extends Application {
         primaryStage.show();
     }
 
-    SubScene sub;
+
     /**
      * Displays the full window with a split view
      *
@@ -75,11 +77,11 @@ public class GeneralViewer extends Application {
         left.setPrefSize(500, 770);
         left.setBackground(new Background(new BackgroundFill(Color.rgb(255, 200, 220), new CornerRadii(2), new Insets(0))));
         Group g = salt();
-        SubScene sub = sub(salt(), 500, 700, true, SceneAntialiasing.DISABLED);
+        sub = sub(salt(), 500, 700, true, SceneAntialiasing.BALANCED);
 
         pane.add(sub, 0, 0);
 
-        TextArea right = new TextArea();
+        right = new TextArea();
         right.setPromptText("Molecule information will be displayed here.");
         right.setEditable(false);
         right.setOnMouseClicked(event -> sub.requestFocus());
@@ -145,21 +147,21 @@ public class GeneralViewer extends Application {
 
                 // rotate commands
                 if (event.getCode() == KeyCode.L) {
-                    scene.getTransforms().add(new Rotate(theta, 0, 0, -100, Rotate.Y_AXIS));
+                    sub.getRoot().getTransforms().add(new Rotate(theta, 0, 0, -100, Rotate.Y_AXIS));
                     if (!scene1.isFocused()) {
                         scene1.requestFocus();
                     }
                     subf = true;
                 } else if (event.getCode() == KeyCode.J) {
-                    scene.getTransforms().add(new Rotate(-theta, 0, 0, 0, Rotate.Y_AXIS));
+                    sub.getRoot().getTransforms().add(new Rotate(-theta, 0, 0, 0, Rotate.Y_AXIS));
                 } else if (event.getCode() == KeyCode.I) {
-                    scene.getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.X_AXIS));
+                    sub.getRoot().getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.X_AXIS));
                 } else if (event.getCode() == KeyCode.K) {
-                    scene.getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.X_AXIS));
+                    sub.getRoot().getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.X_AXIS));
                 } else if (event.getCode() == KeyCode.Y) {
-                    scene.getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.Z_AXIS));
+                    sub.getRoot().getTransforms().add(new Rotate(1, 0, 0, 0, Rotate.Z_AXIS));
                 } else if (event.getCode() == KeyCode.H) {
-                    scene.getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.Z_AXIS));
+                    sub.getRoot().getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.Z_AXIS));
                 } else
                     // translate commands
                     if (event.getCode() == KeyCode.W) {
@@ -207,6 +209,7 @@ public class GeneralViewer extends Application {
         grid.setLeft(search);
 
         Button go = new Button("GO");
+
         go.setPrefWidth(100);
         go.setTextFill(Color.GREEN);
         grid.setRight(go);
@@ -214,7 +217,7 @@ public class GeneralViewer extends Application {
         //If a user presses "GO" after entering search input, search for a molecule.
         go.setOnAction(event -> {
             try {
-                searchForMolecule(search.getText());
+                searchForMolecule(search);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -224,7 +227,7 @@ public class GeneralViewer extends Application {
         search.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 try {
-                    searchForMolecule(search.getText());
+                    searchForMolecule(search);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -337,11 +340,17 @@ public class GeneralViewer extends Application {
     /**
      * Searches for molecule and attempts to update relevant information
      *
-     * @param searchText User-inputted search text
+     * @param search User-inputted search text
      * @return Molecule if found, else null.
      * @throws IOException
      */
-    private Molecule searchForMolecule(String searchText) throws IOException {
+    private Molecule searchForMolecule(TextField search) throws IOException {
+        //search.set
+        right.setText("... searching ...");
+        textPane.setContent(right);
+        String searchText = search.getText();
+        System.out.println(searchText);
+
         String name = null;
         String formula = null;
         HashMap<String, String> results = WebService.getFormula(searchText);
@@ -392,7 +401,11 @@ public class GeneralViewer extends Application {
         textPane.setContent(info);
 
         // Display Molecule in 3D graphics
-        sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.DISABLED);
+        System.out.println(sub.getRoot());
+        sub.setRoot(new MoleculeView(mol));
+
+       // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
+        sub.requestFocus();
 
 
 

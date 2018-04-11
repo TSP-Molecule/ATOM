@@ -138,7 +138,7 @@ Group group = new Group();
     public void start(Stage primaryStage) throws Exception {
        // Group group = new Group();
         Molecule mole = new Molecule("C_{3}_H_{6}_O", "acetone");//Acetone 10 : c3 h6 O
-        // DFS traversal
+      // mole = new Molecule("H_{2}_O", "water"); // DFS traversal
 
 
         ArrayList<Bond> bonds = new ArrayList<>();
@@ -364,7 +364,7 @@ Group group = new Group();
                // scene1.requestFocus();
 
                 // rotate commands
-                if (event.getCode() == KeyCode.H) {
+                if (event.getCode() == KeyCode.G) {
                     if(!stagent.isIconified() ) {
                         stagent.setIconified(true);
                     }
