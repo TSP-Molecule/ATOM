@@ -51,20 +51,3 @@ The flag must come before other arguments.
    Click in the search bar and type the chemical name or formula you want to find.  Then click the button that reads "GO".  The search 
    may take a few seconds to display simple information in the right bottom panel.
    
-# Project Screenshots
-Main Window
-![Main Window](https://i.imgur.com/ect59gc.png)
-
-Rotating the molecular model
-
-<img src="https://i.imgur.com/F4g0Jh9.gif" width="30%" height="30%"/>
-<img src="https://i.imgur.com/mWVuCdB.gif" width="30%" height="30%"/>
-
-Parsing a chemical name into formula and atoms
-
-<img src="https://i.imgur.com/yxhulwd.gif" width="100%" height="100%"/>
-
-Interactive Periodic Table
-
-<img src="https://i.imgur.com/lc60jLM.png" width="50%" height="50%"/>
-<img src="https://i.imgur.com/b7NeVCB.gif" width="50%" height="50%"/>
