@@ -1,9 +1,12 @@
-# ATOM: A Tiny Object Modeler
-TSP Spring 2018 project
+<h1 align="center">ATOM - A Tiny Object Modeler</h1>
+<p align="center">CS3141 R02 | Spring 2018</p>
 
-Project SDK: Java 1.8
-
-Element data from [andrejewski's periodic table](https://github.com/andrejewski/periodic-table) 
+<p align="center">
+  <b>Group Members:</b><br>
+  <a href="https://github.com/mathsochist">Emily Anible</a> |
+  <a href="https://github,com/salty45">Sarah Larkin</a> |
+  <a href="https://github.com/CrystalSpore">Crystal Fletcher</a>
+</p>
 
 # Installation
 To install, simply extract the contents of `ATOM-x.x.zip` into a folder and run the JAR. It does support double-clicking the JAR to run, but this is dependent on your OS settings. `$ java -jar ATOM.jar` will suffice.
