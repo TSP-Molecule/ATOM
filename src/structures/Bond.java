@@ -9,10 +9,10 @@ import java.util.ArrayList;
  * Bond structure.
  * It's best to think of a bond as an edge in a graph, with more properties.
  *
- * @author  Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * @author Emily Anible
+ * @author CS3141, Spring 2018, Team ATOM
  */
-public class Bond implements Serializable{
+public class Bond implements Serializable {
 
     /**
      * BondOrder - 1 for single bonds, 2 for double, 3 for triple.
@@ -30,7 +30,7 @@ public class Bond implements Serializable{
         this(one, two, BondOrder.SINGLE); //TODO: Logic for automatically determining order, if possible.
     }
 
-    public Bond(Atom one, Atom two, BondOrder order){
+    public Bond(Atom one, Atom two, BondOrder order) {
         atoms.add(one);
         atoms.add(two);
         this.order = order;
@@ -90,7 +90,7 @@ public class Bond implements Serializable{
         boolean oneTwo = getAtoms().get(1).equals(bond1.getAtoms().get(2));
         boolean twoOne = getAtoms().get(2).equals(bond1.getAtoms().get(1));
         boolean twoTwo = getAtoms().get(2).equals(bond1.getAtoms().get(2));
-        if (oneOne && twoTwo ) {
+        if (oneOne && twoTwo) {
             return true;
         }
         if (oneTwo && twoOne) {

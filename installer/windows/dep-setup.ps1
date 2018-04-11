@@ -1,1 +1,1 @@
-python -m pip install chemspipy
+python -m pip install chemspipy wikipedia

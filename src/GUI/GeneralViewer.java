@@ -3,6 +3,7 @@ package GUI;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,28 +18,29 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import structures.*;
+import structures.MolFile;
+import structures.Molecule;
 import structures.enums.Elem;
 import web.WebService;
 
 import java.awt.*;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -47,7 +49,7 @@ import java.util.Optional;
  * Displays the main window of the app with a menu, search bar, and two panels for models and information.
  *
  * @author Sarah Larkin, Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 30, 2018
  */
 public class GeneralViewer extends Application {
@@ -80,16 +82,17 @@ public class GeneralViewer extends Application {
         Stage stage = new Stage();
         stage.setMaxWidth(1000);
         stage.setMaxHeight(700);
-        Group group = new Group();
         GridPane pane = new GridPane();
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 240, 200), new CornerRadii(2), new Insets(2))));
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(164, 218, 215), new CornerRadii(2), new Insets(2))));
         pane.setPrefSize(1000, 700);
 
         TextArea left = new TextArea("Molecule here");
         left.setPrefSize(500, 770);
         left.setBackground(new Background(new BackgroundFill(Color.rgb(255, 200, 220), new CornerRadii(2), new Insets(0))));
-        Group g = new Group();
         sub = sub(g, 500, 700, true, SceneAntialiasing.BALANCED);
+        sub = sub(g, 500, 700, true, SceneAntialiasing.BALANCED);
+        Group g = new Group(); //Test Molecule line
 
         pane.add(sub, 0, 0);
 
@@ -100,11 +103,10 @@ public class GeneralViewer extends Application {
         right.setPrefSize(500, 700);
         right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
         textPane.setContent(right);
-        textPane.setMinSize(600, 700);
+        textPane.setMinSize(500, 700);
         pane.add(textPane, 1, 0);
 
         BorderPane mainPane = new BorderPane();
-
         //HBox for Menu and Searchbar
         HBox topBar = new HBox();
         topBar.getChildren().addAll(makeMenuBar(stage), searchBar());
@@ -291,7 +293,19 @@ public class GeneralViewer extends Application {
         MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
-            chooser.showSaveDialog(p);
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
+            File imageFile = chooser.showSaveDialog(p);
+
+            try {
+
+                SnapshotParameters param = new SnapshotParameters();
+                param.setFill(Color.TRANSPARENT);
+                WritableImage img = new WritableImage((int) sub.getWidth(),(int) sub.getHeight());
+                sub.snapshot(param, img);
+                ImageIO.write(SwingFXUtils.fromFXImage(img, null), "png", imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         //Exit Action. Closes the program.
@@ -368,7 +382,7 @@ public class GeneralViewer extends Application {
         System.out.println(sub.getRoot());
         sub.setRoot(new MoleculeView(mol));
 
-       // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
+        // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
         sub.requestFocus();
 
 
@@ -379,7 +393,6 @@ public class GeneralViewer extends Application {
 
     /**
      * Dialogue window -- about screen
-     *
      */
     private void about() {
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -396,7 +409,7 @@ public class GeneralViewer extends Application {
         Label labelTitle = new Label("ATOM - A Tiny Object Modeler");
         Label labelClass = new Label("CS3141 R02 - Spring 2018");
         Label labelGroup = new Label("Emily Anible | Sarah Larkin | Crystal Fletcher");
-        Label spacer     = new Label("");
+        Label spacer = new Label("");
         Hyperlink hyperlink = new Hyperlink("Project Source");
         hyperlink.setText("Project Source");
 
@@ -492,6 +505,4 @@ public class GeneralViewer extends Application {
         }
         return false;
     }
-
-
 }

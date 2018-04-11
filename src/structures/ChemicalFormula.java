@@ -9,8 +9,9 @@ import java.util.regex.Pattern;
 /**
  * Stores Chemical Formula, Parses from string.
  * Used to create proper molecule.
- * @author  Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ *
+ * @author Emily Anible
+ * @author CS3141, Spring 2018, Team ATOM
  */
 public class ChemicalFormula {
 

@@ -1,6 +1,8 @@
 package web;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +13,7 @@ import java.util.regex.Pattern;
  * Utilizes Python scripts to access information about chemicals from various databases.
  *
  * @author Crystal Fletcher
- * CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  */
 public class WebService {
 
@@ -23,22 +25,16 @@ public class WebService {
 
     /**
      * @param chem - Chemical name
-     * @return formumla - Chemical formula
+     * @return Chemical formula
      * (null if no formula found)
      * @throws IOException - thrown if python script is missing
      */
     public static HashMap<String, String> getFormula(String chem) throws IOException {
+        HashMap<String, String> results = new HashMap<>();
         String name;
         String formula;
-        HashMap<String, String> results = new HashMap<>();
 
-        // Process allows for us to run external scripts and receive their output.
-        // -f flag for formula
-        Process p = Runtime.getRuntime().exec(new String[]{PY, SRC + CHEMSPIDER, "-f", chem});
-
-        // pin is the Process IN, which allows for us to read the output from the executed script.
-        BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
+        BufferedReader pin = pyScript(new String[]{PY, SRC + CHEMSPIDER, "-f", chem});
 
         //name and formula responses in line by line, returning the full HashMap at the end.
         while ((name = pin.readLine()) != null && (formula = pin.readLine()) != null) {
@@ -55,33 +51,24 @@ public class WebService {
      * @throws IOException - thrown if python script is missing
      */
     public static String getName(String form) throws IOException {
-        String formEdit = form.replace("_", "").replace("{", "").replace("}", "");
-        // ^^reformats the string passed in (which is in our standard form) to work with the python script
-
-        //getName & getFormula behave the same from here out. -n flag for name
-        Process p = Runtime.getRuntime().exec(new String[]{PY, SRC + CHEMSPIDER, "-n", formEdit});
-
-        BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
+        BufferedReader pin = pyScript(new String[]{PY, SRC + CHEMSPIDER, "-n", simplifyFormula(form, false)});
         return pin.readLine(); //Returns null if not found or issue occurs
     }
 
     /**
+     * ]
+     *
      * @param term - Search Term
      * @return name - First paragrah of wikipedia article
      * (null if no article found)
      * @throws IOException - thrown if python script is missing
      */
     public static ArrayList<String> getWiki(String term) throws IOException {
-        Process p = Runtime.getRuntime().exec(new String[]{PY, SRC + WIKI, term});
-
-        BufferedReader pin = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));
-
         ArrayList<String> ret = new ArrayList<>();
         String read;
 
+        BufferedReader pin = pyScript(new String[]{PY, SRC + WIKI, term});
 
-//        ret.add(read);
         while ((read = pin.readLine()) != null) {
             String fix = Normalizer.normalize(read, Normalizer.Form.NFC);
             fix = fix.replaceAll("(\\\\x[a-z]?[a-z]?[0-9]*)+", " [REDACTED] ");
@@ -94,7 +81,7 @@ public class WebService {
         ArrayList<String> wiki = getWiki(term);
         StringBuilder ret = new StringBuilder();
 
-        for (String s: wiki) {
+        for (String s : wiki) {
             ret.append("\n" + s);
         }
 
@@ -122,5 +109,20 @@ public class WebService {
             withSpaces.append(append);
         }
         return withSpaces.toString();
+    }
+
+    /**
+     * Calls Process to run Python Script with passed in arguments
+     *
+     * @param args Array of terms { PY, script name, arg0, arg1, ..., argn }
+     * @return BufferedReader from Python Script
+     * @throws IllegalArgumentException If the user doesn't specify args to pass.
+     * @throws IOException              If something goes horribly wrong.
+     */
+    private static BufferedReader pyScript(String[] args) throws IllegalArgumentException, IOException {
+        if (args == null || args.length == 0) throw new IllegalArgumentException();
+        Process p = Runtime.getRuntime().exec(args);
+
+        return new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));
     }
 }
