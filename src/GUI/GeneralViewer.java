@@ -8,6 +8,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -24,8 +33,11 @@ import structures.*;
 import structures.enums.Elem;
 import web.WebService;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -269,6 +281,12 @@ public class GeneralViewer extends Application {
         bar.getMenus().add(help);
 //        bar.setPrefHeight(40);
         bar.setPrefWidth(500);
+
+        userManual.setOnAction(event -> openInBrowser("http://www.github.com/TSP-Molecule/ATOM/wiki"));
+
+        sources.setOnAction(event -> openInBrowser("https://github.com/TSP-Molecule/ATOM/wiki/Sources"));
+        about.setOnAction(event -> about());
+
         return bar;
     }
 
@@ -401,6 +419,40 @@ public class GeneralViewer extends Application {
     }
 
     /**
+     * Dialogue window -- about screen
+     *
+     */
+    private void about() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        VBox vbox = new VBox();
+
+        vbox.setMinWidth(dialog.getDialogPane().getWidth());
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(5);
+
+        dialog.setTitle("About");
+        dialog.getDialogPane().setContent(vbox);
+
+
+        Label labelTitle = new Label("ATOM - A Tiny Object Modeler");
+        Label labelClass = new Label("CS3141 R02 - Spring 2018");
+        Label labelGroup = new Label("Emily Anible | Sarah Larkin | Crystal Fletcher");
+        Label spacer     = new Label("");
+        Hyperlink hyperlink = new Hyperlink("Project Source");
+        hyperlink.setText("Project Source");
+
+        hyperlink.setOnMouseClicked(event -> openInBrowser("https://www.github.com/TSP-Molecule/ATOM"));
+
+        ButtonType select = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(select);
+        vbox.getChildren().addAll(labelTitle, labelClass, labelGroup, spacer, hyperlink);
+
+        //Update the name and formula if the user OKs the input
+        dialog.showAndWait();
+    }
+
+
+    /**
      * Dialogue window to select a result if search returns multiple results.
      *
      * @param searchResults HashMap of results from search
@@ -438,9 +490,8 @@ public class GeneralViewer extends Application {
         vbox.getChildren().addAll(helpText, comboBox, selected);
 
         //Update Selected text if the user changes their selection
-        HashMap<String, String> finalResults = searchResults; //final form of results for lambda
         comboBox.valueProperty().addListener((ob, oldV, newV) -> {
-            selected.setText("Selected: " + WebService.simplifyFormula(finalResults.get(newV), true));
+            selected.setText("Selected: " + WebService.simplifyFormula(searchResults.get(newV), true));
         });
 
         //Update the name and formula if the user OKs the input
@@ -463,6 +514,24 @@ public class GeneralViewer extends Application {
         alert.setHeaderText(header);
         alert.setContentText(alertMessage);
         alert.showAndWait();
+    }
+
+    /**
+     * Attempts to open a given link in the user's default web browser.
+     *
+     * @param link Link to open in Browser
+     * @return True if successful, false if not.
+     */
+    private boolean openInBrowser(String link) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI(link));
+                return true;
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     // TEST MOLECULES
