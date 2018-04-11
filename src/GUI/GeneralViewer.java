@@ -439,6 +439,7 @@ public class GeneralViewer extends Application {
         sub.requestFocus();
 
 
+
         failCount = 0; //Reset fail counter
         return mol;
     }
