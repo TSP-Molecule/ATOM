@@ -29,7 +29,7 @@ import java.util.Stack;
  * A test model used throughout development to try out new ideas for displaying 3D images.  Will become outdated during
  * the next sprint.  Currently displays a 3D key-board navigable scene.
  * @author Sarah Larkin
- * CS3141, Spring 2018
+  @author CS3141, Spring 2018
  * Date Last Modified: March 25, 2018
  *
  */

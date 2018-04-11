@@ -4,7 +4,7 @@ import structures.enums.Elem;
 import structures.enums.Geometry;
 import web.WebService;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,9 +12,9 @@ import java.util.ArrayList;
  * It's best to think of a Molecule as a Graph, with Atoms for vertices and Bonds for edges.
  *
  * @author Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  */
-public class Molecule implements Serializable{
+public class Molecule implements Serializable {
 
     private static final long serialVersionUID = 7355608;
 
@@ -27,6 +27,7 @@ public class Molecule implements Serializable{
 
     /**
      * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
+     *
      * @param chemFormula chemical formula
      */
     public Molecule(String chemFormula) {
@@ -35,15 +36,16 @@ public class Molecule implements Serializable{
 
     /**
      * Dynamically creates a molecule given a chemical formula string, e.g. "CH_{4}"
+     *
      * @param chemFormula chemical formula
-     * @param name name of molecule
+     * @param name        name of molecule
      */
     public Molecule(String chemFormula, String name) {
         ChemicalFormula chem = new ChemicalFormula(chemFormula);
         buildMolecule(chem.getAtoms());
 
         this.formula = WebService.simplifyFormula(chemFormula, false);
-        if (name.length() > 1) this.name = name.substring(0,1).toUpperCase() + name.substring(1);
+        if (name.length() > 1) this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
         else this.name = name;
     }
 
@@ -64,6 +66,7 @@ public class Molecule implements Serializable{
 
     /**
      * Dynamically creates a molecule given a list of atoms.
+     *
      * @param atoms list of atoms.
      */
     public Molecule(ArrayList<Atom> atoms) {
@@ -72,7 +75,6 @@ public class Molecule implements Serializable{
 
     /**
      * Attempts to create a molecule with bonds from a molecule with a list of atoms.
-     *
      */
     private void buildMolecule(ArrayList<Atom> initAtoms) {
         //Molecule's ArrayList of Atoms.
@@ -208,14 +210,14 @@ public class Molecule implements Serializable{
     public String toString() {
         StringBuilder molstr = new StringBuilder();
 //        molstr.append("Molecule ");
-        molstr.append(name != null ? name: "");
+        molstr.append(name != null ? name : "");
         molstr.append(formula != null ? " " + formula : "");
         molstr.append(":");
-        for(Atom a: atoms) {
+        for (Atom a : atoms) {
             molstr.append("\n  " + a);
         }
         molstr.append("\n");
-        if (getCenterGeometry() != null){
+        if (getCenterGeometry() != null) {
             molstr.append("\n Center Geometry: " + getCenterGeometry().getName());
             molstr.append("\n Bond Angle: " + getCenterGeometry().getBondAngle());
         }

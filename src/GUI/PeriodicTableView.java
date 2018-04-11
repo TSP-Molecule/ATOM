@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * large rectangle at the top displaying information on the current element.
  *
  * @author Sarah Larkin
- * CS3141, Spring 2018, Team ATOM
+  @author CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 25, 2018
  */
 public class PeriodicTableView extends Stage {

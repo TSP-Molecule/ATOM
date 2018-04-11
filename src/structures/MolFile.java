@@ -6,7 +6,7 @@ import java.io.*;
  * Handles saving and loading of Molecules from file.
  *
  * @author Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  */
 public class MolFile {
 
@@ -32,7 +32,7 @@ public class MolFile {
      *
      * @param filename Filename to load from, with or without extension.
      * @return Molecule that was loaded from file
-     * @throws IOException If something goes horribly wrong.
+     * @throws IOException            If something goes horribly wrong.
      * @throws ClassNotFoundException If something goes even more horribly wrong.
      */
     public static Molecule loadMolecule(String filename) throws IOException, ClassNotFoundException {

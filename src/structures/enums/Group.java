@@ -5,7 +5,7 @@ package structures.enums;
  * associated group.
  *
  * @author Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  */
 public enum Group {
     Group1(1, "IA", 1),

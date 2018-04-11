@@ -19,17 +19,16 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import structures.*;
+import structures.MolFile;
+import structures.Molecule;
 import structures.enums.Elem;
 import web.WebService;
 
@@ -38,7 +37,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -47,7 +45,7 @@ import java.util.Optional;
  * Displays the main window of the app with a menu, search bar, and two panels for models and information.
  *
  * @author Sarah Larkin, Emily Anible
- * CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 30, 2018
  */
 public class GeneralViewer extends Application {
@@ -82,7 +80,7 @@ public class GeneralViewer extends Application {
         stage.setMaxHeight(700);
         GridPane pane = new GridPane();
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 240, 200), new CornerRadii(2), new Insets(2))));
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(164,218,215), new CornerRadii(2), new Insets(2))));
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(164, 218, 215), new CornerRadii(2), new Insets(2))));
         pane.setPrefSize(1000, 700);
 
         TextArea left = new TextArea("Molecule here");
@@ -421,9 +419,8 @@ public class GeneralViewer extends Application {
         System.out.println(sub.getRoot());
         sub.setRoot(new MoleculeView(mol));
 
-       // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
+        // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
         sub.requestFocus();
-
 
 
         failCount = 0; //Reset fail counter
@@ -432,7 +429,6 @@ public class GeneralViewer extends Application {
 
     /**
      * Dialogue window -- about screen
-     *
      */
     private void about() {
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -449,7 +445,7 @@ public class GeneralViewer extends Application {
         Label labelTitle = new Label("ATOM - A Tiny Object Modeler");
         Label labelClass = new Label("CS3141 R02 - Spring 2018");
         Label labelGroup = new Label("Emily Anible | Sarah Larkin | Crystal Fletcher");
-        Label spacer     = new Label("");
+        Label spacer = new Label("");
         Hyperlink hyperlink = new Hyperlink("Project Source");
         hyperlink.setText("Project Source");
 
