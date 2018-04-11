@@ -3,6 +3,7 @@ package GUI;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,6 +18,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +37,7 @@ import structures.enums.Elem;
 import web.WebService;
 
 import java.awt.*;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -345,7 +349,19 @@ public class GeneralViewer extends Application {
         MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
-            chooser.showSaveDialog(p);
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
+            File imageFile = chooser.showSaveDialog(p);
+
+            try {
+
+                SnapshotParameters param = new SnapshotParameters();
+                param.setFill(Color.TRANSPARENT);
+                WritableImage img = new WritableImage((int) sub.getWidth(),(int) sub.getHeight());
+                sub.snapshot(param, img);
+                ImageIO.write(SwingFXUtils.fromFXImage(img, null), "png", imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         //Exit Action. Closes the program.
