@@ -5,28 +5,6 @@ Project SDK: Java 1.8
 
 Element data from [andrejewski's periodic table](https://github.com/andrejewski/periodic-table) 
 
-# Releases
-* Deliverables 1: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-2.0/release/ATOM-1.0.zip) | 
-[Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-1.0/)
-* Deliverables 2: [Release](https://github.com/TSP-Molecule/ATOM/raw/Deliverables-2.0/release/ATOM-2.0.zip) | 
-[Source](https://github.com/TSP-Molecule/ATOM/tree/Deliverables-2.0/)
-
-# Requirements
-* Java 1.8.x JRE
-* Python 3.6.x
-* chemspipy Python package
-    * `pip install chemspipy`
-
-Please make sure that the `ChemSpider.py` script is in the same directory as `ATOM.jar` when running the project, else the search functionality will _not_ work.
-
-![Example Dir](https://i.imgur.com/k9Qa5xy.png)
-
-***IMPORTANT NOTE***:
-If you are on Windows, you will need to make sure to have your Python directory listed in your `Path` Environment Variable. There is an option to do so during your python installation, but if this isn't set, a simple guide to do so can be found [here](http://www.itprotoday.com/management-mobility/how-can-i-add-new-folder-my-system-path).
-
-***ATOM will not function on Windows if this is not set!***
-![System Variable Screen](https://i.imgur.com/SJopMh7.png)
-
 # Installation
 To install, simply extract the contents of `ATOM-x.x.zip` into a folder and run the JAR. It does support double-clicking the JAR to run, but this is dependent on your OS settings. `$ java -jar ATOM.jar` will suffice.
 
