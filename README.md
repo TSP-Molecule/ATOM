@@ -4,7 +4,7 @@
 <p align="center">
   <b>Group Members:</b><br>
   <a href="https://github.com/mathsochist">Emily Anible</a> |
-  <a href="https://github,com/salty45">Sarah Larkin</a> |
+  <a href="https://github.com/salty45">Sarah Larkin</a> |
   <a href="https://github.com/CrystalSpore">Crystal Fletcher</a>
 </p>
 
