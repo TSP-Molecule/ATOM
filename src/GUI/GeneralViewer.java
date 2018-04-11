@@ -90,10 +90,9 @@ public class GeneralViewer extends Application {
         TextArea left = new TextArea("Molecule here");
         left.setPrefSize(500, 770);
         left.setBackground(new Background(new BackgroundFill(Color.rgb(255, 200, 220), new CornerRadii(2), new Insets(0))));
-        sub = sub(g, 500, 700, true, SceneAntialiasing.BALANCED);
-        sub = sub(g, 500, 700, true, SceneAntialiasing.BALANCED);
-        Group g = new Group(); //Test Molecule line
 
+        Group g = new Group(); //Test Molecule line
+        sub = sub(g, 500, 700, true, SceneAntialiasing.BALANCED);
         pane.add(sub, 0, 0);
 
         right = new TextArea();
