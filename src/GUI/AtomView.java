@@ -70,10 +70,8 @@ public class AtomView extends Group {
     public void fillShells() {
         int shell = 0;
         while (numElectrons > 0 && shell < shells.length) {
-            System.out.println(numElectrons);
             if (numAtoms[shell] < shells[shell]) {
                 numAtoms[shell]++;
-                System.out.println("shell: atoms " + shell + ":  " + numAtoms[shell]);
                 numElectrons--;
             } else {
                 shell++;
