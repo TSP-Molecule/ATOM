@@ -54,7 +54,7 @@ import java.util.Optional;
  */
 public class GeneralViewer extends Application {
 
-    private ScrollPane textPane = new ScrollPane();
+    private ScrollPane textPane;
     private SubScene imageScene;
     private Stage periodic = new PeriodicTableView();
     private Molecule mol;
@@ -65,6 +65,8 @@ public class GeneralViewer extends Application {
     private int failCount = 0;
     private TextArea right;
     private SubScene sub;
+    private static final int PROG_WIDTH = 1000;
+    private static final int PROG_HEIGHT = 700;
 
     @Override
     public void start(Stage primaryStage) {
@@ -80,12 +82,13 @@ public class GeneralViewer extends Application {
      */
     public Stage window() {
         Stage stage = new Stage();
-        stage.setMaxWidth(1000);
-        stage.setMaxHeight(700);
+        stage.setMaxWidth(PROG_WIDTH);
+        stage.setMinWidth(PROG_WIDTH);
+        stage.setMaxHeight(PROG_HEIGHT);
+        stage.setMinHeight(PROG_HEIGHT);
         GridPane pane = new GridPane();
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 240, 200), new CornerRadii(2), new Insets(2))));
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(164, 218, 215), new CornerRadii(2), new Insets(2))));
-        pane.setPrefSize(1000, 700);
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(195, 195, 195), new CornerRadii(2), new Insets(2))));
+        pane.setPrefSize(PROG_WIDTH, PROG_HEIGHT);
 
         TextArea left = new TextArea("Molecule here");
         left.setPrefSize(500, 770);
@@ -98,12 +101,20 @@ public class GeneralViewer extends Application {
         right = new TextArea();
         right.setPromptText("Molecule information will be displayed here.");
         right.setEditable(false);
+        right.setWrapText(true);
         right.setOnMouseClicked(event -> sub.requestFocus());
-        right.setPrefSize(500, 700);
+        right.setMaxSize(480, 700);
+        right.setMinSize(500, 700);
         right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
+
+        textPane = new ScrollPane();
+        textPane.setMaxSize(480, 700);
         textPane.setContent(right);
-        textPane.setMinSize(500, 700);
-        pane.add(textPane, 1, 0);
+
+
+//        textPane.setContent(right);
+//        textPane.setMaxSize(480, 700);
+        pane.add(right, 1, 0);
 
         BorderPane mainPane = new BorderPane();
         //HBox for Menu and Searchbar
@@ -261,8 +272,8 @@ public class GeneralViewer extends Application {
                 String filename = molLoad.getAbsolutePath();
                 try {
                     mol = MolFile.loadMolecule(filename);
-                    System.out.println("We loaded in: " + mol);
-                    //TODO: Update information and model with loaded molecule
+                    right.setText(WebService.getWikiAsString(mol.getName()));
+                    sub.setRoot(new MoleculeView(mol));
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -299,7 +310,7 @@ public class GeneralViewer extends Application {
 
                 SnapshotParameters param = new SnapshotParameters();
                 param.setFill(Color.TRANSPARENT);
-                WritableImage img = new WritableImage((int) sub.getWidth(),(int) sub.getHeight());
+                WritableImage img = new WritableImage((int) sub.getWidth(), (int) sub.getHeight());
                 sub.snapshot(param, img);
                 ImageIO.write(SwingFXUtils.fromFXImage(img, null), "png", imageFile);
             } catch (IOException e) {
@@ -322,9 +333,6 @@ public class GeneralViewer extends Application {
      * @throws IOException
      */
     private Molecule searchForMolecule(TextField search) throws IOException {
-        //search.set
-        right.setText("... searching ...");
-        textPane.setContent(right);
         String searchText = search.getText();
         System.out.println(searchText);
 
@@ -371,11 +379,14 @@ public class GeneralViewer extends Application {
         mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.
 
         //Display Molecule information in TextArea
-        TextArea info = new TextArea();
-        info.setText(String.format("%s has the formula %s.\n\n %s", name, formula, mol));
-        info.setEditable(false);
-        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
-        textPane.setContent(info);
+
+        right.setText(String.format("%s has the formula %s.\n\n %s",
+                name,
+                formula,
+                mol));
+//        info.setEditable(false);
+//        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
+//        textPane.setContent(info);
 
         // Display Molecule in 3D graphics
         System.out.println(sub.getRoot());
@@ -383,7 +394,6 @@ public class GeneralViewer extends Application {
 
         // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
         sub.requestFocus();
-
 
 
         failCount = 0; //Reset fail counter
