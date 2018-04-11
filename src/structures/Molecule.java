@@ -215,7 +215,11 @@ public class Molecule implements Serializable{
             molstr.append("\n  " + a);
         }
         molstr.append("\n");
-        molstr.append("\nCenter Geometry: " + getCenterGeometry().getName() + "\nBond Angle: " + getCenterGeometry().getBondAngle());
+        if (getCenterGeometry() != null){
+            molstr.append("\n Center Geometry: " + getCenterGeometry().getName());
+            molstr.append("\n Bond Angle: " + getCenterGeometry().getBondAngle());
+        }
+
         return molstr.toString();
     }
 
