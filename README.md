@@ -16,15 +16,6 @@ So, the command to run is as follows:
 
 To use, simply click any GUI items available. The periodic table popup is available under `Navigation->View Periodic Table` in the menu bar.
 
-
-# To run Python script for ChemSpider data pull (separately from ATOM)
-`~$: python ChemSpider.py -f "chemical name"` #returns the first chemical formula that matches the name provided</br>
-  Example name: water, glucose, "nitric acid"</br>
-  
-`~$: python ChemSpider.py -n "chemical formula"` #returns the first common name that matches the formula provided</br>
-  Example formula: C6H12O6, H2O, HCl</br>
-  
-The flag must come before other arguments.
 # To move around the 3D oxygen molecule
    First click on the molecule to ensure its part of the screen is selected.</br>
    Then type one of the following lowercase letters:</br>
