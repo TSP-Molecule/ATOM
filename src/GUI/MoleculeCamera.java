@@ -96,10 +96,10 @@ public class MoleculeCamera extends PerspectiveCamera {
                 getTransforms().add(new Translate(-dist, 0, 0));
                 break;
             case R:
-                getTransforms().add(new Translate(0, 0, dist));
+                getTransforms().add(new Translate(0, 0, -dist));
                 break;
             case F:
-                getTransforms().add(new Translate(0, 0, -dist));
+                getTransforms().add(new Translate(0, 0, dist));
                 break;
         }
     }

@@ -49,7 +49,8 @@ import java.util.Optional;
  * Displays the main window of the app with a menu, search bar, and two panels for models and information.
  *
  * @author Sarah Larkin, Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ *
+ * CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 30, 2018
  */
 public class GeneralViewer extends Application {
