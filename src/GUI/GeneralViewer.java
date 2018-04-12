@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
@@ -18,25 +17,19 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import structures.MolFile;
 import structures.Molecule;
-import structures.enums.Elem;
 import web.WebService;
 
-import java.awt.*;
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -55,17 +48,42 @@ import java.util.Optional;
  */
 public class GeneralViewer extends Application {
 
-    private ScrollPane textPane = new ScrollPane();
-    private SubScene imageScene;
-    private Stage periodic = new PeriodicTableView();
-    private Molecule mol;
-    private double oldX = 400;
-    private double oldY = 0;
-    private double oldZ = 0;
-    private boolean subf = true;
-    private int failCount = 0;
-    private TextArea right;
+    /**
+     * Default width of the program window
+     */
+    private static final int PROG_WIDTH = 1000;
+
+    /**
+     * Default height of the program window
+     */
+    private static final int PROG_HEIGHT = 700;
+
+    /**
+     * Main 2x2 Grid. Holds entire main contents.
+     */
+    private GridPane gridPane;
+
+    /**
+     * Info area. Updates wiki information.
+     */
+    private TextArea textInfo;
+    /**
+     * Search text field.
+     */
+    private TextField searchBox;
+    /**
+     * Subscene. Contains 3D molecule.
+     */
     private SubScene sub;
+    /**
+     * Null counter. Gives an error to user if it reaches a specified value.
+     */
+    private int nullSearchCount = 0;
+
+    /**
+     * Molecule loaded in to subscene.
+     */
+    private Molecule mol;
 
     @Override
     public void start(Stage primaryStage) {
@@ -73,128 +91,160 @@ public class GeneralViewer extends Application {
         primaryStage.show();
     }
 
-
     /**
      * Displays the full window with a split view
      *
      * @return the stage containing the window
      */
-    public Stage window() {
+    private Stage window() {
         Stage stage = new Stage();
-        stage.setMaxWidth(1000);
-        stage.setMaxHeight(700);
-        GridPane pane = new GridPane();
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 240, 200), new CornerRadii(2), new Insets(2))));
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(164, 218, 215), new CornerRadii(2), new Insets(2))));
-        pane.setPrefSize(1000, 700);
+        stage.setMinWidth(PROG_WIDTH);
+        stage.setMinHeight(PROG_HEIGHT);
 
-        TextArea left = new TextArea("Molecule here");
-        left.setPrefSize(500, 770);
-        left.setBackground(new Background(new BackgroundFill(Color.rgb(255, 200, 220), new CornerRadii(2), new Insets(0))));
+        //Main Grid of Program. 2x2.
+        gridPane = new GridPane();
+        gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(195, 195, 195), new CornerRadii(2), new Insets(2))));
+//        gridPane.gridLinesVisibleProperty().set(true);
 
         Group g = new Group(); //Test Molecule line
-        sub = sub(g, 500, 700, true, SceneAntialiasing.BALANCED);
-        pane.add(sub, 0, 0);
+        sub = sub(g, 500, 600, true, SceneAntialiasing.BALANCED);
 
-        right = new TextArea();
-        right.setPromptText("Molecule information will be displayed here.");
-        right.setEditable(false);
-        right.setOnMouseClicked(event -> sub.requestFocus());
-        right.setPrefSize(500, 700);
-        right.setBackground(new Background(new BackgroundFill(Color.rgb(200, 255, 220), new CornerRadii(2), new Insets(0))));
-        textPane.setContent(right);
-        textPane.setMinSize(500, 700);
-        pane.add(textPane, 1, 0);
+        //Components of GridPane
+        gridPane.add(sub, 0, 1);
+        gridPane.add(makeMenuBar(stage), 0, 0);
+        gridPane.add(searchArea(), 1, 0);
+        gridPane.add(informationArea(), 1, 1);
 
-        BorderPane mainPane = new BorderPane();
-        //HBox for Menu and Searchbar
-        HBox topBar = new HBox();
-        topBar.getChildren().addAll(makeMenuBar(stage), searchBar());
+        //GridPane Row/Col Dimensions
+        RowConstraints row0 = new RowConstraints();
+        RowConstraints row1 = new RowConstraints();
+        ColumnConstraints col0 = new ColumnConstraints();
+        ColumnConstraints col1 = new ColumnConstraints();
+        row0.setPercentHeight(4);
+        row1.setPercentHeight(96);
+        col0.setPercentWidth(50);
+        col1.setPercentWidth(50);
+        gridPane.getRowConstraints().addAll(row0, row1);
+        gridPane.getColumnConstraints().addAll(col0, col1);
 
-        mainPane.setTop(topBar);
-        mainPane.setCenter(pane);
 
-        Scene scene = new Scene(mainPane, 1200, 800);
-
-        // Set default selection of subscene upon entry or click
-        sub.setOnMouseEntered(event -> {
-            sub.requestFocus();
-            subf = true;
-        });
-        sub.setOnMousePressed(event -> {
-            sub.requestFocus();
-            oldX = event.getX();
-        });
+        //Set up Scene
+        Scene scene = new Scene(gridPane, PROG_WIDTH, PROG_HEIGHT);
         stage.setScene(scene);
         stage.setTitle("ATOM - A Tiny Object Modeler");
-        pane.requestFocus();
+        gridPane.requestFocus();
+
+        //Sub Listeners
+        sub.setOnMouseEntered(event -> {
+            sub.requestFocus();
+        });
+
+        sub.setOnMousePressed(event -> {
+            sub.requestFocus();
+        });
+
         return stage;
-
     }
 
-
-
     /**
-     * Makes a subscene which is an alternate option for displaying a 3D model
+     * Creates the Search Box and Button
      *
-     * @param scene the parent scene, or window
-     * @param w     the width of the subscene
-     * @param h     the height of the subscene
-     * @return the subscene
+     * @return grid of search box and button
      */
-    private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
-        SubScene scene1 = new SubScene(scene, w, h, b, SceneAntialiasing.BALANCED);
-        sub = scene1;
-        scene1.setWidth(500);
-        scene1.setHeight(700);
-        Camera cam = new MoleculeCamera(scene1);
-        sub.setCamera(cam);
-        return scene1;
-    }
+    private GridPane searchArea() {
+        GridPane gridSearch = new GridPane();
 
+        searchBox = new TextField();
+        Button buttonGo = new Button("GO");
+        buttonGo.setTextFill(Color.GREEN);
 
+        gridSearch.add(searchBox, 0, 0);
+        gridSearch.add(buttonGo, 1, 0);
 
+        searchBox.setPromptText("Search for a molecule");
 
-    /**
-     * Search bar: handles searching for molecules
-     *
-     * @return the search bar
-     */
-    private BorderPane searchBar() {
-        BorderPane grid = new BorderPane();
-        TextField search = new TextField();
-        search.setPromptText("search");
-        search.setEditable(true);
-        search.setPrefWidth(390);
-        grid.setLeft(search);
+        // Column Sizing
+        ColumnConstraints col0 = new ColumnConstraints();
+        ColumnConstraints col1 = new ColumnConstraints();
+        col0.setPercentWidth(80);
+        col1.setPercentWidth(20);
+        gridSearch.getColumnConstraints().addAll(col0, col1);
 
-        Button go = new Button("GO");
+        searchBox.prefWidthProperty().bind(gridSearch.widthProperty());
+        searchBox.prefHeightProperty().bind(gridSearch.heightProperty());
+        buttonGo.prefWidthProperty().bind(gridSearch.widthProperty());
+        buttonGo.prefHeightProperty().bind(gridSearch.heightProperty());
 
-        go.setPrefWidth(100);
-        go.setTextFill(Color.GREEN);
-        grid.setRight(go);
-
-        //If a user presses "GO" after entering search input, search for a molecule.
-        go.setOnAction(event -> {
+        buttonGo.setOnAction(event -> {
             try {
-                searchForMolecule(search);
+                searchForMolecule(searchBox);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        //If a user presses the enter key after searching, search for a molecule.
-        search.setOnKeyPressed(ke -> {
+        searchBox.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 try {
-                    searchForMolecule(search);
+                    searchForMolecule(searchBox);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        return grid;
+        return gridSearch;
+    }
+
+    /**
+     * Creates information area, contains info and button to go to wikipedia
+     *
+     * @return information grid
+     */
+    private GridPane informationArea() {
+        GridPane gridInfo = new GridPane();
+        ScrollPane scrollInfo = new ScrollPane();
+
+        textInfo = new TextArea();
+        textInfo.setPromptText("Molecule information will be displayed here.");
+        textInfo.setEditable(false);
+        textInfo.setWrapText(true);
+        textInfo.setOnMouseClicked(event -> sub.requestFocus());
+
+        Button buttonInfo = new Button("View In Browser");
+
+
+        gridInfo.add(textInfo, 0, 0);
+        gridInfo.add(buttonInfo, 0, 1);
+
+        // Column Sizing
+        RowConstraints row0 = new RowConstraints();
+        RowConstraints row1 = new RowConstraints();
+        row0.setPercentHeight(95);
+        row1.setPercentHeight(5);
+        gridInfo.getRowConstraints().addAll(row0, row1);
+
+        gridInfo.prefWidthProperty().bind(gridPane.widthProperty());
+        gridInfo.prefHeightProperty().bind(gridPane.heightProperty());
+        scrollInfo.prefWidthProperty().bind(gridInfo.widthProperty());
+        scrollInfo.prefHeightProperty().bind(gridInfo.heightProperty());
+        textInfo.prefWidthProperty().bind(gridInfo.widthProperty());
+        textInfo.prefHeightProperty().bind(gridInfo.heightProperty());
+        buttonInfo.prefWidthProperty().bind(gridInfo.widthProperty());
+        buttonInfo.prefHeightProperty().bind(gridInfo.heightProperty());
+
+        buttonInfo.setOnMouseClicked(event -> {
+
+            if (Desktop.isDesktopSupported() && searchBox.getText().replaceAll(" ", "").length() > 0) {
+                try {
+                    Desktop.getDesktop().browse(new URI("http://www.wikipedia.com/wiki/" + searchBox.getText().replaceAll(" ", "_")));
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return gridInfo;
     }
 
     /**
@@ -206,39 +256,56 @@ public class GeneralViewer extends Application {
     private MenuBar makeMenuBar(Stage p) {
         MenuBar bar = new MenuBar();
         bar.getMenus().add(makeFileMenu(p));
+        bar.getMenus().add(makeNavMenu(p));
+        bar.getMenus().add(makeHelpMenu(p));
 
+        bar.prefWidthProperty().bind(gridPane.widthProperty());
+        bar.prefHeightProperty().bind(gridPane.heightProperty());
+        return bar;
+    }
+
+    /**
+     * Makes a "navigation" menu with options to view the 3D and 2D models, as well as
+     * to view the periodic table of elements in a new window.
+     *
+     * @param p the stage in which the menu is displayed
+     * @return the new menu
+     */
+    private Menu makeNavMenu(Stage p) {
         Menu navigation = new Menu("Navigation");
         MenuItem view3D = new MenuItem("3D View");
         MenuItem view2D = new MenuItem("2D View");
-        MenuItem search = new MenuItem("Search");
-        MenuItem viewInfoWindow = new MenuItem("View molecule info in new window");
         MenuItem viewPeriodicTable = new MenuItem("View periodic table");
+        navigation.getItems().addAll(view2D, view3D, viewPeriodicTable);
+
+
         viewPeriodicTable.setOnAction(event -> {
             PeriodicTableView view = new PeriodicTableView();
             view.show();
         });
-        navigation.getItems().add(view2D);
-        navigation.getItems().add(view3D);
-        navigation.getItems().add(search);
-        navigation.getItems().add(viewInfoWindow);
-        navigation.getItems().add(viewPeriodicTable);
-        bar.getMenus().add(navigation);
 
+        return navigation;
+    }
+
+    /**
+     * Makes a "help" menu with options to view the user menu, program info, and sources.
+     *
+     * @param p the stage in which the menu is displayed
+     * @return the new menu
+     */
+    private Menu makeHelpMenu(Stage p) {
         Menu help = new Menu("Help");
         MenuItem userManual = new MenuItem("User Manual");
         MenuItem about = new MenuItem("About");
         MenuItem sources = new MenuItem("Sources");
         help.getItems().addAll(userManual, about, sources);
-        bar.getMenus().add(help);
-//        bar.setPrefHeight(40);
-        bar.setPrefWidth(500);
 
         userManual.setOnAction(event -> openInBrowser("http://www.github.com/TSP-Molecule/ATOM/wiki"));
 
         sources.setOnAction(event -> openInBrowser("https://github.com/TSP-Molecule/ATOM/wiki/Sources"));
         about.setOnAction(event -> about());
 
-        return bar;
+        return help;
     }
 
     /**
@@ -262,8 +329,8 @@ public class GeneralViewer extends Application {
                 String filename = molLoad.getAbsolutePath();
                 try {
                     mol = MolFile.loadMolecule(filename);
-                    System.out.println("We loaded in: " + mol);
-                    //TODO: Update information and model with loaded molecule
+                    textInfo.setText(WebService.getWikiAsString(mol.getName()));
+                    sub.setRoot(new MoleculeView(mol));
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -289,7 +356,6 @@ public class GeneralViewer extends Application {
             }
         });
 
-        //TODO: SaveImage. Saves an image of the 3D Model
         MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
@@ -300,7 +366,7 @@ public class GeneralViewer extends Application {
 
                 SnapshotParameters param = new SnapshotParameters();
                 param.setFill(Color.TRANSPARENT);
-                WritableImage img = new WritableImage((int) sub.getWidth(),(int) sub.getHeight());
+                WritableImage img = new WritableImage((int) sub.getWidth(), (int) sub.getHeight());
                 sub.snapshot(param, img);
                 ImageIO.write(SwingFXUtils.fromFXImage(img, null), "png", imageFile);
             } catch (IOException e) {
@@ -316,6 +382,30 @@ public class GeneralViewer extends Application {
     }
 
     /**
+     * Makes a subscene which is an alternate option for displaying a 3D model
+     *
+     * @param scene the parent scene, or window
+     * @param w     the width of the subscene
+     * @param h     the height of the subscene
+     * @return the subscene
+     */
+    private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
+        SubScene scene1 = new SubScene(scene, w, h, b, SceneAntialiasing.BALANCED);
+        sub = scene1;
+        scene1.setWidth(500);
+        scene1.setHeight(700);
+        Camera cam = new MoleculeCamera(scene1);
+        cam.setRotationAxis(Rotate.Y_AXIS);
+        cam.setRotate(45);
+
+        cam.setTranslateX(-scene1.getWidth() * 2.5);
+        cam.setTranslateY(-scene1.getHeight() * 0.5);
+        cam.setTranslateZ(-700);
+        sub.setCamera(cam);
+        return scene1;
+    }
+
+    /**
      * Searches for molecule and attempts to update relevant information
      *
      * @param search User-inputted search text
@@ -323,11 +413,7 @@ public class GeneralViewer extends Application {
      * @throws IOException
      */
     private Molecule searchForMolecule(TextField search) throws IOException {
-        //search.set
-        right.setText("... searching ...");
-        textPane.setContent(right);
         String searchText = search.getText();
-        System.out.println(searchText);
 
         String name = null;
         String formula = null;
@@ -335,8 +421,8 @@ public class GeneralViewer extends Application {
 
         // What to do based on the size (or existence) of results returned
         if (results == null) {
-            failCount++;
-            if (failCount < 3) {
+            nullSearchCount++;
+            if (nullSearchCount < 3) {
                 alert(Alert.AlertType.ERROR,
                         "No result found for \"" + searchText + "\"",
                         "We couldn't seem to find a chemical formula that corresponds to the input! "
@@ -360,6 +446,7 @@ public class GeneralViewer extends Application {
             }
         } else if (results.size() > 1) {
             name = selectResult(results);
+            if (name != null) search.setText(name);
             formula = (name != null) ? results.get(name) : null;
         }
 
@@ -372,22 +459,17 @@ public class GeneralViewer extends Application {
         mol = new Molecule(formula, name);  //Create and build molecule with formula, named user input.
 
         //Display Molecule information in TextArea
-        TextArea info = new TextArea();
-        info.setText(String.format("%s has the formula %s.\n\n %s", name, formula, mol));
-        info.setEditable(false);
-        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
-        textPane.setContent(info);
 
-        // Display Molecule in 3D graphics
-        System.out.println(sub.getRoot());
+        textInfo.setText(String.format("%s has the formula %s.\n\n %s",
+                name,
+                formula,
+                mol));
+
         sub.setRoot(new MoleculeView(mol));
-
-        // sub = sub(new MoleculeView(mol), 500, 700, true, SceneAntialiasing.BALANCED);
         sub.requestFocus();
+        if (mol != null) textInfo.setText(WebService.getWikiAsString(mol.getName()));
 
-
-
-        failCount = 0; //Reset fail counter
+        nullSearchCount = 0; //Reset fail counter
         return mol;
     }
 

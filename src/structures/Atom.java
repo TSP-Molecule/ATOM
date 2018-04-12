@@ -11,20 +11,48 @@ import java.util.ArrayList;
 
 /**
  * @author Emily Anible
-  @author CS3141, Spring 2018, Team ATOM
+ * @author CS3141, Spring 2018, Team ATOM
  * <p>
  * Atom. Each instance of this object is a "physical" atom.
  * It's best to think of an Atom as a vertex in a graph, with more properties.
  */
 
 public class Atom implements Serializable {
+    /**
+     * Element associated with the atom.
+     */
     private final Elem element;
-    private ArrayList<Bond> attachedBonds;   //Attached bonds
+    /**
+     * ArrayList of Bonds attached to the atom.
+     */
+    private ArrayList<Bond> attachedBonds;
+
+    /**
+     * ArrayList of atoms attached by bonds.
+     */
     private ArrayList<Atom> attachedAtoms;
-    private int valenceShell;       // Number of electrons currently in valence shell (includes electrons currently being shared from other atoms)
-    private int availableElectrons; //Number of free electrons not yet bonded.
-    private Geometry geometry;      //Molecular Geometry type of this atom within a molecule. Not set until in a molecule.
-    private int lonePairs;          //Valence shell - (# of bonds)
+
+    /**
+     * Number of electrons currently in the valence shell of the atom.
+     */
+    private int valenceShell;
+
+    /**
+     * Number of free electrons in the atom.
+     */
+    private int availableElectrons;
+
+    /**
+     * Number of lone pairs in the valence shell of the atom.
+     */
+    private int lonePairs;
+
+    /**
+     * Molecular geometry of the atom within a molecule.
+     * <p>
+     * Can be null, and will definitely be if not within a Molecule.
+     */
+    private Geometry geometry;
 
     /**
      * Create an Atom with only an element, no attached attachedBonds.
@@ -41,7 +69,7 @@ public class Atom implements Serializable {
             this.availableElectrons = 8 - valenceShell;
         } else {
             this.availableElectrons = 2 - valenceShell;
-        } //Massive oversimplification
+        } //Massive oversimplification. Way too many edge-cases to consider everything.
     }
 
 
@@ -49,18 +77,14 @@ public class Atom implements Serializable {
      * Attempts to add bond to list of attached bonds.
      *
      * @param bond Bond to attach
-     * @return Bond attached if successful, null if not.
      */
-    public Bond addBond(Bond bond) {
-        if (getAttachedBonds().contains(bond)) return bond;
+    public void addBond(Bond bond) {
+        if (getAttachedBonds().contains(bond)) return;
 
         if (isBondable()) {
             this.getAttachedBonds().add(bond);
             incrementAttachedElectrons();
             attachedAtoms.add(bond.getAtoms().get(1).equals(this) ? bond.getAtoms().get(0) : bond.getAtoms().get(1));
-            return bond;
-        } else {
-            return null;
         }
     }
 

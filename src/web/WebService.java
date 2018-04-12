@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * Utilizes Python scripts to access information about chemicals from various databases.
  *
  * @author Crystal Fletcher
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public class WebService {
 
@@ -71,7 +71,7 @@ public class WebService {
 
         while ((read = pin.readLine()) != null) {
             String fix = Normalizer.normalize(read, Normalizer.Form.NFC);
-            fix = fix.replaceAll("(\\\\x[a-z]?[a-z]?[0-9]*)+", " [REDACTED] ");
+            fix = fix.replaceAll("(\\\\x[a-z]?[a-z]?[0-9]*)+", " [] ");
             ret.add(fix);
         }
         return ret;

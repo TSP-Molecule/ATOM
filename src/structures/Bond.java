@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * It's best to think of a bond as an edge in a graph, with more properties.
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public class Bond implements Serializable {
 
