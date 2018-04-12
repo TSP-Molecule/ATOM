@@ -12,10 +12,10 @@ import structures.Atom;
 import structures.Bond;
 import structures.Molecule;
 import structures.enums.BondOrder;
-import structures.enums.Elem;
 import structures.enums.Geometry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -30,13 +30,14 @@ public class MoleculeView extends Group {
     private final double BOND_LENGTH = 200;
 
     public MoleculeView(Molecule molecule) {
-       drawPic(molecule);
+        drawPic(molecule);
     }
 
     /**
      * Draws a bond between two atoms.
      * Uses code from an external source, noted with begin external code and end external code.
      * The source can be found at: http://netzwerg.ch/blog/2015/03/22/javafx-3d-line/
+     *
      * @param origin
      * @param target
      */
@@ -56,7 +57,7 @@ public class MoleculeView extends Group {
 
         Cylinder bond = new Cylinder(10, height);
         bond.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
-       // End external code
+        // End external code
 
         PhongMaterial bondMaterial = new PhongMaterial();
         bondMaterial.setSpecularColor(Color.RED);
@@ -64,7 +65,6 @@ public class MoleculeView extends Group {
         bond.setMaterial(bondMaterial);
         getChildren().add(bond);
     }
-
 
 
     private class Atomus {
@@ -99,7 +99,7 @@ public class MoleculeView extends Group {
             if (par == null) {
                 kids = atom.getAttachedAtoms();
             } else {
-                for (Atom a: atom.getAttachedAtoms()) {
+                for (Atom a : atom.getAttachedAtoms()) {
                     if (!par.atom.equals(a)) {
                         kids.add(a);
                     }
@@ -112,20 +112,23 @@ public class MoleculeView extends Group {
 
     public void drawPic(Molecule mole) {
         Atom cen = mole.getCenter();
+        System.out.println("ven: " + cen);
         Atomus adam = new Atomus(cen, 0, 0, 0, null);
-
+        // System.out.println("central bonds: " + );
         Stack<Atomus> stack = new Stack<>();
         HashMap<Atomus, Boolean> drawn = new HashMap<>();
         HashMap<Atomus, Boolean> visited = new HashMap<>();
 
         stack.push(adam);
         int counter = 0;
-        while(!stack.isEmpty() && counter < mole.getAtoms().size() * 10) {
+        while (!stack.isEmpty() && counter < mole.getAtoms().size() * 10) {
             System.err.println(stack.size());
             counter++;
             Atomus node = stack.pop();
+            // System.out.println("bonds: " + node.atom.getAttachedBonds());
             if (drawn.get(node) == null) {
                 drawAtom(node.atom, node.x, node.y, node.z);
+                drawn.put(node, true);
             }
             if (visited.get(node) != null) {
                 continue;
@@ -144,9 +147,20 @@ public class MoleculeView extends Group {
                 case Bent:
                     bent(node, stack, drawn);
                     break;
+                case VShape:
+                    System.out.println("centre: " + cen + "  \nkids: " + cen.getAttachedAtoms().size());
                 default:
                     System.out.println("hi im a " + geo);
             }
+        }
+        System.out.println("drawn: " + drawn.size() + " " + Arrays.toString(drawn.keySet().toArray()));
+        Object[] ar = drawn.keySet().toArray();
+        for (int i = 0; i < ar.length; i++) {
+            System.out.print(((Atomus) ar[i]).atom.toString() + ", ");
+        }
+        System.out.println();
+        for (int i = 0; i < ar.length; i++) {
+            System.out.print(((Atomus) ar[i]).atom.getElement().getSymbol() + ": " + ((Atomus) ar[i]).loc + ", ");
         }
     }
 
@@ -181,25 +195,36 @@ public class MoleculeView extends Group {
             Atomus atomus = new Atomus(atom, x, y, z, node);
             drawn.put(atomus, true);
             stack.push(atomus);
-//            Bond bond = null;
+            Bond bond = null;
+            System.out.println("Pink: " + atom.getAttachedBonds().size());
 //            for (Bond b: atom.getAttachedBonds()) {
+//                System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHH");
 //                if (b.getAtoms().get(0).equals(atom) && b.getAtoms().get(1).equals(node.atom)) {
 //                    bond = b;
+//                    System.out.println("blue bayou: " + bond);
 //                } else if (b.getAtoms().get(1).equals(atom) && b.getAtoms().get(0).equals(node.atom)) {
 //                    bond = b;
+//                    System.out.println("blue bonnet: " + bond);
 //                } else {
 //                    throw new RuntimeException("no bond!");
 //                }
 //            }
-//            Color color = Color.YELLOW;
-//            if (bond.getOrder() == BondOrder.SINGLE) {
-//                color = Color.GRAY;
-//            } else if (bond.getOrder() == BondOrder.DOUBLE) {
-//                color = Color.BLACK;
-//            } else if (bond.getOrder() == BondOrder.TRIPLE) {
-//                color = Color.PURPLE;
-//            }
-            drawBond(origin, curr, Color.GRAY);
+            for (Bond b : atom.getAttachedBonds()) {
+                if (b.getAtoms().contains(atom)) {
+                    bond = b;
+                }
+            }
+            Color color = Color.YELLOW;
+            if (bond.getOrder() == BondOrder.SINGLE) {
+                color = Color.GRAY;
+
+            } else if (bond.getOrder() == BondOrder.DOUBLE) {
+                color = Color.rgb(21, 244, 238);
+            } else if (bond.getOrder() == BondOrder.TRIPLE) {
+                color = Color.PURPLE;
+            }
+
+            drawBond(origin, curr, color);
 
         }
 
@@ -212,7 +237,7 @@ public class MoleculeView extends Group {
             x = node.x + rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             y = node.y + rad * Math.sin(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             z = node.z + draw * rad * Math.cos(Math.toRadians(thetaXY));
-           // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
+            // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
             thetaZY += angY;
             thetaXY += angZ;
             Point3D curr = new Point3D(x, y, z);
@@ -224,22 +249,19 @@ public class MoleculeView extends Group {
                 stack.push(atomus);
             }
             Bond bond = null;
-            for (Bond b: atom.getAttachedBonds()) {
-                if (b.getAtoms().get(0).equals(atom) && b.getAtoms().get(1).equals(node.atom)) {
+
+            for (Bond b : atom.getAttachedBonds()) {
+                if (b.getAtoms().contains(atom)) {
                     bond = b;
-                } else if (b.getAtoms().get(1).equals(atom) && b.getAtoms().get(0).equals(node.atom)) {
-                    bond = b;
-                } else {
-                   throw new RuntimeException("no bond!");
                 }
             }
             Color color = Color.YELLOW;
             if (bond.getOrder() == BondOrder.SINGLE) {
-                 color = Color.GRAY;
+                color = Color.GRAY;
             } else if (bond.getOrder() == BondOrder.DOUBLE) {
-                 color = Color.BLACK;
+                color = Color.BLACK;
             } else if (bond.getOrder() == BondOrder.TRIPLE) {
-                 color = Color.PURPLE;
+                color = Color.PURPLE;
             }
 
             drawBond(origin, curr, color);
@@ -260,7 +282,7 @@ public class MoleculeView extends Group {
         double z = 0;
         Point3D origin = node.loc;// new Point3D(0, 0, 0);
 //         drawAtom(new Atom(Elem.Carbon), x, y, z);
-        System.out.println("trig!");
+//        System.out.println("trig!");
         for (int i = 0; i < node.kids.size(); i++) {
             Atom atom = node.kids.get(i);
             x = rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
@@ -276,7 +298,7 @@ public class MoleculeView extends Group {
                 drawn.put(atomus, true);
                 stack.push(atomus);
             }
-           // getChildren().add(createConnection(origin, curr));
+            // getChildren().add(createConnection(origin, curr));
 //            Bond bond = null;
 //            for (Bond b: atom.getAttachedBonds()) {
 //                if (b.getAtoms().get(0).equals(atom) && b.getAtoms().get(1).equals(node.atom)) {
@@ -296,7 +318,25 @@ public class MoleculeView extends Group {
 //                color = Color.PURPLE;
 //            }
 
-            drawBond(origin, curr, Color.GRAY);
+            Bond bond = null;
+
+            for (Bond b : atom.getAttachedBonds()) {
+                if (b.getAtoms().contains(atom)) {
+                    bond = b;
+                }
+            }
+            Color color = Color.YELLOW;
+            if (bond.getOrder() == BondOrder.SINGLE) {
+                color = Color.GRAY;
+            } else if (bond.getOrder() == BondOrder.DOUBLE) {
+                color = Color.BLACK;
+                color = Color.rgb(21, 244, 238);
+            } else if (bond.getOrder() == BondOrder.TRIPLE) {
+                color = Color.PURPLE;
+            }
+
+            drawBond(origin, curr, color);
+//            drawBond(origin, curr, Color.GRAY);
         }
     }
 
@@ -313,23 +353,24 @@ public class MoleculeView extends Group {
         double z = 0;
         Point3D origin = node.loc;// new Point3D(0, 0, 0);
         int draw = 1;
-        if (node.par != null) {
+        int dee = 0;
+        if (node.par == null) {
+            draw = 1;
+        } else {
+
             Point3D deltaPar = node.par.loc.subtract(node.loc);
-            if (deltaPar.getZ() > 0) {
+            if (deltaPar.getZ() >= 0) {
                 draw = -1;
             }
-//            thetaZY = node.par.loc.angle(node.loc);
-            System.out.println("parent: " + deltaPar);
-//            yAxis = node.par.loc;
-
+            //if ()
         }
-        // drawAtom(new Atom(Elem.Carbon), x, y, z);
+        System.out.println("node: " + node.atom.getElement().getSymbol() + ": " + node.kids);
         for (int i = 0; i < node.kids.size(); i++) {
             Atom atom = node.kids.get(i);
-            x = rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
+            x = draw * rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             y = rad * Math.sin(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             z = draw * rad * Math.cos(Math.toRadians(thetaXY));
-            // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
+            System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
             thetaZY += angY;
             thetaXY += angZ;
             Point3D curr = new Point3D(x, y, z);
@@ -337,7 +378,7 @@ public class MoleculeView extends Group {
             drawAtom(atom, x, y, z);
             drawn.put(atomus, true);
             stack.push(atomus);
-           // getChildren().add(createConnection(origin, curr));
+            // getChildren().add(createConnection(origin, curr));
 //            Bond bond = null;
 //            for (Bond b: atom.getAttachedBonds()) {
 //                if (b.getAtoms().get(0).equals(atom) && b.getAtoms().get(1).equals(node.atom)) {
@@ -356,6 +397,14 @@ public class MoleculeView extends Group {
 //            } else if (bond.getOrder() == BondOrder.TRIPLE) {
 //                color = Color.PURPLE;
 //            }
+            //        if (node.par != null) {
+
+////            thetaZY = node.par.loc.angle(node.loc);
+//            System.out.println("parent: " + deltaPar);
+////            yAxis = node.par.loc;
+//
+//        }
+            // drawAtom(new Atom(Elem.Carbon), x, y, z);
             drawBond(origin, curr, Color.GRAY);
         }
     }
