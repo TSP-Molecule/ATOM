@@ -6,7 +6,7 @@ import java.io.*;
  * Handles saving and loading of Molecules from file.
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public class MolFile {
 
@@ -15,16 +15,14 @@ public class MolFile {
      *
      * @param mol      Molecule to save to file
      * @param filename Filename to save, without extension.
-     * @return Molecule that was saved to file
      * @throws IOException If something goes horribly wrong.
      */
-    public static Molecule saveMolecule(Molecule mol, String filename) throws IOException {
+    public static void saveMolecule(Molecule mol, String filename) throws IOException {
         FileOutputStream file = new FileOutputStream(filename.contains(".mol") ? filename : filename + ".mol");
         ObjectOutputStream oos = new ObjectOutputStream(file);
         oos.writeObject(mol);
         oos.close();
 
-        return mol;
     }
 
     /**

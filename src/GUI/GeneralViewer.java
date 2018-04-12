@@ -42,27 +42,47 @@ import java.util.Optional;
  * Displays the main window of the app with a menu, search bar, and two panels for models and information.
  *
  * @author Sarah Larkin, Emily Anible
- * <p>
  * CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 30, 2018
  */
 public class GeneralViewer extends Application {
 
-    private ScrollPane textPane;
-    private SubScene imageScene;
-    private Stage periodic = new PeriodicTableView();
-    private Molecule mol;
-    private double oldX = 400;
-    private double oldY = 0;
-    private double oldZ = 0;
-    private boolean subf = true;
-    private int failCount = 0;
-    private TextArea textInfo;
-    private SubScene sub;
+    /**
+     * Default width of the program window
+     */
     private static final int PROG_WIDTH = 1000;
+
+    /**
+     * Default height of the program window
+     */
     private static final int PROG_HEIGHT = 700;
+
+    /**
+     * Main 2x2 Grid. Holds entire main contents.
+     */
     private GridPane gridPane;
+
+    /**
+     * Info area. Updates wiki information.
+     */
+    private TextArea textInfo;
+    /**
+     * Search text field.
+     */
     private TextField searchBox;
+    /**
+     * Subscene. Contains 3D molecule.
+     */
+    private SubScene sub;
+    /**
+     * Null counter. Gives an error to user if it reaches a specified value.
+     */
+    private int nullSearchCount = 0;
+
+    /**
+     * Molecule loaded in to subscene.
+     */
+    private Molecule mol;
 
     @Override
     public void start(Stage primaryStage) {
@@ -77,8 +97,6 @@ public class GeneralViewer extends Application {
      */
     private Stage window() {
         Stage stage = new Stage();
-        stage.setMaxWidth(PROG_WIDTH);
-        stage.setMaxHeight(PROG_HEIGHT);
         stage.setMinWidth(PROG_WIDTH);
         stage.setMinHeight(PROG_HEIGHT);
 
@@ -118,12 +136,10 @@ public class GeneralViewer extends Application {
         //Sub Listeners
         sub.setOnMouseEntered(event -> {
             sub.requestFocus();
-            subf = true;
         });
 
         sub.setOnMousePressed(event -> {
             sub.requestFocus();
-            oldX = event.getX();
         });
 
         return stage;
@@ -181,6 +197,7 @@ public class GeneralViewer extends Application {
 
     /**
      * Creates information area, contains info and button to go to wikipedia
+     *
      * @return information grid
      */
     private GridPane informationArea() {
@@ -217,40 +234,16 @@ public class GeneralViewer extends Application {
 
         buttonInfo.setOnMouseClicked(event -> {
 
-                if (Desktop.isDesktopSupported() && searchBox.getText().replaceAll(" ","").length() > 0) {
-                    try {
-                        Desktop.getDesktop().browse(new URI("http://www.wikipedia.com/wiki/" + searchBox.getText().replaceAll(" ","_")));
-                    } catch (IOException | URISyntaxException e) {
-                        e.printStackTrace();
-                    }
+            if (Desktop.isDesktopSupported() && searchBox.getText().replaceAll(" ", "").length() > 0) {
+                try {
+                    Desktop.getDesktop().browse(new URI("http://www.wikipedia.com/wiki/" + searchBox.getText().replaceAll(" ", "_")));
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
                 }
+            }
         });
 
         return gridInfo;
-    }
-
-    /**
-     * Makes a subscene which is an alternate option for displaying a 3D model
-     *
-     * @param scene the parent scene, or window
-     * @param w     the width of the subscene
-     * @param h     the height of the subscene
-     * @return the subscene
-     */
-    private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
-        SubScene scene1 = new SubScene(scene, w, h, b, SceneAntialiasing.BALANCED);
-        sub = scene1;
-        scene1.setWidth(500);
-        scene1.setHeight(700);
-        Camera cam = new MoleculeCamera(scene1);
-        cam.setRotationAxis(Rotate.Y_AXIS);
-        cam.setRotate(45);
-
-        cam.setTranslateX(- scene1.getWidth() * 2.5);
-        cam.setTranslateY(- scene1.getHeight() * 0.5);
-        cam.setTranslateZ(-700);
-        sub.setCamera(cam);
-        return scene1;
     }
 
     /**
@@ -388,6 +381,30 @@ public class GeneralViewer extends Application {
     }
 
     /**
+     * Makes a subscene which is an alternate option for displaying a 3D model
+     *
+     * @param scene the parent scene, or window
+     * @param w     the width of the subscene
+     * @param h     the height of the subscene
+     * @return the subscene
+     */
+    private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
+        SubScene scene1 = new SubScene(scene, w, h, b, SceneAntialiasing.BALANCED);
+        sub = scene1;
+        scene1.setWidth(500);
+        scene1.setHeight(700);
+        Camera cam = new MoleculeCamera(scene1);
+        cam.setRotationAxis(Rotate.Y_AXIS);
+        cam.setRotate(45);
+
+        cam.setTranslateX(-scene1.getWidth() * 2.5);
+        cam.setTranslateY(-scene1.getHeight() * 0.5);
+        cam.setTranslateZ(-700);
+        sub.setCamera(cam);
+        return scene1;
+    }
+
+    /**
      * Searches for molecule and attempts to update relevant information
      *
      * @param search User-inputted search text
@@ -396,7 +413,6 @@ public class GeneralViewer extends Application {
      */
     private Molecule searchForMolecule(TextField search) throws IOException {
         String searchText = search.getText();
-        System.out.println(searchText);
 
         String name = null;
         String formula = null;
@@ -404,8 +420,8 @@ public class GeneralViewer extends Application {
 
         // What to do based on the size (or existence) of results returned
         if (results == null) {
-            failCount++;
-            if (failCount < 3) {
+            nullSearchCount++;
+            if (nullSearchCount < 3) {
                 alert(Alert.AlertType.ERROR,
                         "No result found for \"" + searchText + "\"",
                         "We couldn't seem to find a chemical formula that corresponds to the input! "
@@ -447,16 +463,12 @@ public class GeneralViewer extends Application {
                 name,
                 formula,
                 mol));
-//        info.setEditable(false);
-//        info.setPrefSize(textPane.widthProperty().doubleValue(), textPane.heightProperty().doubleValue());
-//        textPane.setContent(info);
 
-        System.out.println(sub.getRoot());
         sub.setRoot(new MoleculeView(mol));
         sub.requestFocus();
         if (mol != null) textInfo.setText(WebService.getWikiAsString(mol.getName()));
 
-        failCount = 0; //Reset fail counter
+        nullSearchCount = 0; //Reset fail counter
         return mol;
     }
 

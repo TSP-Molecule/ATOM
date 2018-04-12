@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * Utilizes Python scripts to access information about chemicals from various databases.
  *
  * @author Crystal Fletcher
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public class WebService {
 

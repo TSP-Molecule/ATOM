@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 /**
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  * <p>
  * Parses and stores the electron configuration for each element in Elem
  * so that we can obtain some useful information about it.

@@ -4,7 +4,7 @@ package structures.enums;
  * Period of an element. Used for placement in periodic table.
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public enum Period {
     Period1(1),

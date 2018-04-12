@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * Used to create proper molecule.
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public class ChemicalFormula {
 

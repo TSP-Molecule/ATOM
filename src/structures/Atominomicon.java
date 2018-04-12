@@ -10,7 +10,7 @@ import java.util.HashMap;
  * Each instance of Atominomicon provides a full set of Atoms and their isotopes to be used as reference or for building molecules.
  *
  * @author Emily Anible
- * @author CS3141 Spring 2018: Team ATOM
+ * CS3141 Spring 2018: Team ATOM
  */
 public class Atominomicon {
 

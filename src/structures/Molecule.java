@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * It's best to think of a Molecule as a Graph, with Atoms for vertices and Bonds for edges.
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public class Molecule implements Serializable {
 

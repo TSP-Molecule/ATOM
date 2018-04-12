@@ -4,7 +4,7 @@ package structures.enums;
  * Enum to clarify what order a bond is (Single, Double, Triple, etc).
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public enum BondOrder {
     NONE(0, ""),

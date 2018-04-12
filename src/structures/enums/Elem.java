@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
  * To reference, use Elem.[ELEMENT_NAME].get[PROPERTY]() or Elem.get( atomicNumber ).get[Property}().
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public enum Elem {
     //  Name           num sym  mass        color    econfig                  eneg   radius bonding            density   group           type                  state

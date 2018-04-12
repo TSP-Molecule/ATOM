@@ -7,7 +7,7 @@ import structures.Molecule;
  * Different Geometries that a molecule could have, based on steric number and number of lone pairs.
  *
  * @author Emily Anible
- * @author CS3141, Spring 2018, Team ATOM
+ * CS3141, Spring 2018, Team ATOM
  */
 public enum Geometry {
     //Name (# Atoms Bonded to A, # Lone Pairs around A
