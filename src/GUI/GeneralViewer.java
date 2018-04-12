@@ -21,6 +21,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import structures.MolFile;
@@ -242,6 +243,12 @@ public class GeneralViewer extends Application {
         scene1.setWidth(500);
         scene1.setHeight(700);
         Camera cam = new MoleculeCamera(scene1);
+        cam.setRotationAxis(Rotate.Y_AXIS);
+        cam.setRotate(45);
+
+        cam.setTranslateX(- scene1.getWidth() * 2.5);
+        cam.setTranslateY(- scene1.getHeight() * 0.5);
+        cam.setTranslateZ(-700);
         sub.setCamera(cam);
         return scene1;
     }
