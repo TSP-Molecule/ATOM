@@ -85,7 +85,7 @@ public class GeneralViewer extends Application {
         //Main Grid of Program. 2x2.
         gridPane = new GridPane();
         gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(195, 195, 195), new CornerRadii(2), new Insets(2))));
-        gridPane.gridLinesVisibleProperty().set(true);
+//        gridPane.gridLinesVisibleProperty().set(true);
 
         Group g = new Group(); //Test Molecule line
         sub = sub(g, 500, 600, true, SceneAntialiasing.BALANCED);
