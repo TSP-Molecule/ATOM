@@ -22,6 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import structures.MolFile;
@@ -72,9 +73,23 @@ public class GeneralViewer extends Application {
      */
     private TextField searchBox;
     /**
-     * Subscene. Contains 3D molecule.
+     * Subscene. Contains molecule image.
      */
     private SubScene sub;
+
+    /**
+     * Subscene. Contains molecule image.
+     */
+    private SubScene sub2D;
+
+    /**
+     * Subscene. Contains molecule image.
+     */
+    private SubScene sub3D;
+    /**
+     * Boolean to track 2D vs. 3D display
+     */
+    private boolean dim3D = true;
     /**
      * Null counter. Gives an error to user if it reaches a specified value.
      */
@@ -108,7 +123,8 @@ public class GeneralViewer extends Application {
 
         Group g = new Group(); //Test Molecule line
         sub = sub(g, 500, 600, true, SceneAntialiasing.BALANCED);
-
+        sub2D = new SubScene(new Group(), 500, 600);
+        sub3D = new SubScene(new Group(), 500, 600, true, SceneAntialiasing.BALANCED);
         //Components of GridPane
         gridPane.add(sub, 0, 1);
         gridPane.add(makeMenuBar(stage), 0, 0);
@@ -284,6 +300,14 @@ public class GeneralViewer extends Application {
             view.show();
         });
 
+        view2D.setOnAction(event -> {
+            dim3D = false;
+            updateView();
+        });
+        view3D.setOnAction(event -> {
+            dim3D = true;
+            updateView();
+        });
         return navigation;
     }
 
@@ -465,12 +489,33 @@ public class GeneralViewer extends Application {
                 formula,
                 mol));
 
-        sub.setRoot(new MoleculeView(mol));
-        sub.requestFocus();
+//        sub3D.setRoot(new MoleculeView(mol));
+//        sub.setRoot(new Lewis(mol));
+//        sub.getRoot().getTransforms().add(new Rotate(50, 0, 0, 0, Rotate.Y_AXIS));
+//        sub.getRoot().getTransforms().add(new Translate(-300, -200, -1500));
+//       // sub = sub2D;
+//        //sub.setRoot(new Lewis(mol));
+//       // sub.setRoot(new MoleculeView(mol));
+//        sub.requestFocus();
+        updateView();
         if (mol != null) textInfo.setText(WebService.getWikiAsString(mol.getName()));
 
         nullSearchCount = 0; //Reset fail counter
         return mol;
+    }
+
+    /**
+     * Update the viewer to the present molecule
+     */
+    private void updateView() {
+        if (dim3D) {
+            sub.setRoot(new MoleculeView(mol));
+        } else {
+            sub.setRoot(new Lewis(mol));
+            sub.getRoot().getTransforms().add(new Rotate(50, 0, 0, 0, Rotate.Y_AXIS));
+            sub.getRoot().getTransforms().add(new Translate(-300, -200, -1500));
+        }
+        sub.requestFocus();
     }
 
     /**

@@ -48,7 +48,7 @@ public class Lewis extends Group {
         int[] size = spacing(list);
         int width = size[0];
         int height = size[1];
-        double spin = 400 / Math.max(width, height);
+        double spin = 500 / Math.max(width, height);
 
         drawStructure(list, atoms, spin);
 
