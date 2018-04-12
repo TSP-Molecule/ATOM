@@ -429,6 +429,7 @@ public class GeneralViewer extends Application {
             }
         } else if (results.size() > 1) {
             name = selectResult(results);
+            if (name != null) search.setText(name);
             formula = (name != null) ? results.get(name) : null;
         }
 
