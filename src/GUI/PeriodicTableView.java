@@ -2,15 +2,14 @@ package GUI;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
@@ -54,6 +53,8 @@ public class PeriodicTableView extends Stage {
     public PeriodicTableView() {
         Group group = new Group();
         GridPane pane = new GridPane();
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(255,255,255), new CornerRadii(2), new Insets(2))));
+
         makeTable(pane);
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

@@ -71,7 +71,7 @@ public class WebService {
 
         while ((read = pin.readLine()) != null) {
             String fix = Normalizer.normalize(read, Normalizer.Form.NFC);
-            fix = fix.replaceAll("(\\\\x[a-z]?[a-z]?[0-9]*)+", " [REDACTED] ");
+            fix = fix.replaceAll("(\\\\x[a-z]?[a-z]?[0-9]*)+", " [] ");
             ret.add(fix);
         }
         return ret;
