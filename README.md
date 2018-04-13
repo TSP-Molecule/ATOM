@@ -22,3 +22,5 @@ To use, simply click any GUI items available. The periodic table popup is availa
    Click in the search bar and type the chemical name or formula you want to find.  Then click the button that reads "GO".  The search 
    may take a few seconds to display simple information in the right bottom panel.
    
+# Deliverables
+Deliverables are located [here](https://github.com/TSP-Molecule/ATOM/wiki/Releases).
