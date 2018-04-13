@@ -409,7 +409,9 @@ public class GeneralViewer extends Application {
                         "Offline Mode Toggled!",
                         "You have enabled offline mode. ATOM will no longer validate your input, and will instead " +
                                 "create a molecule based on the formula entered. Please use entries of the form " +
-                                "At_{#}At_{#}... to ensure that your formula will be parsed correctly.");
+                                "At_{#}At_{#}... to ensure that your formula will be parsed correctly." +
+                                "\n\n- Debug information will be shown in place of the typical wikipedia entries." +
+                                "\n- The element information on the periodic table will continue to attempt to use web functionality.");
             }
         });
 
