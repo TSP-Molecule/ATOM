@@ -76,6 +76,10 @@ public class GeneralViewer extends Application {
      * Subscene. Contains molecule image.
      */
     private SubScene sub;
+    /**
+     * Camera to control subscene
+     */
+    Camera cam;
 
     /**
      * Subscene. Contains molecule image.
@@ -102,10 +106,13 @@ public class GeneralViewer extends Application {
 
     private boolean offlineMode = false;
 
+    private Stage stage = new Stage();
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage = window();
         primaryStage.show();
+        stage = primaryStage;
     }
 
     /**
@@ -117,6 +124,18 @@ public class GeneralViewer extends Application {
         Stage stage = new Stage();
         stage.setMinWidth(PROG_WIDTH);
         stage.setMinHeight(PROG_HEIGHT);
+
+        stage.heightProperty().addListener(observable -> {
+            if (mol != null) {
+                updateView();
+            }
+        });
+        stage.widthProperty().addListener(observable -> {
+            if (mol != null) {
+                updateView();
+            }
+        });
+
 
         //Main Grid of Program. 2x2.
         gridPane = new GridPane();
@@ -438,7 +457,7 @@ public class GeneralViewer extends Application {
         sub = scene1;
         scene1.setWidth(500);
         scene1.setHeight(700);
-        Camera cam = new MoleculeCamera(scene1);
+        cam = new MoleculeCamera(scene1, true);
         cam.setRotationAxis(Rotate.Y_AXIS);
         cam.setRotate(45);
 
@@ -535,14 +554,25 @@ public class GeneralViewer extends Application {
      * Update the viewer to the present molecule
      */
     private void updateView() {
+        sub.setWidth(gridPane.widthProperty().doubleValue());
+        sub.setHeight(gridPane.heightProperty().doubleValue());
+        sub.getRoot().prefWidth(gridPane.widthProperty().doubleValue());
+        sub.getRoot().prefHeight(gridPane.heightProperty().doubleValue());
+      //  searchBox.prefHeightProperty().bind(gridPane.heightProperty());
         if (dim3D) {
+
             sub.setRoot(new MoleculeView(mol));
+            sub.setWidth(stage.getWidth()/2);
+            sub.setHeight(stage.getHeight() * 7 / 8);
+            sub.setCamera(new MoleculeCamera(sub, true));
+            sub.requestFocus();
         } else {
             sub.setRoot(new Lewis(mol));
-            sub.getRoot().getTransforms().add(new Rotate(50, 0, 0, 0, Rotate.Y_AXIS));
-            sub.getRoot().getTransforms().add(new Translate(-300, -200, -1500));
+            sub.setCamera(new MoleculeCamera(sub, false));
         }
-        sub.requestFocus();
+//        sub.getRoot().minWidth(sub.getWidth());
+//        sub.getRoot().minHeight(sub.getHeight());
+
     }
 
     /**
@@ -658,5 +688,12 @@ public class GeneralViewer extends Application {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns whether 3D is true
+     */
+    public boolean get3D() {
+        return dim3D;
     }
 }

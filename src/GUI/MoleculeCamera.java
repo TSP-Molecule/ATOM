@@ -3,6 +3,7 @@ import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.stage.Stage;
 
 /**
  * Creates camera controls for the 3D Molecule subscene.
@@ -16,10 +17,15 @@ public class MoleculeCamera extends PerspectiveCamera {
     private SubScene sub;
     private final double dist = 50;
     private final double theta = 10;
+    private boolean is3D = true;
 
-    public MoleculeCamera (SubScene sub) {
+    public MoleculeCamera (SubScene sub, boolean b) {
         this.sub = sub;
-        makeCamera();
+//        makeCamera();
+        is3D = b;
+        if (b) {
+            makeCamera();
+        }
     }
 
     /**
@@ -28,9 +34,11 @@ public class MoleculeCamera extends PerspectiveCamera {
      */
     public Camera makeCamera() {
         Camera cam = new PerspectiveCamera(true);
-        cam.setNearClip(0.1);
-        cam.setFarClip(100000);
-        cam.getTransforms().add(new Translate(0, 0, -1500));
+        setNearClip(0.1);
+        setFarClip(100000);
+        if (is3D) {
+            getTransforms().add(new Translate(-100, -200, -1500));
+        }
         sub.setOnKeyPressed(event -> {
             camControls(event);
         });
@@ -43,7 +51,14 @@ public class MoleculeCamera extends PerspectiveCamera {
      * @param event the key event
      */
     private void camControls(KeyEvent event) {
-        rotationControls(event);
+        if(is3D) {
+            rotationControls(event);
+            setRotationAxis(Rotate.Y_AXIS);
+            setRotate(45);
+        } else {
+            sub.getRoot().getTransforms().add(new Rotate(50, 0, 0, 0, Rotate.Y_AXIS));
+            sub.getRoot().getTransforms().add(new Translate(-300, -200, -100));
+        }
         translationControls(event);
     }
 
