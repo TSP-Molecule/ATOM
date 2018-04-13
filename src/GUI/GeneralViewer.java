@@ -100,6 +100,8 @@ public class GeneralViewer extends Application {
      */
     private Molecule mol;
 
+    private boolean offlineMode = false;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage = window();
@@ -398,10 +400,26 @@ public class GeneralViewer extends Application {
             }
         });
 
+        CheckMenuItem offlineToggle = new CheckMenuItem("Offline Mode");
+        offlineToggle.setOnAction(event -> {
+            offlineMode = offlineToggle.isSelected();
+
+            if ( offlineToggle.isSelected() ) {
+                alert(Alert.AlertType.INFORMATION,
+                        "Offline Mode Toggled!",
+                        "You have enabled offline mode. ATOM will no longer validate your input, and will instead " +
+                                "create a molecule based on the formula entered. Please use entries of the form " +
+                                "At_{#}At_{#}... to ensure that your formula will be parsed correctly.");
+            }
+        });
+
+
+
+
         //Exit Action. Closes the program.
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(event -> p.close());
-        file.getItems().addAll(open, save, saveImage, exit);
+        file.getItems().addAll(open, save, saveImage, offlineToggle, exit);
         return file;
     }
 
@@ -441,10 +459,17 @@ public class GeneralViewer extends Application {
 
         String name = null;
         String formula = null;
-        HashMap<String, String> results = WebService.getFormula(searchText);
+        HashMap<String, String> results = null;
+        //Don't use the webservice if we're offline.
+        if (offlineMode) {
+            name = search.getText();
+            formula = search.getText();
+        } else {
+            results = WebService.getFormula(searchText);
+        }
 
         // What to do based on the size (or existence) of results returned
-        if (results == null) {
+        if (results == null && name == null && formula == null) {
             nullSearchCount++;
             if (nullSearchCount < 3) {
                 alert(Alert.AlertType.ERROR,
@@ -462,13 +487,13 @@ public class GeneralViewer extends Application {
                                 + "try running the standalone ChemSpider.py script outside of ATOM.");
             }
             return null;
-        } else if (results.size() == 1) {
+        } else if (results != null && results.size() == 1) {
             // Not really a for loop... just gets the first (only) value.
             for (String s : results.keySet()) {
                 name = s;
                 formula = results.get(s);
             }
-        } else if (results.size() > 1) {
+        } else if (results != null && results.size() > 1) {
             name = selectResult(results);
             if (name != null) search.setText(name);
             formula = (name != null) ? results.get(name) : null;
@@ -498,7 +523,7 @@ public class GeneralViewer extends Application {
 //       // sub.setRoot(new MoleculeView(mol));
 //        sub.requestFocus();
         updateView();
-        if (mol != null) textInfo.setText(WebService.getWikiAsString(mol.getName()));
+        if (mol != null && !offlineMode) textInfo.setText(WebService.getWikiAsString(mol.getName()));
 
         nullSearchCount = 0; //Reset fail counter
         return mol;

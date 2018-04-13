@@ -77,6 +77,12 @@ public enum Geometry {
      * @return Geometry Molecular Geometry of the molecule.
      */
     public static void calculateGeometry(Molecule molecule) {
+        if (molecule.getAtoms().size() == 2) {
+            for (Atom a: molecule.getAtoms()) {
+                a.setGeometry(Linear);
+            }
+            return;
+        }
         for (Atom a : molecule.getAtoms()) {
             int lonePairs = a.getLonePairs();
             int attached = a.getAttachedBonds().size();
