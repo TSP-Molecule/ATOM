@@ -41,12 +41,13 @@ public class ChemicalFormula {
     private ArrayList<String> chemStringParser(String chemFormula) {
         ArrayList<String> chems = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("(([A-Z])([a-z])?(_\\{[0-9]*})?)");
+        Pattern pattern = Pattern.compile("(([A-Z])([a-z])?(_\\{[0-9]*}|[0-9]*))");
         Matcher matcher = pattern.matcher(chemFormula);
 
         while (matcher.find()) {
             chems.add(matcher.group());
         }
+
 
         return chems;
     }
