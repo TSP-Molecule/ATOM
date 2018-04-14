@@ -8,6 +8,12 @@
   <a href="https://github.com/CrystalSpore">Crystal Fletcher</a>
 </p>
 
+
 <h3 align="center">Head to the <a href="https://github.com/TSP-molecule/ATOM/wiki">wiki</a> for more information!</h3>
    
 <h3 align="center"><a href="https://github.com/TSP-Molecule/ATOM/wiki/Releases">Deliverables</a></h3>
+
+
+<p align="center">
+  <img src="https://lh4.googleusercontent.com/nh4TCSlnG4-o3kAyWSlbATpaMK2OGiPWC3npRGDjsFopMkIKRQJxlnmiBDAUxGYicYTcPKrZzyEEGP0vgfo=w1419-h969" height=40% width=40%>
+</p>
