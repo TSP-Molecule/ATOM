@@ -15,8 +15,14 @@ import java.util.regex.Pattern;
  */
 public class ChemicalFormula {
 
+    /**
+     * List of atoms parsed from chemical formula
+     */
     private ArrayList<Atom> atoms;
 
+    /**
+     * Parsed chemical formula into bits, e.g. "C_{3}"
+     */
     private ArrayList<String> chem;
 
 
@@ -35,8 +41,8 @@ public class ChemicalFormula {
     /**
      * Splits passed in string to ArrayList of elements with total number
      *
-     * @param chemFormula
-     * @return
+     * @param chemFormula formula
+     * @return split formula
      */
     private ArrayList<String> chemStringParser(String chemFormula) {
         ArrayList<String> chems = new ArrayList<>();
@@ -55,8 +61,8 @@ public class ChemicalFormula {
     /**
      * Takes in parsed chemical ArrayList and gives back an ArrayList with each of the atoms in the molecule.
      *
-     * @param chem
-     * @return
+     * @param chem split string formula
+     * @return list of atoms in formula
      */
     private ArrayList<Atom> chemParser(ArrayList<String> chem) {
         ArrayList<Atom> atoms = new ArrayList<>();
@@ -91,10 +97,16 @@ public class ChemicalFormula {
         return atoms;
     }
 
+    /**
+     * @return atoms
+     */
     public ArrayList<Atom> getAtoms() {
         return atoms;
     }
 
+    /**
+     * @return chem
+     */
     public ArrayList<String> getChem() {
         return chem;
     }

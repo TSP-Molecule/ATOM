@@ -1,12 +1,9 @@
 package structures;
 
-import structures.enums.BondOrder;
 import structures.enums.Elem;
 import structures.enums.Geometry;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.ArrayList;
 
 /**

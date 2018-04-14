@@ -27,7 +27,7 @@ public class Bond implements Serializable {
     private final ArrayList<Atom> atoms = new ArrayList<>();
 
     public Bond(Atom one, Atom two) {
-        this(one, two, BondOrder.SINGLE); //TODO: Logic for automatically determining order, if possible.
+        this(one, two, BondOrder.SINGLE);
     }
 
     public Bond(Atom one, Atom two, BondOrder order) {
@@ -40,6 +40,51 @@ public class Bond implements Serializable {
 //        System.out.println("bonded " + one.getElement().getName() + " to " + two.getElement().getName()
 //                    + ". Remaining " + one.getAvailableElectrons() + ":" + one.isBondable() + ", " + two.getAvailableElectrons() + ":" + two.isBondable()
 //                    + "    Equal: " + one.equals(two));
+    }
+
+
+    /**
+     * Used to increment the Bond's BondOrder if possible.
+     * @return new order of Bond
+     */
+    public BondOrder increaseOrder() {
+        if (order.ordinal() < BondOrder.values().length - 1) {
+            order = BondOrder.values()[order.ordinal() + 1];
+            getAtoms().get(0).incrementAttachedElectrons();
+            getAtoms().get(1).incrementAttachedElectrons();
+            //System.out.println("INCREASED ORDER OF " + this + " " + this.getAtoms().get(0).getAvailableElectrons() + ", " + this.getAtoms().get(1).getAvailableElectrons());
+        }
+        return order;
+    }
+
+    /**
+     * @param bond bond with which to check equality
+     * @return true if bonds are equal, false otherwise.
+     */
+    public boolean equals(Bond bond) {
+        boolean oneOne = getAtoms().get(1).equals(bond.getAtoms().get(1));
+        boolean oneTwo = getAtoms().get(1).equals(bond.getAtoms().get(2));
+        boolean twoOne = getAtoms().get(2).equals(bond.getAtoms().get(1));
+        boolean twoTwo = getAtoms().get(2).equals(bond.getAtoms().get(2));
+        if (oneOne && twoTwo) {
+            return true;
+        }
+        if (oneTwo && twoOne) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return getAtoms().get(0).getElement().getSymbol() + getOrder() + getAtoms().get(1).getElement().getSymbol();
+    }
+
+    /**
+     * @param bondingAngle Bonding Angle desired for the bond. Currently unused.
+     */
+    public void setBondingAngle(double bondingAngle) {
+        this.bondingAngle = bondingAngle;
     }
 
     /**
@@ -57,45 +102,18 @@ public class Bond implements Serializable {
     }
 
 
+    /**
+     * @return bondingAngle
+     */
     public double getBondingAngle() {
         return bondingAngle;
     }
 
+    /**
+     * @param order Order of the Bond
+     */
     public void setOrder(BondOrder order) {
         this.order = order;
     }
 
-    public BondOrder increaseOrder() {
-        if (order.ordinal() < BondOrder.values().length - 1) {
-            order = BondOrder.values()[order.ordinal() + 1];
-            getAtoms().get(0).incrementAttachedElectrons();
-            getAtoms().get(1).incrementAttachedElectrons();
-            //System.out.println("INCREASED ORDER OF " + this + " " + this.getAtoms().get(0).getAvailableElectrons() + ", " + this.getAtoms().get(1).getAvailableElectrons());
-        }
-        return order;
-    }
-
-    public void setBondingAngle(double bondingAngle) {
-        this.bondingAngle = bondingAngle;
-    }
-
-    @Override
-    public String toString() {
-        return getAtoms().get(0).getElement().getSymbol() + getOrder() + getAtoms().get(1).getElement().getSymbol();
-    }
-
-
-    public boolean equals(Bond bond1) {
-        boolean oneOne = getAtoms().get(1).equals(bond1.getAtoms().get(1));
-        boolean oneTwo = getAtoms().get(1).equals(bond1.getAtoms().get(2));
-        boolean twoOne = getAtoms().get(2).equals(bond1.getAtoms().get(1));
-        boolean twoTwo = getAtoms().get(2).equals(bond1.getAtoms().get(2));
-        if (oneOne && twoTwo) {
-            return true;
-        }
-        if (oneTwo && twoOne) {
-            return true;
-        }
-        return false;
-    }
 }

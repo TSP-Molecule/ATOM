@@ -37,9 +37,21 @@ public enum Geometry {
     TShape6(3, 3, "T-Shaped (6)", 90), //less than 90
     Linear6(2, 4, "Linear (6)", 180);
 
+    /**
+     * Number of atoms bonded to the target atom
+     */
     private final int bondedAtoms;
+    /**
+     * Number of lone pairs associated with the target atom
+     */
     private final int lonePairs;
+    /**
+     * Bond angle associated with the molecular geometry
+     */
     private final double bondAngle;
+    /**
+     * Text-based name of the molecular geometry. Specifiers for geometries with identical names.
+     */
     private final String name;
 
     Geometry(int bondedAtoms, int lonePairs, String name, double bondAngle) {
@@ -49,6 +61,11 @@ public enum Geometry {
         this.bondAngle = bondAngle;
     }
 
+    /**
+     * @param bondedAtoms number of atoms bonded to target atom
+     * @param lonePairs   number of lone pairs on target atom
+     * @return Geometry associated with target atom
+     */
     public static Geometry get(int bondedAtoms, int lonePairs) {
         for (Geometry g : Geometry.values()) {
             if (g.getBondedAtoms() == bondedAtoms && g.getLonePairs() == lonePairs) {
@@ -58,14 +75,23 @@ public enum Geometry {
         return null;
     }
 
+    /**
+     * @return bondedAtoms
+     */
     public int getBondedAtoms() {
         return bondedAtoms;
     }
 
+    /**
+     * @return lonePairs
+     */
     public int getLonePairs() {
         return lonePairs;
     }
 
+    /**
+     * @return name
+     */
     public String getName() {
         return name;
     }
@@ -74,11 +100,10 @@ public enum Geometry {
      * Calculates the molecular geometry of the center atom of a molecule
      *
      * @param molecule Molecule for which to calculate Molecular Geometry
-     * @return Geometry Molecular Geometry of the molecule.
      */
     public static void calculateGeometry(Molecule molecule) {
         if (molecule.getAtoms().size() == 2) {
-            for (Atom a: molecule.getAtoms()) {
+            for (Atom a : molecule.getAtoms()) {
                 a.setGeometry(Linear);
             }
             return;

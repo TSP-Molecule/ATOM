@@ -18,11 +18,27 @@ public class Molecule implements Serializable {
 
     private static final long serialVersionUID = 7355608;
 
-    private String formula;        //Chemical formula associated with Molecule
+    /**
+     * Chemical formula associated with Molecule
+     */
+    private String formula;
 
-    private ArrayList<Atom> atoms; //List of all of the atoms in the molecule
-    private ArrayList<Bond> bonds; //List of all of the bonds in the molecule
-    private Atom center;           //Atom in the center (lowest eNeg, not Hydrogen)
+    /**
+     * List of all of the atoms in the molecule
+     */
+    private ArrayList<Atom> atoms;
+    /**
+     * List of all of the bonds in the molecule
+     */
+    private ArrayList<Bond> bonds;
+    /**
+     * Atom in the center (lowest eNeg, not Hydrogen)
+     */
+    private Atom center;
+
+    /**
+     * Molecule name.
+     */
     private String name;
 
     /**
@@ -187,25 +203,6 @@ public class Molecule implements Serializable {
         return center;
     }
 
-    public Atom getCenter() {
-        return center;
-    }
-
-    public ArrayList<Bond> getBonds() {
-        return bonds;
-    }
-
-    public ArrayList<Atom> getAtoms() {
-        return atoms;
-    }
-
-    /**
-     * @return Center Atom's Geometry
-     */
-    public Geometry getCenterGeometry() {
-        return center.getGeometry();
-    }
-
     @Override
     public String toString() {
         StringBuilder molstr = new StringBuilder();
@@ -225,14 +222,51 @@ public class Molecule implements Serializable {
         return molstr.toString();
     }
 
+    /**
+     * @return center
+     */
+    public Atom getCenter() {
+        return center;
+    }
+
+    /**
+     * @return bonds
+     */
+    public ArrayList<Bond> getBonds() {
+        return bonds;
+    }
+
+    /**
+     * @return atoms
+     */
+    public ArrayList<Atom> getAtoms() {
+        return atoms;
+    }
+
+    /**
+     * @return Center Atom's Geometry
+     */
+    public Geometry getCenterGeometry() {
+        return center.getGeometry();
+    }
+
+    /**
+     * @return formula
+     */
     public String getFormula() {
         return formula;
     }
 
+    /**
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @param name name desired for the Molecule
+     */
     public void setName(String name) {
         this.name = name;
     }

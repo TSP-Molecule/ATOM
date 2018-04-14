@@ -31,8 +31,17 @@ public enum Group {
     GroupA(19, "Actinides", 0),
     GroupL(20, "Lanthanides", 0);
 
+    /**
+     * Group number according to new IUPAC naming scheme
+     */
     private final int num;
+    /**
+     * Group name in text (CAS naming scheme)
+     */
     private final String group;
+    /**
+     * Number of valence electrons in outer shells (only applies to CAS-A groups)
+     */
     private final int valenceElectrons;
 
     Group(int num, String group, int valenceElectrons) {

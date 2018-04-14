@@ -6,6 +6,8 @@ import javafx.scene.paint.Color;
 /**
  * Contains information about the elements of the periodic table, easily accessible from anywhere in the program.
  * To reference, use Elem.[ELEMENT_NAME].get[PROPERTY]() or Elem.get( atomicNumber ).get[Property}().
+ * <p>
+ * Periodic Table data taken and parsed from https://github.com/andrejewski/periodic-table
  *
  * @author Emily Anible
  * CS3141, Spring 2018, Team ATOM
@@ -132,18 +134,65 @@ public enum Elem {
     Tennessine(117, "Ts", 294, "0x000000", "[Rn]-5f14-6d10-7s2-7p5", -99999, -99999, "", -99999, Group.Group17, Period.Period7, Type.POST_TRANSITION_METAL, -1),
     Oganesson(118, "Og", 294, "0x000000", "[Rn]-5f14-6d10-7s2-7p6", -99999, -99999, "", -99999, Group.Group18, Period.Period7, Type.NOBLE_GAS, -1);
 
+    /**
+     * Element's atomic number
+     */
     private int atomicNumber;
+    /**
+     * Symbol associated with the element
+     * <p>
+     * e.g. "He" for Helium
+     */
     private String symbol;
+    /**
+     * Element's atomic mass.
+     */
     private final double atomicMass;
+    /**
+     * Color of the element according to the CPK Standard.
+     * This value is used to color the element across ATOM.
+     */
     private final String color;
-    private final String eConfigString;        //Electron Configuration
+    /**
+     * Electron Configuration. Unparsed in this state.
+     */
+    private final String eConfigString;
+    /**
+     * Electronegativity of the Element
+     */
     private final double eNegativity;
+    /**
+     * Atomic Radius of the element. Unused.
+     */
     private final int atomicRadius;
+    /**
+     * Bonding type of the element. Unused.
+     */
     private final String bondingType;
+    /**
+     * Density of the element. Unused.
+     */
     private final double density;
+    /**
+     * Group of the element, i.e. the
+     * column of the periodic table in which the element lies.
+     */
     private final Group group;
+    /**
+     * Period of the element, i.e. the
+     * row of the periodic table in which the element lies.
+     */
     private final Period period;
+    /**
+     * The elements type, e.g.
+     * Iron is a transition metal
+     */
     private final Type type;
+    /**
+     * State in which the element typically exists.
+     * <p>
+     * Limited here to solid, liquid, or gas. Excludes other states of matter.
+     */
     private final int state;          //0 1 2, solid liquid gas.
 
     Elem(int atomicNumber, String symbol, double atomicMass, String color, String eConfigString, double eNegativity, int atomicRadius, String bondingType, double density, Group group, Period period, Type type, int state) {
@@ -175,6 +224,10 @@ public enum Elem {
         return Elem.NULL;
     }
 
+    /**
+     * @param symbol elemental symbol as a string: e.g. "He" for Helium
+     * @return element associated with symbol, if one exists
+     */
     public static Elem getBySymbol(String symbol) {
         for (Elem e : Elem.values()) {
             if (e.getSymbol().equalsIgnoreCase(symbol)) return e;

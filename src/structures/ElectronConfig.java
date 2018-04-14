@@ -14,9 +14,19 @@ import java.util.Arrays;
  */
 public class ElectronConfig {
 
+    /**
+     * Electron Config string, unparsed
+     */
     private final String eConfigString;
+
+    /**
+     * Electron config, parsed
+     */
     private ArrayList<String> eConfig;
 
+    /**
+     * Noble gas head of the electron config
+     */
     private Elem nobleHead; // uwu
 
     ElectronConfig(String eConfigString) {
@@ -35,20 +45,31 @@ public class ElectronConfig {
         }
     }
 
+    /**
+     * @param eConfigString Unparsed config string
+     * @return split ArrayList containing the components of the eConfig.
+     */
     private ArrayList<String> initConfig(String eConfigString) {
-        ArrayList<String> ret = new ArrayList<>();
-        ret.addAll(Arrays.asList(eConfigString.split("-")));
-        return ret;
+        return new ArrayList<>(Arrays.asList(eConfigString.split("-")));
     }
 
+    /**
+     * @return eConfigString
+     */
     public String geteConfigString() {
         return eConfigString;
     }
 
+    /**
+     * @return nobleHead
+     */
     public Elem getNobleHead() {
         return nobleHead;
     }
 
+    /**
+     * @return eConfig
+     */
     public ArrayList<String> getConfig() {
         return eConfig;
     }

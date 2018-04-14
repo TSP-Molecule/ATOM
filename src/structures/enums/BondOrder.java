@@ -12,8 +12,14 @@ public enum BondOrder {
     DOUBLE(2, "="),
     TRIPLE(3, "≡");
 
+    /**
+     * Number value of the bond
+     */
     private final int num;
 
+    /**
+     * Symbol used to represent the bond in ASCII
+     */
     private final String symbol;
 
     BondOrder(int num, String symbol) {
@@ -21,11 +27,17 @@ public enum BondOrder {
         this.symbol = symbol;
     }
 
+    /**
+     * @return number associated with BondOrder
+     */
     public int getNum() {
         return num;
     }
 
 
+    /**
+     * @return symbol associated with BondOrder
+     */
     public String getSymbol() {
         return symbol;
     }

@@ -13,6 +13,9 @@ public enum State {
     LIQUID  (1),
     GAS     (2);
 
+    /**
+     * value of the state (-1 through 2)
+     */
     private int state;
 
     State(int state) throws IllegalArgumentException {
