@@ -1,5 +1,6 @@
 package GUI;
 
+import com.sun.javafx.PlatformUtil;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -322,10 +323,12 @@ public class GeneralViewer extends Application {
         });
 
         view2D.setOnAction(event -> {
+            if (mol == null) return;
             dim3D = false;
             updateView();
         });
         view3D.setOnAction(event -> {
+            if (mol == null) return;
             dim3D = true;
             updateView();
         });
@@ -365,17 +368,23 @@ public class GeneralViewer extends Application {
         //Open Action. Opens a .mol file to a Molecule.
         MenuItem open = new MenuItem("Open");
         open.setOnAction(event -> {
+            if (mol == null) return;
             FileChooser chooser = new FileChooser();
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
 
+            String userHome = System.getProperty("user.home") + (PlatformUtil.isWindows() ? "/Desktop" : "");
+            chooser.setInitialDirectory(new File(userHome));
             File molLoad = chooser.showOpenDialog(p.getScene().getWindow());
 
             if (molLoad != null) {
                 String filename = molLoad.getAbsolutePath();
                 try {
                     mol = MolFile.loadMolecule(filename);
-                    textInfo.setText(WebService.getWikiAsString(mol.getName()));
-                    sub.setRoot(new MoleculeView(mol));
+                    if (mol != null) {
+                        textInfo.setText(WebService.getWikiAsString(mol.getName()));
+                        searchBox.setText(mol.getName());
+                        sub.setRoot(new MoleculeView(mol));
+                    }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -385,8 +394,13 @@ public class GeneralViewer extends Application {
         //Save Action. Saves a Molecule to a .mol.
         MenuItem save = new MenuItem("Save");
         save.setOnAction(event -> {
+            if (mol == null) return;
             FileChooser chooser = new FileChooser();
 //            chooser.showSaveDialog(p);
+            chooser.setInitialFileName(searchBox.getText());
+
+            String userHome = System.getProperty("user.home") + (PlatformUtil.isWindows() ? "/Desktop" : "");
+            chooser.setInitialDirectory(new File(userHome));
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ATOM File", "*.mol"));
 
             File molsave = chooser.showSaveDialog(p.getScene().getWindow());
@@ -403,12 +417,16 @@ public class GeneralViewer extends Application {
 
         MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(event -> {
+            if (mol == null) return;
             FileChooser chooser = new FileChooser();
+            String userHome = System.getProperty("user.home") + (PlatformUtil.isWindows() ? "/Desktop" : "");
+
+            chooser.setInitialFileName(searchBox.getText() + "_img");
+            chooser.setInitialDirectory(new File(userHome));
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
             File imageFile = chooser.showSaveDialog(p);
 
             try {
-
                 SnapshotParameters param = new SnapshotParameters();
                 param.setFill(Color.TRANSPARENT);
                 WritableImage img = new WritableImage((int) sub.getWidth(), (int) sub.getHeight());
