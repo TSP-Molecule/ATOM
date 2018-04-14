@@ -468,6 +468,8 @@ public class GeneralViewer extends Application {
      * @param scene the parent scene, or window
      * @param w     the width of the subscene
      * @param h     the height of the subscene
+     * @param b     depthBuffer
+     * @param s     SceneAntialiasing to use
      * @return the subscene
      */
     private SubScene sub(Parent scene, double w, double h, boolean b, SceneAntialiasing s) {
@@ -491,7 +493,7 @@ public class GeneralViewer extends Application {
      *
      * @param search User-inputted search text
      * @return Molecule if found, else null.
-     * @throws IOException
+     * @throws IOException if something goes terribly wrong
      */
     private Molecule searchForMolecule(TextField search) throws IOException {
         String searchText = search.getText();
@@ -709,7 +711,7 @@ public class GeneralViewer extends Application {
     }
 
     /**
-     * Returns whether 3D is true
+     * @return dim3D
      */
     public boolean get3D() {
         return dim3D;

@@ -136,7 +136,7 @@ public class AtomView extends Group {
 
     /**
      * Creates a new group for drawing the Bohr model of an atom
-     * @return the group
+     * @param num number of electrons
      */
     private void bohr(int num) {
         numElectrons = num;

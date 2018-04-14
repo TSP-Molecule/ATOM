@@ -91,6 +91,7 @@ public class Molecule implements Serializable {
 
     /**
      * Attempts to create a molecule with bonds from a molecule with a list of atoms.
+     * @param initAtoms initial list of atoms
      */
     private void buildMolecule(ArrayList<Atom> initAtoms) {
         //Molecule's ArrayList of Atoms.
@@ -170,8 +171,8 @@ public class Molecule implements Serializable {
     /**
      * Sorts list of atoms by electronegativity, placing Hydrogen at the end of the list.
      *
-     * @param init
-     * @return
+     * @param init atoms to sort
+     * @return sorted atoms
      */
     private ArrayList<Atom> sortByENeg(ArrayList<Atom> init) {
         ArrayList<Atom> ret = new ArrayList<>();

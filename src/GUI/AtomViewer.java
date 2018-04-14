@@ -143,6 +143,7 @@ public class AtomViewer extends Stage {
 
     /**
      * Creates a new group for drawing the Bohr model of an atom
+     * @param num number of electrons
      * @return the group
      */
     private Group bohr(int num) {
