@@ -415,6 +415,10 @@ public class GeneralViewer extends Application {
             }
         });
 
+
+        /**
+         * Takes the Subscene displaying the Molecule & saves it to a png utilizing the Snapshot feature
+         */
         MenuItem saveImage = new MenuItem("Save Image");
         saveImage.setOnAction(event -> {
             if (mol == null) return;

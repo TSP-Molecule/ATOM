@@ -9,3 +9,5 @@ javadoc/
 scripts/__init__\.py
 
 installer/unix/makeself-2\.3\.1/
+
+installer/unix/makeself-2\.3\.1\.run

@@ -56,8 +56,6 @@ public class WebService {
     }
 
     /**
-     * ]
-     *
      * @param term - Search Term
      * @return name - First paragrah of wikipedia article
      * (null if no article found)
