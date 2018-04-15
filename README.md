@@ -15,5 +15,5 @@
 
 
 <p align="center">
-  <img src="https://lh4.googleusercontent.com/nh4TCSlnG4-o3kAyWSlbATpaMK2OGiPWC3npRGDjsFopMkIKRQJxlnmiBDAUxGYicYTcPKrZzyEEGP0vgfo=w1419-h969" height=40% width=40%>
+  <img src="https://i.imgur.com/XYjPTUK.png" height=40% width=40%>
 </p>
