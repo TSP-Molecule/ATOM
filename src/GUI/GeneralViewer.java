@@ -46,7 +46,7 @@ import java.util.Optional;
  * @author Sarah Larkin, Emily Anible
  *
  * CS3141, Spring 2018, Team ATOM
- * Date Last Modified: March 30, 2018
+ * Date Last Modified: April 15, 2018
  */
 public class GeneralViewer extends Application {
 
@@ -69,32 +69,27 @@ public class GeneralViewer extends Application {
      * Info area. Updates wiki information.
      */
     private TextArea textInfo;
+
     /**
      * Search text field.
      */
     private TextField searchBox;
+
     /**
      * Subscene. Contains molecule image.
      */
     private SubScene sub;
+
     /**
      * Camera to control subscene
      */
     Camera cam;
 
     /**
-     * Subscene. Contains molecule image.
-     */
-    private SubScene sub2D;
-
-    /**
-     * Subscene. Contains molecule image.
-     */
-    private SubScene sub3D;
-    /**
      * Boolean to track 2D vs. 3D display
      */
     private boolean dim3D = true;
+
     /**
      * Null counter. Gives an error to user if it reaches a specified value.
      */
@@ -145,8 +140,7 @@ public class GeneralViewer extends Application {
 
         Group g = new Group(); //Test Molecule line
         sub = sub(g, 500, 600, true, SceneAntialiasing.BALANCED);
-        sub2D = new SubScene(new Group(), 500, 600);
-        sub3D = new SubScene(new Group(), 500, 600, true, SceneAntialiasing.BALANCED);
+
         //Components of GridPane
         gridPane.add(sub, 0, 1);
         gridPane.add(makeMenuBar(stage), 0, 0);
@@ -174,7 +168,7 @@ public class GeneralViewer extends Application {
 
         //Sub Listeners
         sub.setOnMouseEntered(event -> {
-            sub.requestFocus();
+                sub.requestFocus();
         });
 
         sub.setOnMousePressed(event -> {
@@ -323,13 +317,13 @@ public class GeneralViewer extends Application {
         });
 
         view2D.setOnAction(event -> {
-            if (mol == null) return;
             dim3D = false;
+            if (mol == null) return;
             updateView();
         });
         view3D.setOnAction(event -> {
-            if (mol == null) return;
             dim3D = true;
+            if (mol == null) return;
             updateView();
         });
         return navigation;
@@ -396,7 +390,6 @@ public class GeneralViewer extends Application {
         save.setOnAction(event -> {
             if (mol == null) return;
             FileChooser chooser = new FileChooser();
-//            chooser.showSaveDialog(p);
             chooser.setInitialFileName(searchBox.getText());
 
             String userHome = System.getProperty("user.home") + (PlatformUtil.isWindows() ? "/Desktop" : "");
@@ -559,14 +552,6 @@ public class GeneralViewer extends Application {
                 formula,
                 mol));
 
-//        sub3D.setRoot(new MoleculeView(mol));
-//        sub.setRoot(new Lewis(mol));
-//        sub.getRoot().getTransforms().add(new Rotate(50, 0, 0, 0, Rotate.Y_AXIS));
-//        sub.getRoot().getTransforms().add(new Translate(-300, -200, -1500));
-//       // sub = sub2D;
-//        //sub.setRoot(new Lewis(mol));
-//       // sub.setRoot(new MoleculeView(mol));
-//        sub.requestFocus();
         updateView();
         if (mol != null && !offlineMode) textInfo.setText(WebService.getWikiAsString(mol.getName()));
 
@@ -575,16 +560,14 @@ public class GeneralViewer extends Application {
     }
 
     /**
-     * Update the viewer to the present molecule
+     * Update the viewer to display the present molecule in the correct dimension
      */
     private void updateView() {
         sub.setWidth(gridPane.widthProperty().doubleValue());
         sub.setHeight(gridPane.heightProperty().doubleValue());
         sub.getRoot().prefWidth(gridPane.widthProperty().doubleValue());
         sub.getRoot().prefHeight(gridPane.heightProperty().doubleValue());
-      //  searchBox.prefHeightProperty().bind(gridPane.heightProperty());
         if (dim3D) {
-
             sub.setRoot(new MoleculeView(mol));
             sub.setWidth(stage.getWidth()/2);
             sub.setHeight(stage.getHeight() * 7 / 8);
@@ -594,9 +577,6 @@ public class GeneralViewer extends Application {
             sub.setRoot(new Lewis(mol));
             sub.setCamera(new MoleculeCamera(sub, false));
         }
-//        sub.getRoot().minWidth(sub.getWidth());
-//        sub.getRoot().minHeight(sub.getHeight());
-
     }
 
     /**
@@ -715,6 +695,7 @@ public class GeneralViewer extends Application {
     }
 
     /**
+     * Returns whether the molecule is to be displayed in 2D or 3D
      * @return dim3D
      */
     public boolean get3D() {

@@ -3,13 +3,13 @@ import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
-import javafx.stage.Stage;
 
 /**
  * Creates camera controls for the 3D Molecule subscene.
  * @author Sarah Larkin
- * CS3141, R02, Spring 2018
- * Date Last Modified:  April 11, 2018
+ *
+ * CS3141, R02, Spring 2018, Team ATOM
+ * Date Last Modified:  April 15, 2018
  *
  */
 public class MoleculeCamera extends PerspectiveCamera {
@@ -21,7 +21,6 @@ public class MoleculeCamera extends PerspectiveCamera {
 
     public MoleculeCamera (SubScene sub, boolean b) {
         this.sub = sub;
-//        makeCamera();
         is3D = b;
         if (b) {
             makeCamera();
@@ -69,6 +68,10 @@ public class MoleculeCamera extends PerspectiveCamera {
     private void rotationControls(KeyEvent event) {
         if (!sub.isFocused()) {
             sub.requestFocus();
+        }
+        // If in 2D view, don't rotate
+        if (sub.getRoot() instanceof Lewis) {
+            return;
         }
         switch (event.getCode()) {
             case L:

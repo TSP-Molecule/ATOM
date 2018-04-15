@@ -3,7 +3,6 @@ package GUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,14 +16,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Translate;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import structures.enums.Elem;
 import structures.enums.Type;
-import web.WebService;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -34,12 +29,15 @@ import java.util.ArrayList;
  * large rectangle at the top displaying information on the current element.
  *
  * @author Sarah Larkin
-  @author CS3141, Spring 2018, Team ATOM
+ *
+ * CS3141, Spring 2018, Team ATOM
  * Date Last Modified: March 25, 2018
  */
 public class PeriodicTableView extends Stage {
 
-    private ArrayList<Button> buttonList = new ArrayList<Button>();
+    private ArrayList<Button> buttonList = new ArrayList<>();
+    private Button[][] table = new Button[10][18];
+    private Stage infoStage = new Stage();
     private Text currElem;
     private Color plainCols[] = {
             Color.rgb(188, 255, 128, 1), Color.rgb(240, 128, 128, 1),
@@ -88,7 +86,22 @@ public class PeriodicTableView extends Stage {
         currElem.setFill(Color.rgb(0, 0, 0));
         currElem.setFont(new Font(28));
 
-        // Display the key
+        displayKey(group);
+
+
+        group.getChildren().add(display);
+        group.getChildren().add(currElem);
+        Scene s = new Scene(group, 1080, 800);
+        setScene(s);
+        setTitle("The Periodic Table of the Elements");
+    }
+
+
+    /**
+     * Displays the legend
+     * @param group     the group to which to add the legend
+     */
+    private void displayKey(Group group) {
         for (int i = 0; i < 11; i++) {
             Rectangle rectangle = new Rectangle(500, 20 + i * 17, 180, 17);
             rectangle.setFill(plainCols[i]);
@@ -132,24 +145,15 @@ public class PeriodicTableView extends Stage {
             Text text = new Text(510, 34 + i * 17, s);
             text.setFont(new Font(12));
             group.getChildren().add(text);
-
         }
-
-        group.getChildren().add(display);
-        group.getChildren().add(currElem);
-        Scene s = new Scene(group, 1080, 800);
-        setScene(s);
-        setTitle("The Periodic Table of the Elements");
-
-        // show();
     }
 
-    Button[][] table = new Button[10][18];
+
 
     /**
      * Fills in the full table of elements in a grid pane.
      *
-     * @param pane
+     * @param pane  the gridpane in which to display the elements
      */
     private void makeTable(GridPane pane) {
         initializeGrid();
@@ -266,7 +270,7 @@ public class PeriodicTableView extends Stage {
         });
     }
 
-    private Stage infoStage = new Stage();
+
 
     /**
      * Provides utility of selecting only one button at a time by attaching an
@@ -290,7 +294,6 @@ public class PeriodicTableView extends Stage {
             }
 
             if (event.getButton() == MouseButton.PRIMARY) {
-                System.out.println("LEFT" + b.getElement());
 
                 Group bohr = new AtomView(b.getElement().getNum());
                 bohr.prefWidth(500);
@@ -303,7 +306,6 @@ public class PeriodicTableView extends Stage {
                 }
 
                 Scene sceneBohr;
-                //This ain't a Scene, it's a god damn
                 GridPane grid = new GridPane();
 
                 sceneBohr = new Scene(grid, 1000, 600);
@@ -312,11 +314,9 @@ public class PeriodicTableView extends Stage {
                 ColumnConstraints column = new ColumnConstraints();
                 column.setPercentWidth(50);
                 grid.getColumnConstraints().add(column);
-//                grid.gridLinesVisibleProperty().set(true);
                 grid.setMinSize( infoStage.getWidth(), infoStage.getHeight() );
 
                 BorderPane bp = new BorderPane();
-//                bp.getChildren().add(bohr);
                 bp.setCenter(bohr);
 
                 //Add bohr model and information panel to grid.
@@ -324,6 +324,7 @@ public class PeriodicTableView extends Stage {
                 grid.add(info, 1, 0);
 
                 infoStage.setScene(sceneBohr);
+                infoStage.setTitle(b.getElement().getName());
 
                 infoStage.setMaxWidth(grid.getWidth());
                 infoStage.setMaxHeight(grid.getHeight());
@@ -332,59 +333,6 @@ public class PeriodicTableView extends Stage {
             }
         });
     }
-
-    @Deprecated
-    private Group bohrModel(Stage s, Elem elem) {
-        Group group = new Group();
-//        for (int i = 0; i < 360; i += 60) {
-//            double x = 40 * Math.cos(i);
-//            double y = 40 * Math.sin(i);
-//            System.out.println("x:  " + x + "  y: " + y);
-//            Ellipse e = new Ellipse(x, y, 20, 20);
-//            group.getChildren().add(e);
-//        }
-        int electrons = elem.getNum();
-
-        int[] shells = {2, 10, 18, 36, 54, 86};
-        int[] elec = new int[shells.length];
-        for (int i = 0; i < shells.length; i++) {
-            int rem = electrons - shells[i];
-            if (rem >= 0) {
-                elec[i] = shells[i];
-            } else {
-                elec[i] = rem;
-            }
-        }
-        for (int i = 7; i > 1; i--) {
-            // System.out.println("blue bayou");
-            Ellipse e = new Ellipse(0, 0, i * 50, i * 50);
-            e.setStroke(Color.BLACK);
-            e.setStrokeWidth(1);
-            // e.setFill(Color.GREEN);
-            group.getChildren().add(e);
-            double d = 360 / shells[i - 2];
-            double rad = 15;
-            double radi = i * 50;
-            System.out.println("Shell " + i + ":  " + elec[i - 2]);
-            for (int j = 0; j < elec[i - 2]; j++) {
-
-                double x = radi * Math.cos(d * i);
-                double y = radi * Math.sin(d * i);
-                Ellipse electron = new Ellipse(x, y, rad, rad);
-                electron.setFill(Color.TURQUOISE);
-                group.getChildren().add(electron);
-            }
-        }
-
-        Text atom = new Text(elem.getSymbol());
-        atom.setFont(new Font(18));
-        Ellipse cen = new Ellipse(0, 0, 50, 50);
-        cen.setFill(elem.getType().getFill());
-        group.getChildren().addAll(cen, atom);
-        group.getTransforms().add(new Translate(s.getWidth() / 2, s.getHeight() / 2));
-        return group;
-    }
-
 
     /**
      * Checks if any buttons are currently selected

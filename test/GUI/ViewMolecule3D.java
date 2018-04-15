@@ -1,6 +1,5 @@
 package GUI;
 
-import com.sun.javafx.sg.prism.NGNode;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.*;
@@ -22,8 +21,9 @@ import structures.enums.Elem;
  * and for testing new UI ideas before incorporating them.  Currently displays a 3D scene on the left side,
  * which can be rotated using mouse input and panned and zoomed with keyboard input (standard wasd with r and f for
  * moving vertically).  The right panel is an editable textbox.
+ *
  * @author Sarah Larkin
-  @author CS3141, Spring 2018
+ * @author CS3141, Spring 2018
  * Date Last Modified:  March 25, 2018
  */
 public class ViewMolecule3D extends Application {
@@ -44,28 +44,8 @@ public class ViewMolecule3D extends Application {
     @Override
     public void start(Stage primaryStage) {
         group = new Group();  //grouper();
-      //  Camera cam = new PerspectiveCamera(true);
-//        cam.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                System.out.println("otto");
-//                System.out.println(event.getCode());
-//                cam.getTransforms().add(new Rotate(45, 200, 0, 0, Rotate.Y_AXIS));
-//            }
-//        });
-       // group.getChildren().add(cam);
-       group = grouper();
-//        group.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                System.out.println(event.getCharacter());
-//            }
-//        });
-     //   group.getTransforms().add(new Translate(200, 200, 0));
-//        SubScene subScene = new SubScene(group, 400, 400);
-//        subScene.setCamera(cam);
-//        Group fin = new Group();
-//        fin.getChildren().add(subScene);
+        group = grouper();
+
         Camera cam = new PerspectiveCamera(true);
         cam.setNearClip(0.1);
         cam.setFarClip(10000);
@@ -79,17 +59,14 @@ public class ViewMolecule3D extends Application {
         Button bob = new Button("BLUE\nBELLS\nBLOOM");
         bob.setPrefSize(200, 200);
 
-       // pane.add(bob, 1, 0);
+        // pane.add(bob, 1, 0);
         TextField job = new TextField("blah");
-       // job.setEditable(false);
+        // job.setEditable(false);
         job.setPrefSize(200, 400);
         pane.add(job, 1, 0);
-//        pane.add(job, 1, 0);
         Scene scene = new Scene(pane, 800, 600, true);
 
-      //  scene.setCamera(cam);
-      //  scene.getCamera().getTransforms().add(new Rotate(0, 0, 0, 0));
-        //scene.getCamera().setLayoutX(0);
+
         job.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -109,20 +86,20 @@ public class ViewMolecule3D extends Application {
                 subf = true;
             }
         });
-      job.setOnMouseEntered(new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent event) {
-             // job.requestFocus();
-              subf = false;
-          }
-      });
-      sub.setOnMousePressed(new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent event) {
-              oldX = event.getX();
-              System.out.println(oldX);
-          }
-      });
+        job.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                // job.requestFocus();
+                subf = false;
+            }
+        });
+        sub.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                oldX = event.getX();
+                System.out.println(oldX);
+            }
+        });
         sub.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -161,14 +138,6 @@ public class ViewMolecule3D extends Application {
             @Override
             public void handle(KeyEvent event) {
 
-//                sub.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//                    @Override
-//                    public void handle(KeyEvent event) {
-//                        if (event.getCode().isLetterKey()) {
-//                            System.out.println("MyKey");
-//                        }
-//                    }
-//                });
                 sub.requestFocus();
                 if (event.getCode() == KeyCode.RIGHT) {
 
@@ -180,7 +149,7 @@ public class ViewMolecule3D extends Application {
                         sub.requestFocus();
                     }
                     subf = true;
-                } else if (event.getCode() == KeyCode.LEFT){
+                } else if (event.getCode() == KeyCode.LEFT) {
                     cam.getTransforms().add(new Rotate(-theta, 0, 0, 0, Rotate.Y_AXIS));
                     cam.getTransforms().add(new Translate(100 * Math.cos(-theta), 0, -100 * Math.sin(-theta)));
                 } else if (event.getCode() == KeyCode.UP) {
@@ -189,21 +158,21 @@ public class ViewMolecule3D extends Application {
                     cam.getTransforms().add(new Rotate(-1, 0, 0, 0, Rotate.X_AXIS));
                 } else if (event.getCode() == KeyCode.W) {
                     cam.getTransforms().add(new Translate(0, 0, dist));
-                }  else if (event.getCode() == KeyCode.S) {
+                } else if (event.getCode() == KeyCode.S) {
                     cam.getTransforms().add(new Translate(0, 0, -dist));
-                }  else if (event.getCode() == KeyCode.A) {
+                } else if (event.getCode() == KeyCode.A) {
                     cam.getTransforms().add(new Translate(-dist, 0, 0));
-                }  else if (event.getCode() == KeyCode.D) {
+                } else if (event.getCode() == KeyCode.D) {
                     cam.getTransforms().add(new Translate(dist, 0, 0));
-                }  else if (event.getCode() == KeyCode.R) {
+                } else if (event.getCode() == KeyCode.R) {
                     cam.getTransforms().add(new Translate(0, -dist, 0));
-                }  else if (event.getCode() == KeyCode.F) {
+                } else if (event.getCode() == KeyCode.F) {
                     cam.getTransforms().add(new Translate(0, dist, 0));
                 }
                 sub.requestFocus();
             }
 
-
+// commented out old key controls
   /*          @Override
             public void handle(KeyEvent event) {
                 System.out.println("ono");
@@ -280,8 +249,8 @@ public class ViewMolecule3D extends Application {
 
         Cylinder bond1 = new Cylinder(10, 100);
         bond1.setMaterial(new PhongMaterial(Color.LIGHTGREY));
-        bond1.getTransforms().add(new Translate(bondLength * Math.cos(theta)/2, -bondLength * Math.cos(theta)/2, 0));
-        bond1.getTransforms().add(new Rotate(theta,bondLength * Math.cos(theta)/2, -bondLength * Math.cos(theta)/2, 0, Rotate.Z_AXIS));
+        bond1.getTransforms().add(new Translate(bondLength * Math.cos(theta) / 2, -bondLength * Math.cos(theta) / 2, 0));
+        bond1.getTransforms().add(new Rotate(theta, bondLength * Math.cos(theta) / 2, -bondLength * Math.cos(theta) / 2, 0, Rotate.Z_AXIS));
         group.getChildren().add(bond1);
 
         thetaX += ANGLE;
@@ -369,7 +338,7 @@ public class ViewMolecule3D extends Application {
         Sphere hydrogen1 = new Sphere(50);
         hydrogen1.setMaterial(whiteMat);
 
-        Cylinder b1 = new Cylinder(10,bond);
+        Cylinder b1 = new Cylinder(10, bond);
         PhongMaterial blackM = new PhongMaterial();
         blackM.setDiffuseColor(Color.BLACK);
         blackM.setSpecularColor(Color.BLACK);
@@ -382,22 +351,22 @@ public class ViewMolecule3D extends Application {
         oxygen.setTranslateY(0);
         oxygen.setTranslateZ(0);
 
-        hydrogen.setTranslateX(bond * Math.cos(-1 * Math.PI/3));
-        hydrogen.setTranslateY(bond * Math.sin(-1 * Math.PI/3));
+        hydrogen.setTranslateX(bond * Math.cos(-1 * Math.PI / 3));
+        hydrogen.setTranslateY(bond * Math.sin(-1 * Math.PI / 3));
         hydrogen.setTranslateZ(0);
 
-        hydrogen1.setTranslateX(bond * Math.cos(Math.PI/3));
-        hydrogen1.setTranslateY(bond * Math.sin(Math.PI/3));
+        hydrogen1.setTranslateX(bond * Math.cos(Math.PI / 3));
+        hydrogen1.setTranslateY(bond * Math.sin(Math.PI / 3));
         hydrogen1.setTranslateZ(0);
 
-        b1.setTranslateX(bond * Math.cos(-1 * Math.PI/3)/2 - 0);
-        b1.setTranslateY(bond * Math.sin(-1 * Math.PI/3)/2 + 0);
+        b1.setTranslateX(bond * Math.cos(-1 * Math.PI / 3) / 2 - 0);
+        b1.setTranslateY(bond * Math.sin(-1 * Math.PI / 3) / 2 + 0);
         b1.setTranslateZ(0);
         b1.setRotationAxis(Rotate.Z_AXIS);
         b1.setRotate(30);
 
-        b2.setTranslateX(bond * Math.cos(Math.PI/3)/2);
-        b2.setTranslateY(bond * Math.sin(Math.PI/3)/2);
+        b2.setTranslateX(bond * Math.cos(Math.PI / 3) / 2);
+        b2.setTranslateY(bond * Math.sin(Math.PI / 3) / 2);
         b2.setTranslateZ(0);
         b2.setRotationAxis(Rotate.Z_AXIS);
         b2.setRotate(150);

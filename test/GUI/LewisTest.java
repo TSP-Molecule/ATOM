@@ -1,10 +1,13 @@
 package GUI;
 
+import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Translate;
+import javafx.stage.Stage;
 import structures.Atom;
 import structures.Bond;
 import structures.Molecule;
@@ -13,19 +16,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Creates a Lewis Dot Structure to represent a molecule.
+ * Creates and tests Lewis Dot Structure to represent a molecule.
  * @author  Sarah Larkin
  *
  * CS3141, R02, Spring 2018, Team ATOM
- * Date Last Modified:  April 12, 2018
+ * Date Last Modified:  April 15, 2018
  */
-public class Lewis extends Group {
+public class LewisTest extends Application {
 
-
-    public Lewis(Molecule mole) {
-        lewisStructure(mole);
-    }
-
+    private Group group = new Group();
+    private   Molecule mole = /*new Molecule("H_{2}_O", "water" );// = */new Molecule("C_{3}_H_{6}_O", "acetone");
+    private String [][] list = new String[0][0];
+    private int iter = 0;
 
     /**
      * Creates the Lewis Structure by calling helper methods
@@ -35,7 +37,7 @@ public class Lewis extends Group {
         // Set up structures
         Atom cen = mole.getCenter();
         int max = mole.getAtoms().size();
-        String[][] list = new String[max][max];
+        list = new String[max][max];
         list[max / 2][max / 2] = cen.getElement().getSymbol();
         HashMap<Atom, Atom> map = new HashMap<>();
         map.put(cen, cen);
@@ -54,7 +56,7 @@ public class Lewis extends Group {
 
         int minCol = size[2];
         int minRow = size[3];
-        getTransforms().add(new Translate(-spin * minCol + spin, -spin * minRow + spin));
+        group.getTransforms().add(new Translate(-spin * minCol + spin, -spin * minRow + spin));
 
 
     }
@@ -72,7 +74,7 @@ public class Lewis extends Group {
                     drawBonds(atoms, i, j, spin);
                     Text text = new Text(j * spin, i * spin, list[i][j]);
                     text.setFont(new Font(0.3 * spin));
-                    getChildren().add(text);
+                    group.getChildren().add(text);
                 }
             }
         }
@@ -153,18 +155,18 @@ public class Lewis extends Group {
         switch (b.getOrder()) {
             case SINGLE:
                 Line line = new Line((j) * spin + spin / 9, (i - 1) * spin + spin / 4, j * spin + spin / 9, i * spin - spin / 3);
-                getChildren().add(line);
+                group.getChildren().add(line);
                 break;
             case DOUBLE:
                 Line d = new Line((j) * spin + spin / 12, (i - 1) * spin + spin / 4, j * spin + spin / 12, i * spin - spin / 3);
                 Line lin = new Line((j) * spin + spin / 6, (i - 1) * spin + spin / 4, j * spin + spin / 6, i * spin - spin / 3);
-                getChildren().addAll(d, lin);
+                group.getChildren().addAll(d, lin);
                 break;
             case TRIPLE:
                 Line a = new Line((j) * spin + spin / 12, (i - 1) * spin + spin / 4, j * spin + spin / 12, i * spin - spin / 3);
                 Line c = new Line((j) * spin + spin / 6, (i - 1) * spin + spin / 4, j * spin + spin / 6, i * spin - spin / 3);
-                Line f = new Line((j) * spin + spin / 4, (i - 1) * spin + spin / 4, j * spin + spin / 4, i * spin - spin / 3);
-                getChildren().addAll(a, c, f);
+                Line f = new Line((j) * spin + spin / 3, (i - 1) * spin + spin / 4, j * spin + spin / 3, i * spin - spin / 3);
+                group.getChildren().addAll(a, c, f);
                 break;
         }
     }
@@ -180,18 +182,18 @@ public class Lewis extends Group {
         switch (b.getOrder()) {
             case SINGLE:
                 Line line = new Line((j - 1) * spin + spin / 2, i * spin - spin / 8, j * spin - spin / 4, i * spin - spin / 8);
-                getChildren().add(line);
+                group.getChildren().add(line);
                 break;
             case DOUBLE:
                 Line d = new Line((j - 1) * spin + spin / 2, i * spin - spin / 12, j * spin - spin / 4, i * spin - spin / 12);
                 Line lin = new Line((j - 1) * spin + spin / 2, i * spin - spin / 6, j * spin - spin / 4, i * spin - spin / 6);
-                getChildren().addAll(d, lin);
+                group.getChildren().addAll(d, lin);
                 break;
             case TRIPLE:
                 Line a = new Line((j - 1) * spin + spin / 2, i * spin - spin / 12, j * spin - spin / 4, i * spin - spin / 12);
                 Line c = new Line((j - 1) * spin + spin / 2, i * spin - spin / 6, j * spin - spin / 4, i * spin - spin / 6);
-                Line f = new Line((j - 1) * spin + spin / 2, i * spin - spin / 4, j * spin - spin / 4, i * spin - spin / 4);
-                getChildren().addAll(a, c, f);
+                Line f = new Line((j - 1) * spin + spin / 2, i * spin - spin / 3, j * spin - spin / 4, i * spin - spin / 3);
+                group.getChildren().addAll(a, c, f);
                 break;
         }
     }
@@ -206,6 +208,7 @@ public class Lewis extends Group {
      * @param col       the current column of the array
      */
     private void addition(Atom curr, String[][] list, Atom[][] atoms, HashMap<Atom, Atom> map, int row, int col) {
+        iter++;
         for (Atom atom : curr.getAttachedAtoms()) {
             if (map.get(atom) != null) {
                 continue;
@@ -256,6 +259,7 @@ public class Lewis extends Group {
      * @param list  the array representing the molecule
      */
     public void lewisTest(String[][] list) {
+
         // Test the printout
         for (int row = 0; row < list.length; row++) {
             for (int col = 0; col < list[0].length; col++) {
@@ -270,4 +274,38 @@ public class Lewis extends Group {
         }
     }
 
+    /**
+     * Tests the number of iterations required to build the molecule and compares it to the number of atoms
+     */
+    public void buildTest() {
+        Atom cen = mole.getCenter();
+        int max = mole.getAtoms().size();
+        String[][] list = new String[max][max];
+        list[max / 2][max / 2] = cen.getElement().getSymbol();
+        HashMap<Atom, Atom> map = new HashMap<>();
+        map.put(cen, cen);
+        Atom[][] atoms = new Atom[max][max];
+        atoms[max / 2][max / 2] = cen;
+
+        // Call recursive method to populate structures
+        addition(cen, list, atoms, map, max / 2, max / 2);
+        if (iter != mole.getAtoms().size() * 2) {
+            System.out.println("atoms should be " + mole.getAtoms().size() * 2 + " but are " + iter);
+        }
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Scene scene = new Scene(group, 500, 500);
+        lewisStructure(mole);
+        lewisTest(list);
+        buildTest();
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String [] args) {
+        launch(args);
+    }
 }

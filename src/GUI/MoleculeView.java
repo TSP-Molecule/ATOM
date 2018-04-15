@@ -15,19 +15,22 @@ import structures.enums.BondOrder;
 import structures.enums.Geometry;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 
-// crl alt L format file
-// ctrl alt O optimize imports
-
-
+/**
+ * Draws a 3D molecule as a group
+ *
+ * @author Sarah Larkin
+ *
+ * CS3141, R02, Spring 2018, Team ATOM
+ * Date Last Modified:  April 15, 2018
+ *
+ */
 public class MoleculeView extends Group {
 
     private final double ATOM_RADIUS = 50;
     private final double BOND_RADIUS = 10;
-    private final double BOND_LENGTH = 200;
 
     public MoleculeView(Molecule molecule) {
         drawPic(molecule);
@@ -38,8 +41,8 @@ public class MoleculeView extends Group {
      * Uses code from an external source, noted with begin external code and end external code.
      * The source can be found at: http://netzwerg.ch/blog/2015/03/22/javafx-3d-line/
      *
-     * @param origin
-     * @param target
+     * @param origin the atom at one end of the bond
+     * @param target the atom at the other end of the bond
      */
     private void drawBond(Point3D origin, Point3D target, Color color) {
 
@@ -55,7 +58,7 @@ public class MoleculeView extends Group {
         double angle = Math.acos(diff.normalize().dotProduct(yAxis));
         Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
-        Cylinder bond = new Cylinder(10, height);
+        Cylinder bond = new Cylinder(BOND_RADIUS, height);
         bond.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
         // End external code
 
@@ -67,6 +70,9 @@ public class MoleculeView extends Group {
     }
 
 
+    /**
+     * Inner class provides a way to track the location of an atom and its attached atoms.
+     */
     private class Atomus {
         double x;
         double y;
@@ -75,7 +81,6 @@ public class MoleculeView extends Group {
         Point3D loc;
         Atomus par;
         ArrayList<Atom> kids = new ArrayList<>();
-        ArrayList<Atom> sibs = new ArrayList<>();
         Atom atom;
 
         public Atomus(Atom atom, double x, double y, double z, Atomus par) {
@@ -109,20 +114,23 @@ public class MoleculeView extends Group {
 
     }
 
-
+    /**
+     * Draws the 3D image of the atom.
+     *
+     * @param mole
+     */
     public void drawPic(Molecule mole) {
         Atom cen = mole.getCenter();
-        System.out.println("ven: " + cen);
         Atomus adam = new Atomus(cen, 0, 0, 0, null);
-        // System.out.println("central bonds: " + );
         Stack<Atomus> stack = new Stack<>();
         HashMap<Atomus, Boolean> drawn = new HashMap<>();
         HashMap<Atomus, Boolean> visited = new HashMap<>();
 
         stack.push(adam);
         int counter = 0;
+
+        // Perform a depth-first iteration of the molecule
         while (!stack.isEmpty() && counter < mole.getAtoms().size() * 10) {
-            System.err.println(stack.size());
             counter++;
             Atomus node = stack.pop();
             if (drawn.get(node) == null) {
@@ -146,32 +154,29 @@ public class MoleculeView extends Group {
                 case Bent:
                     bent(node, stack, drawn);
                     break;
-                case VShape:
-                    System.out.println("centre: " + cen + "  \nkids: " + cen.getAttachedAtoms().size());
+                case Linear:
+                    trig(node, stack, drawn);
                 default:
-                    System.out.println("hi im a " + geo);
+                    trig(node, stack, drawn);
+                    //System.out.println("hi I'm a " + geo);
             }
-        }
-        System.out.println("drawn: " + drawn.size() + " " + Arrays.toString(drawn.keySet().toArray()));
-        Object[] ar = drawn.keySet().toArray();
-        for (int i = 0; i < ar.length; i++) {
-            System.out.print(((Atomus) ar[i]).atom.toString() + ", ");
-        }
-        System.out.println();
-        for (int i = 0; i < ar.length; i++) {
-            System.out.print(((Atomus) ar[i]).atom.getElement().getSymbol() + ": " + ((Atomus) ar[i]).loc + ", ");
         }
     }
 
+    /**
+     * Draws a tetrahedral configuration around the given atom node
+     *
+     * @param node  the node around which to draw the tetrahedron
+     * @param stack the stack tracking which nodes still need to be visitec
+     * @param drawn a map representing all nodes already drawn
+     */
     private void tetra(Atomus node, Stack<Atomus> stack, HashMap<Atomus, Boolean> drawn) {
-        Group group = new Group();
         double rad = 200;
-        double thetaZY = 0;//s
-        double thetaXY = 0;//t
+        double thetaZY = 0;
+        double thetaXY = 0;
         double angY = 60;
         double angZ = 120;
 
-        boolean big = false;
         int draw = 1;
 
         if (node.par != null) {
@@ -180,9 +185,12 @@ public class MoleculeView extends Group {
                 draw = -1;
             }
         }
+
         int j = 0;
 
         Point3D origin = node.loc;
+
+        //  Draw the fourth node if it isn't already drawn
         if (node.par == null) {
             j = 1;
             Atom atom = node.kids.get(0);
@@ -195,7 +203,6 @@ public class MoleculeView extends Group {
             drawn.put(atomus, true);
             stack.push(atomus);
             Bond bond = null;
-            System.out.println("Pink: " + atom.getAttachedBonds().size());
 
             for (Bond b : atom.getAttachedBonds()) {
                 if (b.getAtoms().contains(atom)) {
@@ -203,56 +210,65 @@ public class MoleculeView extends Group {
                 }
             }
             drawBond(origin, curr, setBondColor(bond));
-
         }
 
-        double x = 0;
-        double y = 0;
-        double z = 0;
 
         for (int i = j; i < node.kids.size(); i++) {
             Atom atom = node.kids.get(i);
-            x = node.x + rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
-            y = node.y + rad * Math.sin(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
-            z = node.z + draw * rad * Math.cos(Math.toRadians(thetaXY));
-            // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
+            double x = node.x + rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
+            double y = node.y + rad * Math.sin(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
+            double z = node.z + draw * rad * Math.cos(Math.toRadians(thetaXY));
+            // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z); // prints out the location of the atom
             thetaZY += angY;
             thetaXY += angZ;
             Point3D curr = new Point3D(x, y, z);
             Atomus atomus = new Atomus(atom, x, y, z, node);
 
+            // Draw the attached atoms
             if (drawn.get(atomus) == null) {
                 drawAtom(atom, x, y, z);
                 drawn.put(atomus, true);
                 stack.push(atomus);
             }
-            Bond bond = null;
 
+            // Draw the attached bonds
+            Bond bond = null;
             for (Bond b : atom.getAttachedBonds()) {
                 if (b.getAtoms().contains(atom)) {
                     bond = b;
                 }
             }
-
-
             drawBond(origin, curr, setBondColor(bond));
 
         }
     }
 
+    /**
+     * Colour the bonds based on bond order
+     *
+     * @param bond the bond to be coloured
+     * @return the colour of the bond
+     */
     private Color setBondColor(Bond bond) {
         Color color = Color.YELLOW;
         if (bond.getOrder() == BondOrder.SINGLE) {
             color = Color.LIGHTGREY;
         } else if (bond.getOrder() == BondOrder.DOUBLE) {
-            color = Color.rgb(21, 244, 238);;
+            color = Color.rgb(21, 244, 238);
+            ;
         } else if (bond.getOrder() == BondOrder.TRIPLE) {
             color = Color.PURPLE;
         }
         return color;
     }
 
-
+    /**
+     * Draws atoms around a central node in a trigonal pattern
+     *
+     * @param node  the node representing the atom around which to draw
+     * @param stack the representation of nodes still to be traversed
+     * @param drawn the representation of nodes already drawn
+     */
     private void trig(Atomus node, Stack<Atomus> stack, HashMap<Atomus, Boolean> drawn) {
         double rad = 200;
         double thetaZY = 0;//s
@@ -269,20 +285,21 @@ public class MoleculeView extends Group {
             x = rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             y = rad * Math.sin(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             z = rad * Math.cos(Math.toRadians(thetaXY));
-            // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
+            // System.out.printf("bee:  (%f, %f, %f) \n", x, y, z); // prints out the location of the atom
             thetaZY += angY;
             thetaXY += angZ;
             Point3D curr = new Point3D(x, y, z);
             Atomus atomus = new Atomus(atom, x, y, z, node);
+
+            // Draw the atom
             drawAtom(atom, x, y, z);
             if (drawn.get(atomus) == null) {
                 drawn.put(atomus, true);
                 stack.push(atomus);
             }
 
-
+            // Draw the bonds
             Bond bond = null;
-
             for (Bond b : atom.getAttachedBonds()) {
                 if (b.getAtoms().contains(atom)) {
                     bond = b;
@@ -293,45 +310,55 @@ public class MoleculeView extends Group {
     }
 
 
+    /**
+     * Draws atoms around a central node in a bent pattern
+     *
+     * @param node  the node representing the atom around which to draw
+     * @param stack the representation of nodes still to be traversed
+     * @param drawn the representation of nodes already drawn
+     */
     private void bent(Atomus node, Stack<Atomus> stack, HashMap<Atomus, Boolean> drawn) {
         double rad = 200;
-        double thetaZY = 0;//s
-        double thetaXY = 0;//t
+        double thetaZY = 0;
+        double thetaXY = 0;
         double angY = 0;
         double angZ = 120;
 
         double x = 0;
         double y = 0;
         double z = 0;
-        Point3D origin = node.loc;// new Point3D(0, 0, 0);
+        Point3D origin = node.loc;
         int draw = 1;
-        int dee = 0;
+
+        // Determine the direction in which to draw
         if (node.par == null) {
             draw = 1;
         } else {
-
             Point3D deltaPar = node.par.loc.subtract(node.loc);
             if (deltaPar.getZ() >= 0) {
                 draw = -1;
             }
-            //if ()
         }
-        System.out.println("node: " + node.atom.getElement().getSymbol() + ": " + node.kids);
+
         for (int i = 0; i < node.kids.size(); i++) {
             Atom atom = node.kids.get(i);
             x = draw * rad * Math.cos(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             y = rad * Math.sin(Math.toRadians(thetaZY)) * Math.sin(Math.toRadians(thetaXY));
             z = draw * rad * Math.cos(Math.toRadians(thetaXY));
-            System.out.printf("bee:  (%f, %f, %f) \n", x, y, z);
+            //System.out.printf("bee:  (%f, %f, %f) \n", x, y, z); // print the location of the atom
             thetaZY += angY;
             thetaXY += angZ;
             Point3D curr = new Point3D(x, y, z);
             Atomus atomus = new Atomus(atom, x, y, z, node);
-            drawAtom(atom, x, y, z);
-            drawn.put(atomus, true);
-            stack.push(atomus);
-            Bond bond = null;
 
+            if (drawn.get(atomus) == null) {
+                drawAtom(atom, x, y, z);
+                drawn.put(atomus, true);
+            }
+            stack.push(atomus);
+
+            // Draw the bonds
+            Bond bond = null;
             for (Bond b : atom.getAttachedBonds()) {
                 if (b.getAtoms().contains(atom)) {
                     bond = b;
@@ -341,21 +368,13 @@ public class MoleculeView extends Group {
         }
     }
 
-    private double toDegrees(double inRadians) {
-        return inRadians * 180 / Math.PI;
-    }
-
-    private double toRadians(double inDegrees) {
-        return inDegrees * Math.PI / 180;
-    }
-
     /**
      * Draws an atom with the proper color and location.
      *
-     * @param atom
-     * @param x
-     * @param y
-     * @param z
+     * @param atom the atom to be drawn
+     * @param x    the x-coordinate of the atom
+     * @param y    the y-coordinate of the atom
+     * @param z    the z-coordinate of the atom
      */
     private void drawAtom(Atom atom, double x, double y, double z) {
         Color color = atom.getElement().getColor();

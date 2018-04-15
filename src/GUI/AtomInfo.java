@@ -1,11 +1,8 @@
 package GUI;
 
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import structures.enums.Elem;
@@ -16,12 +13,19 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * Contains and organizes information about an atom.
+ *
+ * @author Emily Anible
+ *
+ * CS3141, R02, Spring 2018, Team ATOM
+ */
 public class AtomInfo extends GridPane {
 
 
     public AtomInfo(Elem element) throws IOException {
         super();
-        setPrefSize(500,600);
+        setPrefSize(500, 600);
 
         String wiki = WebService.getWikiAsString(element.getName());
 
@@ -29,7 +33,6 @@ public class AtomInfo extends GridPane {
         text.setText(wiki);
         text.setEditable(false);
         text.setWrapText(true);
-//        text.setMinSize(, gridText.getHeight());
         add(text, 0, 0);
 
         Button buttonBrowser = new Button("View In Browser");
