@@ -1,1 +1,1 @@
-pip install chemspipy wikipedia
+mkdir ~/ATOM/ && cp ./ATOM.jar ~/ATOM/ATOM.jar && cp -r ./scripts/ ~/ATOM/scripts/ && pip install chemspipy wikipedia
