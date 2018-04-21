@@ -6,12 +6,12 @@ if test "n" = n; then
     umask 077
 fi
 
-CRCsum="1301578135"
-MD5="90b990b3e74a43d81e9d2c0f3b2de1ec"
+CRCsum="2889589789"
+MD5="e102eb052108ad65e3830169afacea35"
 TMPROOT=${TMPDIR:=/tmp}
 USER_PWD="$PWD"; export USER_PWD
 
-label="A Tiny Object Modeler (ATOM) is now being setup."
+label="ATOM (A Tiny Object Modeler)"
 script="./dep-setup"
 scriptargs=""
 licensetxt=""
@@ -254,12 +254,12 @@ do
 	echo Target directory: "$targetdir"
 	echo Uncompressed size: 148 KB
 	echo Compression: gzip
-	echo Date of packaging: Sun Apr 15 17:24:37 DST 2018
+	echo Date of packaging: Wed Apr 18 08:44:43 DST 2018
 	echo Built with Makeself version 2.3.1 on 
-	echo Build command was: "./makeself.sh \\
+	echo Build command was: "/mnt/c/Users/spore/workspace/ATOM/installer/unix/makeself-2.3.1/makeself.sh \\
     \"/mnt/c/Users/spore/workspace/ATOM/out/artifacts/ATOM/\" \\
     \"/mnt/c/Users/spore/workspace/ATOM/installer/unix/ATOM-setup.run\" \\
-    \"A Tiny Object Modeler (ATOM) is now being setup.\" \\
+    \"ATOM (A Tiny Object Modeler)\" \\
     \"./dep-setup\""
 	if test x"$script" != x; then
 	    echo Script run after extraction:
@@ -551,7 +551,7 @@ if test x"$keep" = xn; then
     /bin/rm -rf $tmpdir
 fi
 eval $finish; exit $res
-‹ EíÓZìıc°µÏ³6îılÛ¶mÛ¶mÛ¶mÛ¶mÛ¶móéßÿ ûLÇÄyÏû¡gb"&#jİ+¢ªî(\™ueV­Z´t ÿı?ÂÆÆöoÏäÿşü·ïLŒ¬Ìl¬ÿ$€•fbÀgøÿ€¸898âã8ÚÙ9ÿwåşWùÿ?*´tÊr2´–ÿ_šfFz&¦ÿ˜fV&&f zVV |úÿÿüÿ?.òR@ÀÈ ààà uB1Òÿ5 @FDY€FBV”îw  èŸÂ`àÿÊúó¿¬ŒüOú?+ËÈJˆŠ()ÓÊˆÚÄô@şa€şâß% ‹â’¸ƒ £x®×™©0&ÚØŸÛ²Bnwä=ÍÂğÿÆí8G`ú•ÉŠ@öá‹™DºL¡Œù<À“€Œâğ¬ˆ1Äo“a£Hµ9İÊZy`hj•U±f(;s+Úu11p:åó;V¬]È}¶/·İaÃA4/³z)vÿ·>I+-%şÓâÿ¶OÀÿ$1	ºÿq@ü:Îv6¶¦v´FÖNN9ªjHjÈa‚¡GàAĞ´çC]–754ñ…‡ñsˆáĞ3¦‹™è€­k–m]÷škvnLßTù„)ÏŸäş–æî²I‹óËmİŞİ¾íxøı8]Á€Ù…™f?·æÙ…½wß ı:£ñ2ÁyúœõE‡ù¨%¢Ã©Cıq‘•gõ!¹p<ôÖ®ÎU"+€p]£,02g¥ê„d0´bu°óÂi<Cš±-†
+‹ ìg×Zìıc°µÏ³6îılÛ¶mÛ¶mÛ¶mÛ¶mÛ¶móéßÿ ûLÇÄyÏû¡gb"&#jİ+¢ªî(\™ueV­Z´t ÿı?ÂÆÆöoÏäÿşü·ïLŒ¬Ìl¬ÿ$€•fbÀgøÿ€¸898âã8ÚÙ9ÿwåşWùÿ?*´tÊr2´–ÿ_šfFz&¦ÿ˜fV&&f zVV |úÿÿüÿ?.òR@ÀÈ ààà uB1Òÿ5 @FDY€FBV”îw  èŸÂ`àÿÊúó¿¬ŒüOú?+ËÈJˆŠ()ÓÊˆÚÄô@şa€şâß% ‹â’¸ƒ £x®×™©0&ÚØŸÛ²Bnwä=ÍÂğÿÆí8G`ú•ÉŠ@öá‹™DºL¡Œù<À“€Œâğ¬ˆ1Äo“a£Hµ9İÊZy`hj•U±f(;s+Úu11p:åó;V¬]È}¶/·İaÃA4/³z)vÿ·>I+-%şÓâÿ¶OÀÿ$1	ºÿq@ü:Îv6¶¦v´FÖNN9ªjHjÈa‚¡GàAĞ´çC]–754ñ…‡ñsˆáĞ3¦‹™è€­k–m]÷škvnLßTù„)ÏŸäş–æî²I‹óËmİŞİ¾íxøı8]Á€Ù…™f?·æÙ…½wß ı:£ñ2ÁyúœõE‡ù¨%¢Ã©Cıq‘•gõ!¹p<ôÖ®ÎU"+€p]£,02g¥ê„d0´bu°óÂi<Cš±-†
 Ëa×ˆnO—aPç½î·w—½	¢%¢0’|«·½üÆô?peœLbuR6%=Šİ4©w×ú‰–ëd€(!Ø1î™pŞÒÎOzŒGY‰&˜Yáõ:?@ê$* vşV–¿ÙWå6Õ°A4}LŸ ±Ö@{(}–Ğç)’±¨,È8²Lßêä 5Ï–Arª‘ÂÊRÍ!gÊÀl‘¶Õ
 å†Í² ÖF“p´ÍÈiMqL§1°ò•EyWüJd½èœÄåE²LsBßŒA5±@RıEüŞYZD=àÂ™œ®É¸t)ZIT¦
 ù hÒ™¯Ã£ºh £„LË„8Òâ¨ º"b=cyƒs,¯?¨%ûjÁ¦Ä¨hl¿.¹©à*–¡•6¥_œ²ij¯:º™;À1GÉ§yQÉ!MKîKGî® Mw`‘¥6ñgÄQÜ¬âFÀÉ‹ÕFğÂ$'uDÄ‰'ZN¡l9*ÊÄ=¤Tmê>3pí!4í!5º¥;È¥;L
