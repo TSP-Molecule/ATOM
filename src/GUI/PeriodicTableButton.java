@@ -25,10 +25,21 @@ public class PeriodicTableButton extends Button {
     private static double q = 0.75;// opacity of color
 
     private static Color plainCols [] = {
-            Color.rgb(188, 255, 128, 1), Color.rgb(240, 128, 128, 1), Color.rgb(255, 209, 128, 1), Color.rgb(166, 160, 67, 1),
-            Color.rgb(94, 224, 255, 1), Color.rgb(134, 252, 110, 1), Color.rgb(215, 184, 255, 1), Color.rgb(255, 95, 168, 1),// 55 128
-            Color.rgb(255, 114, 247, 1), Color.rgb(230, 180, 180, 1), Color.rgb(195, 195, 195, 1), Color.rgb(120, 120, 120, 1),
-            Color.rgb(255, 185, 105, 1)
+            Color.rgb(188, 255, 128, 1),
+            Color.rgb(240, 128, 128, 1),
+            Color.rgb(255, 209, 128, .5),
+            Color.rgb(166, 160, 67, 1),
+            Color.rgb(94, 224, 255, 1.0),
+            Color.rgb(134, 252, 110, 1),
+            Color.rgb(215, 184, 255, 1),
+            Color.rgb(255, 95, 168, .5),//Color.rgb(255, 145, 255, 1),// 55 128
+            Color.rgb(255, 114, 247, 1),
+            Color.rgb(230, 180, 180, 1),
+            Color.rgb(195, 195, 195, 1),
+            Color.rgb(120, 120, 120, 1),
+            Color.rgb(255, 185, 105, .75)
+
+
     };
 
 

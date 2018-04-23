@@ -40,12 +40,17 @@ public class PeriodicTableView extends Stage {
     private Stage infoStage = new Stage();
     private Text currElem;
     private Color plainCols[] = {
-            Color.rgb(188, 255, 128, 1), Color.rgb(240, 128, 128, 1),
-            Color.rgb(255, 209, 128, 1), Color.rgb(166, 160, 67, 1),
-            Color.rgb(94, 224, 255, 1), Color.rgb(134, 252, 110, 1),
-            Color.rgb(215, 184, 255, 1), Color.rgb(255, 95, 168, 1),
-            Color.rgb(230, 180, 180, 1), Color.rgb(195, 195, 195, 1),
-            Color.rgb(255, 185, 105, 1)
+            Color.rgb(188, 255, 128, 1),
+            Color.rgb(240, 128, 128, 1),
+            Color.rgb(255, 209, 128, .5),
+            Color.rgb(166, 160, 67, .75),
+            Color.rgb(94, 224, 255, 1),
+            Color.rgb(134, 252, 110, 1),
+            Color.rgb(215, 184, 255, 1),
+            Color.rgb(255, 95, 168, .5),// Color.rgb(255, 145, 255, 1),//Color.rgb(255, 95, 168, 1),
+            Color.rgb(230, 180, 180, 1),
+            Color.rgb(195, 195, 195, 1),
+            Color.rgb(255, 185, 105, .75)
     };
 
     public PeriodicTableView() {
