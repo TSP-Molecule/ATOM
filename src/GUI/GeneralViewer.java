@@ -454,7 +454,7 @@ public class GeneralViewer extends Application {
 
         //Exit Action. Closes the program.
         MenuItem exit = new MenuItem("Exit");
-        exit.setOnAction(event -> p.close());
+        exit.setOnAction(event -> System.exit(0));
         file.getItems().addAll(open, save, saveImage, offlineToggle, exit);
         return file;
     }
